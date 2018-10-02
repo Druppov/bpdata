@@ -15,7 +15,7 @@ class Module extends \yii\base\Module
 	/**
 	 * @inheritdoc
 	 */
-	public $defaultRoute = 'dashboard';
+	public $defaultRoute = 'users';
 
 	/**
 	 * @inheritdoc
@@ -31,6 +31,6 @@ class Module extends \yii\base\Module
 		Yii::configure(Yii::$container, require(__DIR__ . '/config/container.php'));
 
 		// change error action to match admin styles
-		Yii::$app->errorHandler->errorAction = 'admin/dashboard/error';
+        Yii::$app->errorHandler->errorAction = 'admin/dashboard/error';
 	}
 }
