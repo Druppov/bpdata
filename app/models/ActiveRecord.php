@@ -12,7 +12,7 @@ use yii\web\NotFoundHttpException;
  */
 abstract class ActiveRecord extends \yii\db\ActiveRecord
 {
-	/**
+    /**
 	 * @inheritdoc
 	 */
 	public function behaviors()
