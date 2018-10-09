@@ -40,8 +40,8 @@
                         'icon' => 'list-alt',
                         'url' => '#',
                         'items' => [
-                            ['label' => 'Торговые точки', 'icon' => 'file-code-o', 'url' => ['/gii'],],
-                            ['label' => 'Цены', 'icon' => 'file-code-o', 'url' => ['/gii'],],
+                            ['label' => 'Торговые точки', 'icon' => 'file-code-o', 'url' => ['/admin/preference/bpos-index'],],
+                            ['label' => 'Цены', 'icon' => 'file-code-o', 'url' => ['/admin/preference/tovar-price-index'],],
                             ['label' => 'Чеки', 'icon' => 'file-code-o', 'url' => ['/gii'],],
                             ['label' => 'Внутренний расход', 'icon' => 'file-code-o', 'url' => ['/gii'],],
                             ['label' => 'Отчет смены', 'icon' => 'file-code-o', 'url' => ['/gii'],],

@@ -16,6 +16,16 @@ use Yii;
  */
 class TovarPrice extends ActiveRecord
 {
+    public static $valuePublished = [
+        'P' => 'Да',
+        'U' => 'Нет'
+    ];
+
+    public static $valueIsUsed = [
+        'Y' => 'Да',
+        'N' => 'Нет'
+    ];
+
     /**
      * {@inheritdoc}
      */
@@ -45,12 +55,28 @@ class TovarPrice extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'POS_ID' => Yii::t('app', 'Pos'),
-            'TOVAR_ID' => Yii::t('app', 'Tovar'),
-            'PRICE_DATE' => Yii::t('app', 'Price Date'),
-            'PRICE_VALUE' => Yii::t('app', 'Price Value'),
-            'PUBLISHED' => Yii::t('app', 'Published'),
-            'ISUSED' => Yii::t('app', 'Is Used'),
+            'POS_ID' => Yii::t('app', 'Точка продаж'),
+            'TOVAR_ID' => Yii::t('app', 'Товар'),
+            'PRICE_DATE' => Yii::t('app', 'Дата цены'),
+            'PRICE_VALUE' => Yii::t('app', 'Цена'),
+            'PUBLISHED' => Yii::t('app', 'Опубликовано'),
+            'ISUSED' => Yii::t('app', 'Используется'),
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBpos()
+    {
+        return $this->hasOne(Bpos::className(), ['POS_ID' => 'POS_ID']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTovar()
+    {
+        return $this->hasOne(Tovar::className(), ['TOVAR_ID' => 'TOVAR_ID']);
     }
 }

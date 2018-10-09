@@ -3,6 +3,8 @@
 namespace app\modules\admin\controllers;
 
 use app\models\Tovar;
+use app\models\TovarPrice;
+use app\modules\admin\models\TovarPriceSearch;
 use app\modules\admin\models\TovarSearch;
 use Yii;
 use app\models\Bpos;
@@ -33,6 +35,7 @@ class PreferenceController extends Controller
                     'tovar-type-delete' => ['POST'],
                     'personal-delete' => ['POST'],
                     'tovar-delete' => ['POST'],
+                    'tovar-price-delete' => ['POST'],
                 ],
             ],
         ];
@@ -293,15 +296,9 @@ class PreferenceController extends Controller
         }
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        $searchBposModel = new BposSearch();
-        $dataBposProvider = $searchBposModel->search(Yii::$app->request->queryParams);
-        $dataBposProvider->sort->sortParam = 'sortBpos';
-
         return $this->render('tovar/index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'searchBposModel' => $searchBposModel,
-            'dataBposProvider' => $dataBposProvider,
         ]);
     }
 
@@ -379,6 +376,92 @@ class PreferenceController extends Controller
     }
 
     /**
+     * Lists all TovarPrice models.
+     * @return mixed
+     */
+    public function actionTovarPriceIndex()
+    {
+        $searchModel = new TovarPriceSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('tovar-price/index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Displays a single TovarPrice model.
+     * @param integer $POS_ID
+     * @param integer $TOVAR_ID
+     * @param string $PRICE_DATE
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionTovarPriceView($POS_ID, $TOVAR_ID, $PRICE_DATE)
+    {
+        return $this->render('tovar-price/view', [
+            'model' => $this->findTovarPriceModel($POS_ID, $TOVAR_ID, $PRICE_DATE),
+        ]);
+    }
+
+    /**
+     * Creates a new TovarPrice model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionTovarPriceCreate()
+    {
+        $model = new TovarPrice();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['tovar-price-view', 'POS_ID' => $model->POS_ID, 'TOVAR_ID' => $model->TOVAR_ID, 'PRICE_DATE' => $model->PRICE_DATE]);
+        }
+
+        return $this->render('tovar-price/create', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Updates an existing TovarPrice model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $POS_ID
+     * @param integer $TOVAR_ID
+     * @param string $PRICE_DATE
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionTovarPriceUpdate($POS_ID, $TOVAR_ID, $PRICE_DATE)
+    {
+        $model = $this->findTovarPriceModel($POS_ID, $TOVAR_ID, $PRICE_DATE);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['tovar-prive-view', 'POS_ID' => $model->POS_ID, 'TOVAR_ID' => $model->TOVAR_ID, 'PRICE_DATE' => $model->PRICE_DATE]);
+        }
+
+        return $this->render('tovar-price/update', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Deletes an existing TovarPrice model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $POS_ID
+     * @param integer $TOVAR_ID
+     * @param string $PRICE_DATE
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionTovarPriceDelete($POS_ID, $TOVAR_ID, $PRICE_DATE)
+    {
+        $this->findTovarPriceModel($POS_ID, $TOVAR_ID, $PRICE_DATE)->delete();
+
+        return $this->redirect(['tovar-price-index']);
+    }
+
+    /**
      * Finds the Bpos model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
@@ -436,6 +519,24 @@ class PreferenceController extends Controller
     protected function findTovarModel($id)
     {
         if (($model = Tovar::findOne($id)) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+
+    /**
+     * Finds the TovarPrice model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $POS_ID
+     * @param integer $TOVAR_ID
+     * @param string $PRICE_DATE
+     * @return TovarPrice the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findTovarPriceModel($POS_ID, $TOVAR_ID, $PRICE_DATE)
+    {
+        if (($model = TovarPrice::findOne(['POS_ID' => $POS_ID, 'TOVAR_ID' => $TOVAR_ID, 'PRICE_DATE' => $PRICE_DATE])) !== null) {
             return $model;
         }
 

@@ -15,8 +15,8 @@ use Yii;
 class Bpos extends ActiveRecord
 {
     public static $valuePublished = [
-        'U' => 'Yes',
-        'N' => 'No'
+        'U' => 'Да',
+        'N' => 'Нет'
     ];
 
     /**
@@ -49,9 +49,9 @@ class Bpos extends ActiveRecord
     {
         return [
             'POS_ID' => Yii::t('app', 'ID'),
-            'POS_NAME' => Yii::t('app', 'Name'),
-            'ADDR' => Yii::t('app', 'Address'),
-            'PUBLISHED' => Yii::t('app', 'Published'),
+            'POS_NAME' => Yii::t('app', 'Название'),
+            'ADDR' => Yii::t('app', 'Адрес'),
+            'PUBLISHED' => Yii::t('app', 'Опубликовано'),
         ];
     }
 }
