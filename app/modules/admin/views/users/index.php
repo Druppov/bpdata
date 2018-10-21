@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					$searchModel,
 					'status',
 					User::getStatusesList(),
-					['prompt' => 'All', 'class' => 'form-control']
+					['prompt' => 'Все', 'class' => 'form-control']
 				),
 			),
 			'created_at:date:Registered',

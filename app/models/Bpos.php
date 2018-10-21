@@ -15,8 +15,8 @@ use Yii;
 class Bpos extends ActiveRecord
 {
     public static $valuePublished = [
-        'U' => 'Да',
-        'N' => 'Нет'
+        'P' => 'Да',
+        'U' => 'Нет'
     ];
 
     /**

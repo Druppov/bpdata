@@ -1,5 +1,6 @@
 <?php
 
+use app\modules\admin\assets\ThemeHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\grid\GridView;
@@ -12,45 +13,40 @@ use app\models\Bpos;
 $this->title = Yii::t('app', 'Точки продаж');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<?php $this->beginBlock(ThemeHelper::BLOCK_HEADER_BUTTONS); ?>
+    <?= Html::a(Yii::t('app', 'Добавить точку'), ['bpos-create'], ['class' => 'btn btn-sm btn-success']) ?>
+<?php $this->endBlock(); ?>
+
 <div class="bpos-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php Pjax::begin(); ?>
     <?php //echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Создать точку'), ['bpos-create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'autoXlFormat'=>true,
-        'toggleDataContainer' => ['class' => 'btn-group mr-2'],
-        'export'=>[
-            'showConfirmAlert'=>false,
-            'target'=>GridView::TARGET_BLANK
-        ],
-        'pjax'=>true,
-        //'showPageSummary'=>true,
-        'panel'=>[
-            'type'=>'primary',
-            'heading'=>$this->title
-        ],
         'columns' => [
-            ['class' => 'kartik\grid\SerialColumn'],
-
             'POS_ID',
             'POS_NAME',
             'ADDR',
-            //'PUBLISHED',
             [
+                //'class' => '\kartik\grid\BooleanColumn',
                 'attribute' => 'PUBLISHED',
                 'value' => 'PUBLISHED',
-                'filter' => Html::activeDropDownList($searchModel, 'PUBLISHED', Bpos::$valuePublished,['class'=>'form-control','prompt' => 'Публикация']),
+                //'trueLabel' => 'P',
+                //'falseLabel' => 'U',
+                'filter' => Html::activeDropDownList(
+                    $searchModel,
+                    'PUBLISHED',
+                    Bpos::$valuePublished,
+                    ['class'=>'form-control','prompt' => 'Все']
+                ),
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
+                'header' => Yii::t('app', 'Действия'),
                 'urlCreator' => function ($action, $model, $key, $index) {
                     $action = 'bpos-'.$action;
                     return Url::to(['preference/'.$action, 'id' => $model->POS_ID]);

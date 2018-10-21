@@ -1,4 +1,4 @@
 
 <footer class="main-footer">
-	<strong>&copy; 2017 My Company</strong>. All rights reserved.
+	<strong>&copy; <?=date('Y')?> My Company</strong>. <?=Yii::t('app', 'Все права защищены')?>.
 </footer>

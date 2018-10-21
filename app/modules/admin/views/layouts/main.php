@@ -27,6 +27,8 @@ $this->beginPage() ?>
 
 <div class="wrapper">
 
+    <?= $this->render('../partials/dialog_layouts'); ?>
+
 	<?= $this->render('../partials/header', ['adminlteAssets' => $adminlteAssets]); ?>
 
 	<?= $this->render('../partials/nav', ['adminlteAssets' => $adminlteAssets]); ?>

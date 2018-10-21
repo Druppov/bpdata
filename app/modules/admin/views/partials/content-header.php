@@ -22,8 +22,10 @@ use app\modules\admin\assets\ThemeHelper;
 
 	<?= Breadcrumbs::widget([
 		'homeLink' => [
-			'label' => '<i class="fa fa-dashboard"></i> Dashboard',
-			'url' => ['/admin/dashboard'],
+			//'label' => '<i class="fa fa-dashboard"></i> Dashboard',
+			//'url' => ['/admin/dashboard'],
+            'label' => '<i class="fa fa-dashboard"></i> Admin',
+            'url' => ['/admin'],
 			'encode' => false,
 		],
 		'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],

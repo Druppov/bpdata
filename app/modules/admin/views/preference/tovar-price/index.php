@@ -1,5 +1,6 @@
 <?php
 
+use app\modules\admin\assets\ThemeHelper;
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
@@ -11,15 +12,16 @@ use app\models\TovarPrice;
 $this->title = Yii::t('app', 'Цена товара');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<?php $this->beginBlock(ThemeHelper::BLOCK_HEADER_BUTTONS); ?>
+<?= Html::a(Yii::t('app', 'Добавить цену товара'), ['tovar-price-create'], ['class' => 'btn btn-sm btn-success']) ?>
+<?php $this->endBlock(); ?>
+
 <div class="tovar-price-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php Pjax::begin(); ?>
+    <h1><?//= Html::encode($this->title) ?></h1>
+    <?//php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::a(Yii::t('app', 'Добавить цену товара'), ['tovar-price-create'], ['class' => 'btn btn-success']) ?>
-    </p>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -39,12 +41,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'kartik\grid\SerialColumn'],
 
-            //'POS_ID',
             [
                 'attribute' => 'POS_ID',
-                'value' => 'bpos.POS_NAME'
+                'value' => 'bpos.POS_NAME',
+                'filter' => TovarPrice::getBposFilter($searchModel),
             ],
-            //'TOVAR_ID',
             [
                 'attribute' => 'TOVAR_ID',
                 'value' => 'tovar.NAME'
@@ -90,5 +91,5 @@ $this->params['breadcrumbs'][] = $this->title;
             //['class' => 'kartik\grid\ActionColumn'],
         ],
     ]); ?>
-    <?php Pjax::end(); ?>
+    <?//php Pjax::end(); ?>
 </div>

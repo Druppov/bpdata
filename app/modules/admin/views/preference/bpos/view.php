@@ -6,8 +6,8 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Bpos */
 
-$this->title = $model->POS_ID;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Bpos'), 'url' => ['bpos-index']];
+$this->title = $model->POS_NAME;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Точки продаж'), 'url' => ['bpos-index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="bpos-view">
@@ -15,11 +15,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Update'), ['bpos-update', 'id' => $model->POS_ID], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['bpos-delete', 'id' => $model->POS_ID], [
+        <?= Html::a(Yii::t('app', 'Изменить'), ['bpos-update', 'id' => $model->POS_ID], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('app', 'Удалить'), ['bpos-delete', 'id' => $model->POS_ID], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
+                'confirm' => Yii::t('app', 'Вы уверены, что хотите удалить?'),
                 'method' => 'post',
             ],
         ]) ?>

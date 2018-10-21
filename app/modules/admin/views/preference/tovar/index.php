@@ -1,9 +1,9 @@
 <?php
 
+use app\modules\admin\assets\ThemeHelper;
 use app\modules\admin\models\BposSearch;
 use app\modules\admin\models\TovarPriceSearch;
 use yii\helpers\Html;
-//use yii\grid\GridView;
 use kartik\grid\GridView;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
@@ -11,18 +11,19 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\modules\admin\models\TovarSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Tovars');
+$this->title = Yii::t('app', 'Товары и цены');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<?php $this->beginBlock(ThemeHelper::BLOCK_HEADER_BUTTONS); ?>
+<?= Html::a(Yii::t('app', 'Добавить товар'), ['tovar-create', 'type'=>$searchModel->TYPE_ID], ['class' => 'btn btn-sm btn-success']) ?>
+<?php $this->endBlock(); ?>
+
 <div class="tovar-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php Pjax::begin(); ?>
     <?php //echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::a(Yii::t('app', 'Create Tovar'), ['tovar-create', 'type'=>$searchModel->TYPE_ID], ['class' => 'btn btn-success']) ?>
-    </p>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

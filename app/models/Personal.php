@@ -43,7 +43,7 @@ class Personal extends ActiveRecord
     {
         return [
             'PERSON_ID' => Yii::t('app', 'ID'),
-            'FIO' => Yii::t('app', 'FIO'),
+            'FIO' => Yii::t('app', 'ФИО'),
             'ISACTIVE' => Yii::t('app', 'Is Active'),
             'PUBLISHED' => Yii::t('app', 'Published'),
         ];

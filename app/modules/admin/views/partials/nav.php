@@ -14,9 +14,16 @@
 			[
 				'options' => ['class' => 'sidebar-menu', 'data-widget' => 'tree',],
 				'items'   => [
-					['label' => 'MAIN NAVIGATION', 'options' => ['class' => 'header']],
+					['label' => 'Главное меню', 'options' => ['class' => 'header']],
 					//['label' => 'Dashboard', 'icon' => 'dashboard', 'url' => ['/admin/dashboard']],
-                    ['label' => 'Работа', 'icon' => 'bookmark', 'url' => ['/admin/#']],
+                    [
+                        'label' => 'Работа',
+                        'icon' => 'bookmark',
+                        'url' => ['#'],
+                        'items' => [
+                            ['label' => 'Загрузить файл', 'icon'  =>  'download', 'url' => ['/admin/packet/index']],
+                        ],
+                    ],
                     [
                         'label' => 'Справочники',
                         'icon' => 'book',
@@ -31,7 +38,6 @@
                             ],
                             ['label' => 'Типы товаров', 'icon' => 'file-code-o', 'url' => ['/admin/preference/tovar-type-index'],],
                             ['label' => 'Персонал', 'icon' => 'users', /*'url' => ['/admin/users'],*/ 'url' => ['/admin/preference/personal-index'], 'active' => 'users' === Yii::$app->controller->id, ],
-                            ['label' => 'Роли/Права', 'icon' => 'lock', 'url' => ['/admin/rbac/permissions'], 'active' => 'permissions' === Yii::$app->controller->id,],
                             ['label' => 'Виды работ', 'icon' => 'file-code-o', 'url' => ['/gii'],],
                         ]
                     ],
@@ -40,12 +46,12 @@
                         'icon' => 'list-alt',
                         'url' => '#',
                         'items' => [
-                            ['label' => 'Торговые точки', 'icon' => 'file-code-o', 'url' => ['/admin/preference/bpos-index'],],
+                            ['label' => 'Торговые точки', 'icon' => 'file-code-o', 'url' => ['/admin/preference/bpos-report'],],
                             ['label' => 'Цены', 'icon' => 'file-code-o', 'url' => ['/admin/preference/tovar-price-index'],],
-                            ['label' => 'Чеки', 'icon' => 'file-code-o', 'url' => ['/gii'],],
-                            ['label' => 'Внутренний расход', 'icon' => 'file-code-o', 'url' => ['/gii'],],
-                            ['label' => 'Отчет смены', 'icon' => 'file-code-o', 'url' => ['/gii'],],
-                            ['label' => 'Остатки на торрговых точках', 'icon' => 'file-code-o', 'url' => ['/gii'],],
+                            ['label' => 'Чеки', 'icon' => 'file-code-o', 'url' => ['/admin/operation/pay-check-index'],],
+                            ['label' => 'Внутренний расход', 'icon' => 'file-code-o', 'url' => ['/admin/operation/pay-check-intl-index'],],
+                            ['label' => 'Отчет смены', 'icon' => 'file-code-o', 'url' => ['/admin/operation/smena-tb-index'],],
+                            ['label' => 'Остатки на торрговых точках', 'icon' => 'file-code-o', 'url' => ['/admin/operation/balance-index'],],
                         ]
                     ],
                     [
@@ -54,7 +60,7 @@
                         'url' => '#',
                         'items' => [
                             ['label' => 'Свойства', 'icon'  =>  'gears', 'url' => ['/admin/settings/app']],
-                            ['label' => 'Загрузить файл', 'icon'  =>  'download', 'url' => ['/admin/settings/app']],
+                            ['label' => 'Роли/Права', 'icon' => 'lock', 'url' => ['/admin/rbac/permissions'], 'active' => 'permissions' === Yii::$app->controller->id,],
                         ],
                     ],
                     ['label' => 'Окна', 'icon' => 'tasks', 'url' => ['/admin/#']],

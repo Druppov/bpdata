@@ -57,6 +57,21 @@ class PreferenceController extends Controller
     }
 
     /**
+     * Lists all Bpos models.
+     * @return mixed
+     */
+    public function actionBposReport()
+    {
+        $searchModel = new BposSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('bpos/report', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
      * Displays a single Bpos model.
      * @param integer $id
      * @return mixed
@@ -400,9 +415,16 @@ class PreferenceController extends Controller
      */
     public function actionTovarPriceView($POS_ID, $TOVAR_ID, $PRICE_DATE)
     {
-        return $this->render('tovar-price/view', [
-            'model' => $this->findTovarPriceModel($POS_ID, $TOVAR_ID, $PRICE_DATE),
-        ]);
+        $model = $this->findTovarPriceModel($POS_ID, $TOVAR_ID, $PRICE_DATE);
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('tovar-price/view', [
+                'model' => $model,
+            ]);
+        } else {
+            return $this->render('tovar-price/view', [
+                'model' => $model,
+            ]);
+        }
     }
 
     /**
@@ -436,13 +458,20 @@ class PreferenceController extends Controller
     {
         $model = $this->findTovarPriceModel($POS_ID, $TOVAR_ID, $PRICE_DATE);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['tovar-prive-view', 'POS_ID' => $model->POS_ID, 'TOVAR_ID' => $model->TOVAR_ID, 'PRICE_DATE' => $model->PRICE_DATE]);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->save(false);
+            //return $this->redirect(['tovar-price-view', 'POS_ID' => $model->POS_ID, 'TOVAR_ID' => $model->TOVAR_ID, 'PRICE_DATE' => $model->PRICE_DATE]);
+        } else {
+            if (Yii::$app->request->isAjax) {
+                return $this->renderAjax('tovar-price/update', [
+                    'model' => $model,
+                ]);
+            } else {
+                return $this->render('tovar-price/update', [
+                    'model' => $model,
+                ]);
+            }
         }
-
-        return $this->render('tovar-price/update', [
-            'model' => $model,
-        ]);
     }
 
     /**
