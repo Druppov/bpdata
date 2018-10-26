@@ -46,14 +46,14 @@ class Tovar extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'TOVAR_ID' => Yii::t('app', 'ID'),
-            'NAME' => Yii::t('app', 'Name'),
-            'PRINTNAME' => Yii::t('app', 'Printname'),
+            'TOVAR_ID' => Yii::t('app', '№'),
+            'NAME' => Yii::t('app', 'Наименование'),
+            'PRINTNAME' => Yii::t('app', 'Для печати'),
             'TYPE_ID' => Yii::t('app', 'Type ID'),
             'TAX_ID' => Yii::t('app', 'Tax ID'),
-            'ISACTIVE' => Yii::t('app', 'Is Active'),
+            'ISACTIVE' => Yii::t('app', 'Активно'),
             'PUBLISHED' => Yii::t('app', 'Published'),
-            'FKEY_1C' => Yii::t('app', 'Fkey 1C'),
+            'FKEY_1C' => Yii::t('app', 'Ключ 1C'),
         ];
     }
 }

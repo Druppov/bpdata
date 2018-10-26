@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="balance-index">
 
-    <h1><?//= Html::encode($this->title) ?></h1>
+    <!--<h1><?= Html::encode($this->title) ?></h1>-->
     <?//php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -83,17 +83,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 'pageSummary'=>true
             ],
             [
-                'class' => '\kartik\grid\BooleanColumn',
                 'attribute' => 'PUBLISHED',
-                'value' => 'PUBLISHED',
-                'trueLabel' => 'P',
-                'falseLabel' => 'U',
-                'filter' => Html::activeDropDownList(
-                    $searchModel,
-                    'PUBLISHED',
-                    Balance::$valuePublished,
-                    ['class'=>'form-control','prompt' => 'Все']
-                ),
+                'format' => 'raw',
+                'value' => function ($model, $index, $widget) {
+                    if ($model->PUBLISHED=='P') {
+                        return '<span class="glyphicon glyphicon-ok text-success"></span>';
+                    } else {
+                        return '<span class="glyphicon glyphicon-remove text-danger"></span>';
+                    }
+                },
+                'filter' => Balance::$valuePublished,
             ],
             [
                 'class' => 'kartik\grid\ActionColumn',

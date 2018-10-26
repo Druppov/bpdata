@@ -37,17 +37,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'POS_NAME',
             'ADDR',
             [
-                //'class' => '\kartik\grid\BooleanColumn',
                 'attribute' => 'PUBLISHED',
-                'value' => 'PUBLISHED',
-                //'trueLabel' => 'P',
-                //'falseLabel' => 'U',
-                'filter' => Html::activeDropDownList(
-                    $searchModel,
-                    'PUBLISHED',
-                    Bpos::$valuePublished,
-                    ['class'=>'form-control','prompt' => 'Все']
-                ),
+                'format' => 'raw',
+                'value' => function ($model, $index, $widget) {
+                    if ($model->PUBLISHED=='P') {
+                        return '<span class="glyphicon glyphicon-ok text-success"></span>';
+                    } else {
+                        return '<span class="glyphicon glyphicon-remove text-danger"></span>';
+                    }
+                },
+                'filter' => \app\models\Bpos::$valuePublished,
             ],
         ],
 

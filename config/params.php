@@ -8,5 +8,7 @@ return [
 		'systemName'  => 'Support',
 		'passwordResetToken' => 3600,
 		'rememberMeExpiration' => 3600 * 24 * 30, // 30 days
+        'name' => 'Bpos',
+        'id' => 'BPOS-ID'
 	]
 ];

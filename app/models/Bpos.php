@@ -48,7 +48,7 @@ class Bpos extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'POS_ID' => Yii::t('app', 'ID'),
+            'POS_ID' => Yii::t('app', '№'),
             'POS_NAME' => Yii::t('app', 'Название'),
             'ADDR' => Yii::t('app', 'Адрес'),
             'PUBLISHED' => Yii::t('app', 'Опубликовано'),

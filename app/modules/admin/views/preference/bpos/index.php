@@ -28,24 +28,27 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            'POS_ID',
+            [
+                'attribute' => 'POS_ID',
+                'headerOptions' => ['width'=>'80'],
+            ],
             'POS_NAME',
             'ADDR',
             [
-                //'class' => '\kartik\grid\BooleanColumn',
                 'attribute' => 'PUBLISHED',
-                'value' => 'PUBLISHED',
-                //'trueLabel' => 'P',
-                //'falseLabel' => 'U',
-                'filter' => Html::activeDropDownList(
-                    $searchModel,
-                    'PUBLISHED',
-                    Bpos::$valuePublished,
-                    ['class'=>'form-control','prompt' => 'Все']
-                ),
+                'format' => 'raw',
+                'value' => function ($model, $index, $widget) {
+                    if ($model->PUBLISHED=='P') {
+                        return '<span class="glyphicon glyphicon-ok text-success"></span>';
+                    } else {
+                        return '<span class="glyphicon glyphicon-remove text-danger"></span>';
+                    }
+                },
+                'filter' => \app\models\Bpos::$valuePublished,
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
+                'headerOptions' => ['width'=>'120'],
                 'header' => Yii::t('app', 'Действия'),
                 'urlCreator' => function ($action, $model, $key, $index) {
                     $action = 'bpos-'.$action;

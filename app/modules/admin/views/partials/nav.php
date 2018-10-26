@@ -38,7 +38,7 @@
                             ],
                             ['label' => 'Типы товаров', 'icon' => 'file-code-o', 'url' => ['/admin/preference/tovar-type-index'],],
                             ['label' => 'Персонал', 'icon' => 'users', /*'url' => ['/admin/users'],*/ 'url' => ['/admin/preference/personal-index'], 'active' => 'users' === Yii::$app->controller->id, ],
-                            ['label' => 'Виды работ', 'icon' => 'file-code-o', 'url' => ['/gii'],],
+                            ['label' => 'Тип сотрудников', 'icon' => 'file-code-o', 'url' => ['/admin/preference/work-index'],],
                         ]
                     ],
                     [

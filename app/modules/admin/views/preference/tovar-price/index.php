@@ -69,26 +69,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'html',
             ],
             'PRICE_VALUE',
-            /*
             [
-                'class' => '\kartik\grid\BooleanColumn',
-                'attribute' => 'PUBLISHED',
-                'value' => 'PUBLISHED',
-                'trueLabel' => TovarPrice::$valuePublished['P'],
-                'falseLabel' => TovarPrice::$valuePublished['U'],
-                'filter' => Html::activeDropDownList($searchModel, 'PUBLISHED', TovarPrice::$valuePublished,['class'=>'form-control','prompt' => 'Публикация']),
-            ],
-            */
-            [
-                'class' => '\kartik\grid\BooleanColumn',
                 'attribute' => 'ISUSED',
-                'value' => 'ISUSED',
-                'trueLabel' => TovarPrice::$valueIsUsed['Y'],
-                'falseLabel' => TovarPrice::$valueIsUsed['N'],
-                'filter' => Html::activeDropDownList($searchModel, 'ISUSED', TovarPrice::$valueIsUsed,['class'=>'form-control','prompt' => 'Используется']),
+                'format' => 'raw',
+                'value' => function ($model, $index, $widget) {
+                    if ($model->ISUSED=='Y') {
+                        return '<span class="glyphicon glyphicon-ok text-success"></span>';
+                    } else {
+                        return '<span class="glyphicon glyphicon-remove text-danger"></span>';
+                    }
+                },
+                'filter' => \app\models\TovarPrice::$valueYesNo,
             ],
-
-            //['class' => 'kartik\grid\ActionColumn'],
         ],
     ]); ?>
     <?//php Pjax::end(); ?>

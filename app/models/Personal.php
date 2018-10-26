@@ -42,10 +42,10 @@ class Personal extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'PERSON_ID' => Yii::t('app', 'ID'),
+            'PERSON_ID' => Yii::t('app', '№'),
             'FIO' => Yii::t('app', 'ФИО'),
-            'ISACTIVE' => Yii::t('app', 'Is Active'),
-            'PUBLISHED' => Yii::t('app', 'Published'),
+            'ISACTIVE' => Yii::t('app', 'Активность'),
+            'PUBLISHED' => Yii::t('app', 'Опубликовано'),
         ];
     }
 }

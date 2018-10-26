@@ -22,7 +22,7 @@ use yii\helpers\Html;
 			<ul class="nav navbar-nav">
 
 				<!-- Messages: style can be found in dropdown.less-->
-				<li class="dropdown messages-menu">
+				<li style="display: none;" class="dropdown messages-menu">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 						<i class="fa fa-envelope-o"></i>
 						<span class="label label-success">4</span>
@@ -103,7 +103,7 @@ use yii\helpers\Html;
 						<li class="footer"><a href="#">See All Messages</a></li>
 					</ul>
 				</li>
-				<li class="dropdown notifications-menu">
+				<li style="display: none;" class="dropdown notifications-menu">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 						<i class="fa fa-bell-o"></i>
 						<span class="label label-warning">10</span>
@@ -146,7 +146,7 @@ use yii\helpers\Html;
 					</ul>
 				</li>
 				<!-- Tasks: style can be found in dropdown.less -->
-				<li class="dropdown tasks-menu">
+				<li style="display: none;" class="dropdown tasks-menu">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 						<i class="fa fa-flag-o"></i>
 						<span class="label label-danger">9</span>

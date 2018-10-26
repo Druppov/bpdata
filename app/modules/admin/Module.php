@@ -15,7 +15,7 @@ class Module extends \yii\base\Module
 	/**
 	 * @inheritdoc
 	 */
-	public $defaultRoute = 'users';
+	public $defaultRoute = 'preference/personal-index';
 
 	/**
 	 * @inheritdoc

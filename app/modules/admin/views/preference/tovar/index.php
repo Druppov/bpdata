@@ -21,16 +21,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="tovar-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php Pjax::begin(); ?>
+    <!--<h1><?= Html::encode($this->title) ?></h1>-->
+    <?//php Pjax::begin(); ?>
     <?php //echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'pjax' => true,
         'columns' => [
-            //['class' => 'yii\grid\SerialColumn'],
-            //['class' => 'kartik\grid\SerialColumn'],
             [
                 'class' => 'kartik\grid\ExpandRowColumn',
                 'value' => function ($model,$key,$index,$column)
@@ -50,19 +49,36 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
 
-            //'TOVAR_ID',
+            [
+                'attribute' => 'TOVAR_ID',
+                'headerOptions' => ['width'=>80],
+            ],
             'NAME',
             'PRINTNAME',
-            'TYPE_ID',
-            'TAX_ID',
+            [
+                'attribute' => 'ISACTIVE',
+                'format' => 'raw',
+                'value' => function ($model, $index, $widget) {
+                    if ($model->ISACTIVE=='Y') {
+                        return '<span class="glyphicon glyphicon-ok text-success"></span>';
+                    } else {
+                        return '<span class="glyphicon glyphicon-remove text-danger"></span>';
+                    }
+                },
+                'filter' => \app\models\Tovar::$valueYesNo,
+            ],
+            //'TYPE_ID',
+            //'TAX_ID',
             //'ISACTIVE',
             //'PUBLISHED',
-            //'FKEY_1C',
+            'FKEY_1C',
 
             //['class' => 'yii\grid\ActionColumn'],
             [
-                //'class' => 'yii\grid\ActionColumn',
-                'class' => 'kartik\grid\ActionColumn',
+                'class' => 'yii\grid\ActionColumn',
+                //'class' => 'kartik\grid\ActionColumn',
+                'headerOptions' => ['width'=>'120'],
+                'header' => Yii::t('app', 'Действия'),
                 'urlCreator' => function ($action, $model, $key, $index) {
                     $action = 'tovar-'.$action;
                     return Url::to(['preference/'.$action, 'id' => $model->TOVAR_ID]);
@@ -71,5 +87,5 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
-    <?php Pjax::end(); ?>
+    <?//php Pjax::end(); ?>
 </div>

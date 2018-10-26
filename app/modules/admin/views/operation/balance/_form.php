@@ -36,8 +36,7 @@ use app\models\Tovar;
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Сохранить'), ['class' => 'btn btn-success']) ?>
-        <? //Yii::$app->request->referrer ?: Yii::$app->homeUrl ?>
-        <?= Html::a(Yii::t('app', 'Отменить'), ['balance-index'], ['class' => 'btn btn btn-info']) ?>
+        <?= Html::a(Yii::t('app', 'Отменить'), Yii::$app->request->referrer, ['class' => 'btn btn-info'])?>
     </div>
 
     <?php ActiveForm::end(); ?>

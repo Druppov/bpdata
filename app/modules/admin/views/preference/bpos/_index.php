@@ -9,19 +9,17 @@ use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\admin\models\BposSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-
-$this->title = Yii::t('app', 'Точки продаж');
 ?>
 <div class="bpos-index">
-
-    <h4><?= Html::encode($this->title) ?></h4>
-    <?php Pjax::begin(); ?>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'pjax' => true,
         'columns' => [
-            //'POS_ID',
+            [
+                'attribute' => 'POS_ID',
+                'headerOptions' => ['width'=>'80'],
+            ],
             [
                 'class' => 'kartik\grid\ExpandRowColumn',
                 'value' => function ($model,$key,$index,$column)
@@ -43,16 +41,7 @@ $this->title = Yii::t('app', 'Точки продаж');
             ],
             'POS_NAME',
             'ADDR',
-            'PUBLISHED',
-            [
-                'class' => 'kartik\grid\ActionColumn',
-                'urlCreator' => function ($action, $model, $key, $index) {
-                    $action = 'bpos-'.$action;
-                    return Url::to(['preference/'.$action, 'id' => $model->POS_ID]);
-                }
-            ],
         ],
 
     ]); ?>
-    <?php Pjax::end(); ?>
 </div>

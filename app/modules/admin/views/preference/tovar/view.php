@@ -7,22 +7,23 @@ use yii\widgets\DetailView;
 /* @var $model app\models\Tovar */
 
 $this->title = $model->NAME;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Tovars'), 'url' => ['tovar-index', 'type'=>$model->TYPE_ID]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Товары'), 'url' => ['tovar-index', 'type'=>$model->TYPE_ID]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tovar-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <!--<h1><?= Html::encode($this->title) ?></h1>-->
 
     <p>
-        <?= Html::a(Yii::t('app', 'Update'), ['tovar-update', 'id' => $model->TOVAR_ID], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['tovar-delete', 'id' => $model->TOVAR_ID], [
+        <?= Html::a(Yii::t('app', 'Изменить'), ['tovar-update', 'id' => $model->TOVAR_ID], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('app', 'Удалить'), ['tovar-delete', 'id' => $model->TOVAR_ID], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
+                'confirm' => Yii::t('app', 'Вы уверены, что хотите удалить?'),
                 'method' => 'post',
             ],
         ]) ?>
+        <?= Html::a(Yii::t('app', 'Отменить'), Yii::$app->request->referrer, ['class' => 'btn btn-info'])?>
     </p>
 
     <?= DetailView::widget([
@@ -31,10 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'TOVAR_ID',
             'NAME',
             'PRINTNAME',
-            'TYPE_ID',
-            'TAX_ID',
             'ISACTIVE',
-            'PUBLISHED',
             'FKEY_1C',
         ],
     ]) ?>

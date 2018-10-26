@@ -42,9 +42,9 @@ class TovarType extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'TYPE_ID' => Yii::t('app', 'ID'),
-            'TYPE_NAME' => Yii::t('app', 'Name'),
-            'SHOWASCATEGORY' => Yii::t('app', 'Show As Category'),
+            'TYPE_ID' => Yii::t('app', '№'),
+            'TYPE_NAME' => Yii::t('app', 'Наименование'),
+            'SHOWASCATEGORY' => Yii::t('app', 'Активно'),
             'PUBLISHED' => Yii::t('app', 'Published'),
         ];
     }

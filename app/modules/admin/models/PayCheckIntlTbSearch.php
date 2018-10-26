@@ -90,7 +90,7 @@ class PayCheckIntlTbSearch extends PayCheckIntlTb
             'ROW_NPP' => $this->ROW_NPP,
         ]);
 
-        $query->andFilterWhere(['like', 'PUBLISHED', $this->PUBLISHED])
+        $query->andFilterWhere(['like', PayCheckIntl::tableName().'.PUBLISHED', $this->PUBLISHED])
             ->andFilterWhere([PayCheckIntl::tableName().'.SMENA_ID'=>$this->SMENA_ID])
             ->andFilterWhere([PayCheckIntl::tableName().'.RASHOD_ID'=>$this->RASHOD_ID])
             ->andFilterWhere([PayCheckIntl::tableName().'.PERSON_ID'=>$this->PERSON_ID]);

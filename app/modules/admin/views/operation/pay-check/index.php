@@ -87,21 +87,17 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             */
             [
-                'class' => '\kartik\grid\BooleanColumn',
                 'attribute' => 'PUBLISHED',
-                'value' => 'PUBLISHED',
-                'trueLabel' => PayCheckTb::$valuePublished['P'],
-                'falseLabel' => PayCheckTb::$valuePublished['U'],
-                'filter' => Html::activeDropDownList(
-                    $searchModel,
-                    'PUBLISHED',
-                    PayCheckTb::$valuePublished,
-                    ['class'=>'form-control','prompt' => 'Все']
-                ),
+                'format' => 'raw',
+                'value' => function ($model, $index, $widget) {
+                    if ($model->PUBLISHED=='P') {
+                        return '<span class="glyphicon glyphicon-ok text-success"></span>';
+                    } else {
+                        return '<span class="glyphicon glyphicon-remove text-danger"></span>';
+                    }
+                },
+                'filter' => \app\models\PayCheck::$valuePublished,
             ],
-            //'ROW_NPP',
-
-            //['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
     <?//php Pjax::end(); ?>

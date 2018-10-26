@@ -8,6 +8,7 @@ use app\modules\admin\models\PacketInSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * PacketController implements the CRUD actions for PacketIn model.
@@ -67,8 +68,33 @@ class PacketController extends Controller
     {
         $model = new PacketIn();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'POS_ID' => $model->POS_ID, 'PACKETNO' => $model->PACKETNO]);
+        if ($model->load(Yii::$app->request->post())) {
+            $file = UploadedFile::getInstance($model, 'PACKETFILENAME');
+            $model->PACKETFILENAME = $file->name;
+            if (preg_match('/mgt-(\d+)-(\d+)-(\d+)\.(zip|rar)/', $file->name, $output)) {
+                $model->POS_ID = (int)$output[1];
+                $model->PACKETNO = (int)$output[3];
+            }
+            Yii::$app->params['uploadPath'] = Yii::$app->basePath . PacketIn::$uploadPath;
+            $path = Yii::$app->params['uploadPath'] . $file->name;
+            $file->saveAs($path);
+            $model->DATA = file_get_contents($path);
+            $model->PROCESSED = 'N';
+            //$model->PACKETFILENAME = $path;
+            if ($model->save()) {
+                //Обработка информации
+                $model->unzipping();
+                return $this->redirect(['view', 'POS_ID' => $model->POS_ID, 'PACKETNO' => $model->PACKETNO]);
+            }  else {
+                var_dump ($model->getErrors());
+                die();
+            }
+            /*
+            if ($model->upload()) {
+                // file is uploaded successfully
+                return $this->redirect(['view', 'POS_ID' => $model->POS_ID, 'PACKETNO' => $model->PACKETNO]);
+            }
+            */
         }
 
         return $this->render('create', [
@@ -110,6 +136,11 @@ class PacketController extends Controller
         $this->findModel($POS_ID, $PACKETNO)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function zipped($acrName)
+    {
+        //
     }
 
     /**

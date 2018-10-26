@@ -11,7 +11,7 @@ use Yii;
  * @property string $WORKNAME
  * @property string $PUBLISHED
  */
-class Work extends \yii\db\ActiveRecord
+class Work extends ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -27,7 +27,7 @@ class Work extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['WORK_ID', 'WORKNAME', 'PUBLISHED'], 'required'],
+            [['WORKNAME', 'PUBLISHED'], 'required'],
             [['WORK_ID'], 'integer'],
             [['WORKNAME'], 'string', 'max' => 20],
             [['PUBLISHED'], 'string', 'max' => 1],
@@ -41,9 +41,9 @@ class Work extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'WORK_ID' => Yii::t('app', 'Work  ID'),
-            'WORKNAME' => Yii::t('app', 'Workname'),
-            'PUBLISHED' => Yii::t('app', 'Published'),
+            'WORK_ID' => Yii::t('app', '№'),
+            'WORKNAME' => Yii::t('app', 'Название'),
+            'PUBLISHED' => Yii::t('app', 'Видимость'),
         ];
     }
 }

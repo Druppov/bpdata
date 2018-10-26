@@ -11,25 +11,14 @@ use kartik\dialog\Dialog;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\admin\models\TovarPriceSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-
-$this->title = Yii::t('app', 'Цены');
 ?>
 
-<?php $this->beginBlock(ThemeHelper::BLOCK_HEADER_BUTTONS); ?>
-<?= Html::a(Yii::t('app', 'Добавить цену'), ['tovar-price-create'], ['class' => 'btn btn-sm btn-success']) ?>
-<?php $this->endBlock(); ?>
-
 <div class="tovar-price-index">
-
-    <h3><?= Html::encode($this->title) ?></h3>
-
-    <?php //Pjax::begin(); ?>
-
     <?= GridView::widget([
         'id' => 'grid-tovar-price',
         'pjax' => true,
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'kartik\grid\SerialColumn'],
             [
@@ -44,19 +33,30 @@ $this->title = Yii::t('app', 'Цены');
                 'format' => 'html',
             ],
             'PRICE_VALUE',
-            'PUBLISHED',
-            'ISUSED',
-
-            //['class' => 'kartik\grid\ActionColumn'],
             [
-                'class' => 'kartik\grid\ActionColumn',
-                /*
-                'template'=>'{view}{update}{delete}',
+                'attribute' => 'ISUSED',
+                'format' => 'raw',
+                'value' => function ($model, $index, $widget) {
+                    if ($model->ISUSED=='Y') {
+                        return '<span class="glyphicon glyphicon-ok text-success"></span>';
+                    } else {
+                        return '<span class="glyphicon glyphicon-remove text-danger"></span>';
+                    }
+                },
+                'filter' => \app\models\TovarPrice::$valueYesNo,
+            ],
+
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'headerOptions' => ['width'=>'120'],
+                'header' => Yii::t('app', 'Действия'),
+                'template' => '{update}&nbsp;{add}',
                 'urlCreator' => function ($action, $model, $key, $index) {
                     $action = 'tovar-price-'.$action;
                     return Url::to(['preference/'.$action, 'id' => $model->TOVAR_ID]);
                 },
                 'buttons'=>[
+                    /*
                     'update' => function($url,$model,$key){
                         $btn = Html::button("<span class='glyphicon glyphicon-pencil'></span>",[
                             'value'=>Yii::$app->urlManager->createUrl('example/update?id='.$key), //<---- here is where you define the action that handles the ajax request
@@ -66,10 +66,37 @@ $this->title = Yii::t('app', 'Цены');
                             'title'=>'Update'
                         ]);
                         return $btn;
+                    },
+                    */
+                    'update' => function($url,$model,$key){
+                        $btn = Html::a("<span class='glyphicon glyphicon-pencil'></span>",
+                            ['/admin/preference/tovar-price-update', 'POS_ID'=>$model->POS_ID, 'TOVAR_ID'=>$model->TOVAR_ID, 'PRICE_DATE'=>$model->PRICE_DATE],
+                            [
+                            'value'=>Yii::$app->urlManager->createUrl(['/admin/preference/tovar-price-update', 'POS_ID'=>$model->POS_ID, 'TOVAR_ID'=>$model->TOVAR_ID, 'PRICE_DATE'=>$model->PRICE_DATE]),
+                            //<---- here is where you define the action that handles the ajax request
+                            'class'=>'add-modal-click grid-action popupModal',
+                            'data-toggle'=>'tooltip',
+                            'data-placement'=>'bottom',
+                            'title'=>'Изменить'
+                            ]);
+                        return $btn;
+                    },
+                    'add' => function($url,$model,$key){
+                        $btn = Html::a("<span class='glyphicon glyphicon-new-window'></span>",
+                            ['/admin/preference/tovar-price-create', 'POS_ID'=>$model->POS_ID, 'TOVAR_ID'=>$model->TOVAR_ID],
+                            [
+                            'value'=>Yii::$app->urlManager->createUrl('/admin/preference/tovar-price-create'),
+                            //<---- here is where you define the action that handles the ajax request
+                            'class'=>'add-modal-click grid-action popupModal',
+                            'data-toggle'=>'tooltip',
+                            'data-placement'=>'bottom',
+                            'title'=>'Добавить'
+                            ]);
+                        return $btn;
                     }
-                ]
-                */
+                ],
             ],
+            /*
             [
                 'header'=>'Plan Info',
                 'value'=> function($data) {
@@ -82,9 +109,9 @@ $this->title = Yii::t('app', 'Цены');
                 },
                 'format' => 'raw'
             ],
+            */
         ]
     ]); ?>
-    <?php //Pjax::end(); ?>
 </div>
 
 <?

@@ -17,6 +17,11 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord
         'U' => 'Нет'
     ];
 
+    public static $valueYesNo = [
+        'Y' => 'Да',
+        'N' => 'Нет'
+    ];
+
     public static function getBposFilter($searchModel, $idSmenaSelector=null)
     {
         return \yii\helpers\Html::activeDropDownList(
@@ -41,10 +46,12 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord
     /**
 	 * @inheritdoc
 	 */
+    /*
 	public function behaviors()
 	{
 		return [
 			TimestampBehavior::class,
 		];
 	}
+    */
 }

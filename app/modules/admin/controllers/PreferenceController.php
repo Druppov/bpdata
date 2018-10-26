@@ -4,8 +4,10 @@ namespace app\modules\admin\controllers;
 
 use app\models\Tovar;
 use app\models\TovarPrice;
+use app\models\Work;
 use app\modules\admin\models\TovarPriceSearch;
 use app\modules\admin\models\TovarSearch;
+use app\modules\admin\models\WorkSearch;
 use Yii;
 use app\models\Bpos;
 use app\modules\admin\models\BposSearch;
@@ -36,6 +38,7 @@ class PreferenceController extends Controller
                     'personal-delete' => ['POST'],
                     'tovar-delete' => ['POST'],
                     'tovar-price-delete' => ['POST'],
+                    'work-delete' => ['POST'],
                 ],
             ],
         ];
@@ -93,7 +96,10 @@ class PreferenceController extends Controller
     {
         $model = new Bpos();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->PUBLISHED = 'U';
+            $model->save(false);
+
             return $this->redirect(['bpod-view', 'id' => $model->POS_ID]);
         }
 
@@ -173,7 +179,10 @@ class PreferenceController extends Controller
     {
         $model = new TovarType();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->PUBLISHED = 'N';
+            $model->save(false);
+
             return $this->redirect(['tovar-type-view', 'id' => $model->TYPE_ID]);
         }
 
@@ -217,6 +226,86 @@ class PreferenceController extends Controller
     }
 
     /**
+     * Lists all Work models.
+     * @return mixed
+     */
+    public function actionWorkIndex()
+    {
+        $searchModel = new WorkSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('work/index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Displays a single Work model.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionWorkView($id)
+    {
+        return $this->render('work/view', [
+            'model' => $this->findWorkModel($id),
+        ]);
+    }
+
+    /**
+     * Creates a new Work model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionWorkCreate()
+    {
+        $model = new Work();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['work-view', 'id' => $model->WORK_ID]);
+        }
+
+        return $this->render('work/create', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Updates an existing Work model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionWorkUpdate($id)
+    {
+        $model = $this->findWorkModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->WORK_ID]);
+        }
+
+        return $this->render('work/update', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Deletes an existing Work model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionWorkDelete($id)
+    {
+        $this->findWorkModel($id)->delete();
+
+        return $this->redirect(['work-index']);
+    }
+
+    /**
      * Lists all Personal models.
      * @return mixed
      */
@@ -253,7 +342,10 @@ class PreferenceController extends Controller
     {
         $model = new Personal();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->PUBLISHED = 'P';
+            $model->save(false);
+
             return $this->redirect(['personal-view', 'id' => $model->PERSON_ID]);
         }
 
@@ -343,7 +435,10 @@ class PreferenceController extends Controller
             $model->TYPE_ID = $type;
         }
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->PUBLISHED = 'P';
+            $model->save(false);
+
             return $this->redirect(['tovar-view', 'id' => $model->TOVAR_ID]);
         }
 
@@ -432,17 +527,37 @@ class PreferenceController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionTovarPriceCreate()
+    public function actionTovarPriceCreate($POS_ID=null, $TOVAR_ID=null)
     {
         $model = new TovarPrice();
+        if (!is_null($POS_ID)) {
+            $model->POS_ID = $POS_ID;
+        }
+        if (!is_null($TOVAR_ID)) {
+            $model->TOVAR_ID = $TOVAR_ID;
+        }
+        $model->PUBLISHED = 'P';
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['tovar-price-view', 'POS_ID' => $model->POS_ID, 'TOVAR_ID' => $model->TOVAR_ID, 'PRICE_DATE' => $model->PRICE_DATE]);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->save(false);
+
+            return ;
+            //return $this->redirect(['tovar-price-view', 'POS_ID' => $model->POS_ID, 'TOVAR_ID' => $model->TOVAR_ID, 'PRICE_DATE' => $model->PRICE_DATE]);
+        } else {
+            if (Yii::$app->request->isAjax) {
+                return $this->renderAjax('tovar-price/create', [
+                    'model' => $model,
+                ]);
+            } else {
+                return $this->render('tovar-price/create', [
+                    'model' => $model,
+                ]);
+            }
         }
 
-        return $this->render('tovar-price/create', [
-            'model' => $model,
-        ]);
+        //return $this->render('tovar-price/create', [
+        //    'model' => $model,
+        //]);
     }
 
     /**
@@ -460,6 +575,8 @@ class PreferenceController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->save(false);
+            echo 'ok';
+            return ;
             //return $this->redirect(['tovar-price-view', 'POS_ID' => $model->POS_ID, 'TOVAR_ID' => $model->TOVAR_ID, 'PRICE_DATE' => $model->PRICE_DATE]);
         } else {
             if (Yii::$app->request->isAjax) {
@@ -566,6 +683,22 @@ class PreferenceController extends Controller
     protected function findTovarPriceModel($POS_ID, $TOVAR_ID, $PRICE_DATE)
     {
         if (($model = TovarPrice::findOne(['POS_ID' => $POS_ID, 'TOVAR_ID' => $TOVAR_ID, 'PRICE_DATE' => $PRICE_DATE])) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+
+    /**
+     * Finds the Work model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return Work the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findWorkModel($id)
+    {
+        if (($model = Work::findOne($id)) !== null) {
             return $model;
         }
 
