@@ -5,10 +5,12 @@ namespace app\modules\admin\controllers;
 use app\models\PayCheckIntlTb;
 use app\models\Smena;
 use app\models\SmenaTb;
+use app\modules\admin\models\BposSearch;
 use app\modules\admin\models\PayCheckIntlTbSearch;
 use app\modules\admin\models\PayCheckTbSearch;
 use app\modules\admin\models\SmenaSearch;
 use app\modules\admin\models\SmenaTbSearch;
+use app\modules\admin\models\TovarPriceSearch;
 use kartik\grid\EditableColumnAction;
 use Yii;
 use app\models\Balance;
@@ -148,6 +150,36 @@ class OperationController extends Controller
     }
 
     /**
+     * Lists all TovarPrice models.
+     * @return mixed
+     */
+    public function actionTovarPriceReport()
+    {
+        $searchModel = new TovarPriceSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('tovar-price/index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Lists all Bpos models.
+     * @return mixed
+     */
+    public function actionBposReport()
+    {
+        $searchModel = new BposSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('bpos/index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
      * Lists all Smena models.
      * @return mixed
      */
@@ -169,6 +201,7 @@ class OperationController extends Controller
     public function actionSmenaTbIndex()
     {
         $searchModel = new SmenaTbSearch();
+        $searchModel->POS_ID = -1;
         $searchPayCheckTbModel = new PayCheckTbSearch();
         $searchPayCheckTbRetModel = new PayCheckTbSearch();
         $searchPayCheckIntlTbModel = new PayCheckIntlTbSearch();

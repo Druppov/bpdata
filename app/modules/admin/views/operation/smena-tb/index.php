@@ -3,14 +3,37 @@
 use app\modules\admin\assets\ThemeHelper;
 use yii\helpers\Html;
 use kartik\grid\GridView;
-use yii\widgets\Pjax;
 use app\models\SmenaTb;
+use kartik\export\ExportMenu;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\admin\models\SmenaTbSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', 'Смена');
 $this->params['breadcrumbs'][] = $this->title;
+
+$gridColumns1 = [
+    'personal.FIO',
+    'work.WORKNAME',
+    'PUBLISHED'
+];
+$gridColumns2 = [
+    'tovar.NAME',
+    'KVO',
+    'SUMMA',
+    'PUBLISHED'
+];
+$gridColumns3 = [
+    'tovar.NAME',
+    'PUBLISHED'
+];
+$gridColumns4 = [
+    'payCheckIntl.rashodType.RASHODNAME',
+    'payCheckIntl.personal.FIO',
+    'KVO',
+    'SUMMA',
+    'PUBLISHED'
+];
 ?>
 
 <?php $this->beginBlock(ThemeHelper::BLOCK_HEADER_BUTTONS); ?>
@@ -19,20 +42,22 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="smena-tb-index">
 
-    <!--<h1><?= Html::encode($this->title) ?></h1>-->
-    <?//php Pjax::begin(); ?>
     <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
+    <? echo ExportMenu::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => $gridColumns1,
+    ]); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
+        'pjax'=>true,
         'autoXlFormat'=>true,
         'toggleDataContainer' => ['class' => 'btn-group mr-2'],
         'export'=>[
             'showConfirmAlert'=>false,
             'target'=>GridView::TARGET_BLANK
         ],
-        'pjax'=>true,
         'panel'=>[
             'type'=>'primary',
             'heading'=>$this->title
@@ -62,15 +87,22 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
+    <? if (isset($dataPayCheckTbRetProvider)) {
+        echo ExportMenu::widget([
+            'dataProvider' => $dataPayCheckTbProvider,
+            'columns' => $gridColumns2,
+        ]);
+    }
+    ?>
     <?= GridView::widget([
         'dataProvider' => $dataPayCheckTbProvider,
+        'pjax'=>true,
         'autoXlFormat'=>true,
         'toggleDataContainer' => ['class' => 'btn-group mr-2'],
         'export'=>[
             'showConfirmAlert'=>false,
             'target'=>GridView::TARGET_BLANK
         ],
-        'pjax'=>true,
         'panel'=>[
             'type'=>'primary',
             'heading'=>Yii::t('app', 'Продажи по смене')
@@ -95,6 +127,10 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
+    <? echo ExportMenu::widget([
+        'dataProvider' => $dataPayCheckTbRetProvider,
+        'columns' => $gridColumns3,
+    ]); ?>
     <?= GridView::widget([
         'dataProvider' => $dataPayCheckTbRetProvider,
         'autoXlFormat'=>true,
@@ -128,6 +164,10 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
+    <? echo ExportMenu::widget([
+        'dataProvider' => $dataPayCheckIntlTbProvider,
+        'columns' => $gridColumns4,
+    ]); ?>
     <?= GridView::widget([
         'dataProvider' => $dataPayCheckIntlTbProvider,
         'autoXlFormat'=>true,
@@ -171,5 +211,4 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
-    <?//php Pjax::end(); ?>
 </div>

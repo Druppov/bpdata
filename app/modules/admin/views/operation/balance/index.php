@@ -5,41 +5,46 @@ use yii\helpers\Html;
 //use yii\grid\GridView;
 use kartik\grid\GridView;
 use yii\helpers\Url;
-use yii\widgets\Pjax;
 use app\models\Balance;
 use app\models\Bpos;
+use kartik\export\ExportMenu;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\admin\models\BalanceSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', 'Остатки');
 $this->params['breadcrumbs'][] = $this->title;
-?>
 
-<?php $this->beginBlock(ThemeHelper::BLOCK_HEADER_BUTTONS); ?>
-<?= Html::a(Yii::t('app', 'Добавить остатки'), ['balance-create'], ['class' => 'btn btn-sm btn-success']) ?>
-<?php $this->endBlock(); ?>
+$gridColumns = [
+    'bpos.POS_NAME',
+    'BALANCEDATE',
+    'tovar.NAME',
+    'AMOUNT',
+    'PUBLISHED'
+];?>
 
 <div class="balance-index">
 
-    <!--<h1><?= Html::encode($this->title) ?></h1>-->
-    <?//php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
+    <? echo ExportMenu::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => $gridColumns,
+    ]); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'pjax'=>true,
+        /*
         'autoXlFormat'=>true,
         'toggleDataContainer' => ['class' => 'btn-group mr-2'],
         'export'=>[
             'showConfirmAlert'=>false,
             'target'=>GridView::TARGET_BLANK
         ],
-        'pjax'=>true,
         'panel'=>[
             'type'=>'primary',
             'heading'=>$this->title
         ],
+        */
         'columns' => [
             ['class' => 'kartik\grid\SerialColumn'],
 
@@ -65,15 +70,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'html',
             ],
             [
-                'attribute' => 'TOVAR_ID',
+                'attribute' => 'TOVAR_NAME',
                 'value' => 'tovar.NAME',
+                'label' => Yii::t('app', 'Товар')
             ],
             [
                 'class'=>'kartik\grid\EditableColumn',
                 'attribute'=>'AMOUNT',
                 'editableOptions'=>[
                     'formOptions'=>['action' => ['/admin/operation/balance-edit-amount']], // point to the new action
-                    //'inputType'=>kartik\editable\Editable::INPUT_MONEY,
                     'options'=>['pluginOptions'=>['min'=>0, 'max'=>5000]]
                 ],
                 'hAlign'=>'right',
@@ -94,15 +99,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'filter' => Balance::$valuePublished,
             ],
-            [
-                'class' => 'kartik\grid\ActionColumn',
-                'header' => Yii::t('app', 'Действия'),
-                'urlCreator' => function ($action, $model, $key, $index) {
-                    $action = 'balance-'.$action;
-                    return Url::to(['operation/'.$action, 'POS_ID' => $model->POS_ID, 'BALANCEDATE'=>$model->BALANCEDATE, 'TOVAR_ID'=>$model->TOVAR_ID]);
-                }
-            ],
         ],
     ]); ?>
-    <?//php Pjax::end(); ?>
 </div>

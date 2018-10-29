@@ -3,41 +3,49 @@
 use app\modules\admin\assets\ThemeHelper;
 use yii\helpers\Html;
 use kartik\grid\GridView;
-use yii\widgets\Pjax;
 use app\models\TovarPrice;
+use kartik\export\ExportMenu;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\admin\models\TovarPriceSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Цена товара');
+$this->title = Yii::t('app', 'Отчет `Цена товара`');
 $this->params['breadcrumbs'][] = $this->title;
-?>
 
-<?php $this->beginBlock(ThemeHelper::BLOCK_HEADER_BUTTONS); ?>
-<?= Html::a(Yii::t('app', 'Добавить цену товара'), ['tovar-price-create'], ['class' => 'btn btn-sm btn-success']) ?>
-<?php $this->endBlock(); ?>
+$gridColumns = [
+    'bpos.POS_NAME',
+    'tovar.NAME',
+    'PRICE_DATE',
+    'PRICE_VALUE',
+    'ISUSED',
+];
+?>
 
 <div class="tovar-price-index">
 
-    <h1><?//= Html::encode($this->title) ?></h1>
-    <?//php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
+    <? echo ExportMenu::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => $gridColumns,
+    ]); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'pjax'=>true,
+        /*
         'autoXlFormat'=>true,
         'toggleDataContainer' => ['class' => 'btn-group mr-2'],
         'export'=>[
             'showConfirmAlert'=>false,
             'target'=>GridView::TARGET_BLANK
         ],
-        'pjax'=>true,
         //'showPageSummary'=>true,
         'panel'=>[
             'type'=>'primary',
             'heading'=>$this->title
         ],
+        */
         'columns' => [
             ['class' => 'kartik\grid\SerialColumn'],
 
@@ -51,7 +59,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => 'tovar.NAME',
                 'label' => Yii::t('app', 'Товар'),
             ],
-            //'PRICE_DATE',
             [
                 'class' => '\kartik\grid\DataColumn',
                 'attribute' => 'PRICE_DATE',
@@ -66,7 +73,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'todayHighlight' => true,
                     ]
                 ],
-                //'group' => true,
                 'format' => 'html',
             ],
             'PRICE_VALUE',
@@ -84,5 +90,4 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
-    <?//php Pjax::end(); ?>
 </div>

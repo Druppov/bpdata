@@ -65,4 +65,13 @@ class PayCheck extends ActiveRecord
             'ZAKAZNO' => Yii::t('app', 'Zakazno'),
         ];
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSmena()
+    {
+        return $this->hasOne(Smena::className(), ['SMENA_ID'=>'SMENA_ID', 'POS_ID'=>'POS_ID']);
+    }
+
 }

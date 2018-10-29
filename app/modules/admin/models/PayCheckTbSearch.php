@@ -3,6 +3,7 @@
 namespace app\modules\admin\models;
 
 use app\models\PayCheck;
+use app\models\Tovar;
 use phpDocumentor\Reflection\Types\Self_;
 use Yii;
 use yii\base\Model;
@@ -16,6 +17,7 @@ class PayCheckTbSearch extends PayCheckTb
 {
     public $SMENA_ID;
     public $RET;
+    public $TOVAR_NAME;
 
     /**
      * {@inheritdoc}
@@ -25,7 +27,7 @@ class PayCheckTbSearch extends PayCheckTb
         return [
             [['POS_ID', 'CHECKNO', 'STRNO', 'TOVAR_ID', 'KVO', 'ROW_NPP'], 'integer'],
             [['PRICE', 'SUMMA'], 'number'],
-            [['PUBLISHED', 'SMENA_ID', 'RET'], 'safe'],
+            [['PUBLISHED', 'SMENA_ID', 'RET', 'TOVAR_NAME'], 'safe'],
         ];
     }
 
@@ -50,7 +52,7 @@ class PayCheckTbSearch extends PayCheckTb
         $query = PayCheckTb::find();
 
         // add conditions that should always apply here
-        $query->joinWith(['payCheck']);
+        $query->joinWith(['payCheck', 'tovar']);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -59,6 +61,10 @@ class PayCheckTbSearch extends PayCheckTb
         $dataProvider->sort->attributes['SMENA_ID'] = [
             'asc' => [PayCheck::tableName().'.SMENA_ID' => SORT_ASC],
             'desc' => [PayCheck::tableName().'.SMENA_ID' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['TOVAR_NAME'] = [
+            'asc' => [Tovar::tableName().'.NAME' => SORT_ASC],
+            'desc' => [Tovar::tableName().'.NAME' => SORT_DESC],
         ];
 
         $this->load($params);
@@ -83,7 +89,9 @@ class PayCheckTbSearch extends PayCheckTb
 
         $query->andFilterWhere(['like', self::tableName().'.PUBLISHED', $this->PUBLISHED])
             ->andFilterWhere([PayCheck::tableName().'.SMENA_ID'=>$this->SMENA_ID])
-            ->andFilterWhere([PayCheck::tableName().'.RET'=>$this->RET]);
+            ->andFilterWhere([PayCheck::tableName().'.RET'=>$this->RET])
+            ->andFilterWhere(['like', Tovar::tableName().'.NAME', $this->TOVAR_NAME])
+        ;
 
         return $dataProvider;
     }

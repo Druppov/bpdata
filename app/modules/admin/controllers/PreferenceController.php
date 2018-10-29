@@ -60,21 +60,6 @@ class PreferenceController extends Controller
     }
 
     /**
-     * Lists all Bpos models.
-     * @return mixed
-     */
-    public function actionBposReport()
-    {
-        $searchModel = new BposSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('bpos/report', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
      * Displays a single Bpos model.
      * @param integer $id
      * @return mixed

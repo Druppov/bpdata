@@ -22,6 +22,8 @@ class Smena extends ActiveRecord
         'U' => 'Нет'
     ];
 
+    public $data;
+
     public static function getSmenaList($pos_id)
     {
         $smenaList = [];
@@ -38,9 +40,9 @@ class Smena extends ActiveRecord
         return $smenaList;
     }
 
-    public static function getSmenaName($pos_id)
+    public static function getSmenaName($POS_ID, $SMENA_ID)
     {
-        $smena = Smena::find(['POS_ID'=>$pos_id])->one();
+        $smena = Smena::find()->where(['POS_ID'=>$POS_ID, 'SMENA_ID'=>$SMENA_ID])->one();
         return empty($smena) ? '' : sprintf("[%s|%s]", date("d.m.Y",strtotime($smena->DATEOPEN)), $smena->personal->FIO);
     }
 
@@ -60,7 +62,7 @@ class Smena extends ActiveRecord
         return [
             [['POS_ID'], 'required'],
             [['POS_ID', 'CHIEF', 'ZOTCHENO'], 'integer'],
-            [['DATEOPEN', 'DATECLOSE'], 'safe'],
+            [['DATEOPEN', 'DATECLOSE', 'data'], 'safe'],
             [['PUBLISHED'], 'string', 'max' => 1],
         ];
     }
@@ -79,6 +81,19 @@ class Smena extends ActiveRecord
             'ZOTCHENO' => Yii::t('app', 'Zotcheno'),
             'PUBLISHED' => Yii::t('app', 'Опубликовано'),
         ];
+    }
+
+    protected function beforeFind()
+    {
+        $this->data = sprintf("[%s|%s]", date("d.m.Y",strtotime($this->DATEOPEN)), $this->personal->FIO);
+        parent::beforeFind();
+    }
+
+    public function getData()
+    {
+        //return sprintf("[%s|%s]", date("d.m.Y",strtotime($this->DATEOPEN)), $this->personal->FIO);
+        //return $this->SMENA_ID;
+        return $this->data;
     }
 
     /**

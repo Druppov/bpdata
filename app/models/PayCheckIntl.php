@@ -73,4 +73,12 @@ class PayCheckIntl extends ActiveRecord
     {
         return $this->hasOne(Personal::className(), ['PERSON_ID' => 'PERSON_ID']);
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSmena()
+    {
+        return $this->hasOne(Smena::className(), ['SMENA_ID'=>'SMENA_ID', 'POS_ID'=>'POS_ID']);
+    }
 }

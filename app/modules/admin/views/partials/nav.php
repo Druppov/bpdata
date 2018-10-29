@@ -46,8 +46,8 @@
                         'icon' => 'list-alt',
                         'url' => '#',
                         'items' => [
-                            ['label' => 'Торговые точки', 'icon' => 'file-code-o', 'url' => ['/admin/preference/bpos-report'],],
-                            ['label' => 'Цены', 'icon' => 'file-code-o', 'url' => ['/admin/preference/tovar-price-index'],],
+                            ['label' => 'Торговые точки', 'icon' => 'file-code-o', 'url' => ['/admin/operation/bpos-report'],],
+                            ['label' => 'Цены', 'icon' => 'file-code-o', 'url' => ['/admin/operation/tovar-price-report'],],
                             ['label' => 'Чеки', 'icon' => 'file-code-o', 'url' => ['/admin/operation/pay-check-index'],],
                             ['label' => 'Внутренний расход', 'icon' => 'file-code-o', 'url' => ['/admin/operation/pay-check-intl-index'],],
                             ['label' => 'Отчет смены', 'icon' => 'file-code-o', 'url' => ['/admin/operation/smena-tb-index'],],

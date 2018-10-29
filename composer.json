@@ -15,6 +15,7 @@
     "kartik-v/yii2-datecontrol": "dev-master",
     "kartik-v/yii2-dialog": "dev-master",
     "kartik-v/yii2-editable": "dev-master",
+    "kartik-v/yii2-export": "dev-master",
     "kartik-v/yii2-grid": "dev-master",
     "kartik-v/yii2-money": "dev-master",
     "kartik-v/yii2-mpdf": "dev-master",

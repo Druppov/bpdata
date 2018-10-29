@@ -2,6 +2,7 @@
 
 namespace app\modules\admin\models;
 
+use app\models\Tovar;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -12,6 +13,8 @@ use app\models\Balance;
  */
 class BalanceSearch extends Balance
 {
+    public $TOVAR_NAME;
+
     /**
      * {@inheritdoc}
      */
@@ -19,7 +22,7 @@ class BalanceSearch extends Balance
     {
         return [
             [['POS_ID', 'TOVAR_ID'], 'integer'],
-            [['BALANCEDATE', 'PUBLISHED'], 'safe'],
+            [['BALANCEDATE', 'PUBLISHED', 'TOVAR_NAME'], 'safe'],
             [['AMOUNT'], 'number'],
         ];
     }
@@ -49,7 +52,12 @@ class BalanceSearch extends Balance
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+        $query->joinWith(['tovar']);
 
+        $dataProvider->sort->attributes['TOVAR_NAME'] = [
+            'asc' => [Tovar::tableName().'.NAME' => SORT_ASC],
+            'desc' => [Tovar::tableName().'.NAME' => SORT_DESC],
+        ];
         $this->load($params);
 
         if (!$this->validate()) {
@@ -66,7 +74,8 @@ class BalanceSearch extends Balance
             'AMOUNT' => $this->AMOUNT,
         ]);
 
-        $query->andFilterWhere(['like', 'PUBLISHED', $this->PUBLISHED]);
+        $query->andFilterWhere(['like', 'PUBLISHED', $this->PUBLISHED])
+            ->andFilterWhere(['like', Tovar::tableName().'NAME', $this->TOVAR_NAME]);
 
         return $dataProvider;
     }

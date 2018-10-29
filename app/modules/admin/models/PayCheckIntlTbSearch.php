@@ -7,6 +7,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\PayCheckIntlTb;
+use app\models\Tovar;
 
 /**
  * PayCheckIntlTbSearch represents the model behind the search form of `app\models\PayCheckIntlTb`.
@@ -16,6 +17,7 @@ class PayCheckIntlTbSearch extends PayCheckIntlTb
     public $SMENA_ID;
     public $RASHOD_ID;
     public $PERSON_ID;
+    public $TOVAR_NAME;
 
     /**
      * {@inheritdoc}
@@ -25,7 +27,7 @@ class PayCheckIntlTbSearch extends PayCheckIntlTb
         return [
             [['POS_ID', 'CHECKNO', 'STRNO', 'TOVAR_ID', 'KVO', 'ROW_NPP'], 'integer'],
             [['PRICE', 'SUMMA'], 'number'],
-            [['PUBLISHED', 'SMENA_ID', 'RASHOD_ID', 'PERSON_ID'], 'safe'],
+            [['PUBLISHED', 'SMENA_ID', 'RASHOD_ID', 'PERSON_ID', 'TOVAR_NAME'], 'safe'],
         ];
     }
 
@@ -50,7 +52,7 @@ class PayCheckIntlTbSearch extends PayCheckIntlTb
         $query = PayCheckIntlTb::find();
 
         // add conditions that should always apply here
-        $query->joinWith(['payCheckIntl']);
+        $query->joinWith(['payCheckIntl', 'tovar']);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -68,6 +70,10 @@ class PayCheckIntlTbSearch extends PayCheckIntlTb
         $dataProvider->sort->attributes['SMENA_ID'] = [
             'asc' => [PayCheckIntl::tableName().'.SMENA_ID' => SORT_ASC],
             'desc' => [PayCheckIntl::tableName().'.SMENA_ID' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['TOVAR_NAME'] = [
+            'asc' => [Tovar::tableName().'.NAME' => SORT_ASC],
+            'desc' => [Tovar::tableName().'.NAME' => SORT_DESC],
         ];
 
         $this->load($params);
@@ -93,7 +99,8 @@ class PayCheckIntlTbSearch extends PayCheckIntlTb
         $query->andFilterWhere(['like', PayCheckIntl::tableName().'.PUBLISHED', $this->PUBLISHED])
             ->andFilterWhere([PayCheckIntl::tableName().'.SMENA_ID'=>$this->SMENA_ID])
             ->andFilterWhere([PayCheckIntl::tableName().'.RASHOD_ID'=>$this->RASHOD_ID])
-            ->andFilterWhere([PayCheckIntl::tableName().'.PERSON_ID'=>$this->PERSON_ID]);
+            ->andFilterWhere([PayCheckIntl::tableName().'.PERSON_ID'=>$this->PERSON_ID])
+            ->andFilterWhere(['like', Tovar::tableName().'.NAME', $this->TOVAR_NAME]);
 
         return $dataProvider;
     }

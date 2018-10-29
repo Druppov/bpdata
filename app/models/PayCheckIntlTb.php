@@ -19,6 +19,7 @@ use Yii;
  */
 class PayCheckIntlTb extends ActiveRecord
 {
+    public $smenaData;
     /**
      * {@inheritdoc}
      */
@@ -38,6 +39,7 @@ class PayCheckIntlTb extends ActiveRecord
             [['PRICE', 'SUMMA'], 'number'],
             [['PUBLISHED'], 'string', 'max' => 1],
             [['POS_ID', 'CHECKNO', 'STRNO'], 'unique', 'targetAttribute' => ['POS_ID', 'CHECKNO', 'STRNO']],
+            [['smenaData'], 'safe'],
         ];
     }
 
@@ -81,5 +83,12 @@ class PayCheckIntlTb extends ActiveRecord
     public function getPayCheckIntl()
     {
         return $this->hasOne(PayCheckIntl::className(), ['CHECKNO'=>'CHECKNO', 'POS_ID'=>'POS_ID']);
+    }
+
+    public function getSmenaData()
+    {
+        //return empty($this->payCheckIntl->smena) ? '' : sprintf("[%s|%s]", date("d.m.Y",strtotime($this->payCheckIntl->smena->DATEOPEN)), $this->payCheckIntl->smena->personal->FIO);
+        //return $this->payCheckIntl->CHECKNO;
+        return Smena::getSmenaName($this->POS_ID, $this->payCheckIntl->SMENA_ID);
     }
 }

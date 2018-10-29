@@ -2,6 +2,8 @@
 
 namespace app\modules\admin\models;
 
+use app\models\Bpos;
+use app\models\Tovar;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -12,6 +14,8 @@ use app\models\TovarPrice;
  */
 class TovarPriceSearch extends TovarPrice
 {
+    public $TOVAR_NAME;
+
     /**
      * {@inheritdoc}
      */
@@ -19,7 +23,7 @@ class TovarPriceSearch extends TovarPrice
     {
         return [
             [['POS_ID', 'TOVAR_ID'], 'integer'],
-            [['PRICE_DATE', 'PUBLISHED', 'ISUSED'], 'safe'],
+            [['PRICE_DATE', 'PUBLISHED', 'ISUSED', 'POS_NAME', 'TOVAR_NAME'], 'safe'],
             [['PRICE_VALUE'], 'number'],
         ];
     }
@@ -45,10 +49,16 @@ class TovarPriceSearch extends TovarPrice
         $query = TovarPrice::find();
 
         // add conditions that should always apply here
+        $query->joinWith(['tovar']);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
+        $dataProvider->sort->attributes['TOVAR_NAME'] = [
+            'asc' => [Tovar::tableName().'.NAME' => SORT_ASC],
+            'desc' => [Tovar::tableName().'.NAME' => SORT_DESC],
+        ];
 
         $this->load($params);
 
@@ -61,13 +71,14 @@ class TovarPriceSearch extends TovarPrice
         // grid filtering conditions
         $query->andFilterWhere([
             'POS_ID' => $this->POS_ID,
-            'TOVAR_ID' => $this->TOVAR_ID,
+            self::tableName().'.TOVAR_ID' => $this->TOVAR_ID,
             'PRICE_DATE' => $this->PRICE_DATE,
             'PRICE_VALUE' => $this->PRICE_VALUE,
         ]);
 
         $query->andFilterWhere(['like', 'PUBLISHED', $this->PUBLISHED])
-            ->andFilterWhere(['like', 'ISUSED', $this->ISUSED]);
+            ->andFilterWhere(['like', 'ISUSED', $this->ISUSED])
+            ->andFilterWhere(['like', Tovar::tableName().'.NAME', $this->TOVAR_NAME]);
 
         return $dataProvider;
     }

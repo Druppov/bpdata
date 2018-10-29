@@ -4,36 +4,50 @@ use app\modules\admin\assets\ThemeHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\grid\GridView;
-use yii\widgets\Pjax;
-use app\models\Bpos;
+use kartik\export\ExportMenu;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\admin\models\BposSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', 'Точки продаж');
 $this->params['breadcrumbs'][] = $this->title;
+
+$gridColumns = [
+    'POS_ID',
+    'POS_NAME',
+    'ADDR',
+    'PUBLISHED',
+];
 ?>
 
 <div class="bpos-index">
-    <?php Pjax::begin(); ?>
     <?php //echo $this->render('_search', ['model' => $searchModel]); ?>
 
+    <? echo ExportMenu::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => $gridColumns,
+    ]); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'pjax' => true,
+        /*
         'autoXlFormat'=>true,
         'toggleDataContainer' => ['class' => 'btn-group mr-2'],
         'export'=>[
             'showConfirmAlert'=>false,
             'target'=>GridView::TARGET_BLANK
         ],
-        'pjax'=>true,
         'panel'=>[
             'type'=>'primary',
             'heading'=>$this->title
         ],
+        */
         'columns' => [
-            'POS_ID',
+            [
+                'attribute' => 'POS_ID',
+                'headerOptions' => ['width'=>'80'],
+            ],
             'POS_NAME',
             'ADDR',
             [
@@ -51,5 +65,4 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
 
     ]); ?>
-    <?php Pjax::end(); ?>
 </div>

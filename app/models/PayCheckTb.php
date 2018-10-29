@@ -19,6 +19,8 @@ use Yii;
  */
 class PayCheckTb extends ActiveRecord
 {
+    public $smenaData;
+
     /**
      * {@inheritdoc}
      */
@@ -81,5 +83,10 @@ class PayCheckTb extends ActiveRecord
     public function getPayCheck()
     {
         return $this->hasOne(PayCheck::className(), ['CHECKNO'=>'CHECKNO', 'POS_ID'=>'POS_ID']);
+    }
+
+    public function getSmenaData()
+    {
+        return $this->payCheck->smena->data;
     }
 }

@@ -3,9 +3,9 @@
 use app\modules\admin\assets\ThemeHelper;
 use yii\helpers\Html;
 use kartik\grid\GridView;
-use yii\widgets\Pjax;
 use app\models\PayCheckIntlTb;
 use app\models\Smena;
+use kartik\export\ExportMenu;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\admin\models\PayCheckIntlTbSearch */
@@ -13,32 +13,44 @@ use app\models\Smena;
 
 $this->title = Yii::t('app', 'Внутренний расход');
 $this->params['breadcrumbs'][] = $this->title;
+
+$gridColumns = [
+    'bpos.POS_NAME',
+    'smenaData',
+    'tovar.NAME',
+    'KVO',
+    'PRICE',
+    'SUMMA',
+    'PUBLISHED'
+];
 ?>
 
-<?php $this->beginBlock(ThemeHelper::BLOCK_HEADER_BUTTONS); ?>
-<?= Html::a(Yii::t('app', 'Добавить внутренний расход'), ['pay-check-intl-create'], ['class' => 'btn btn-sm btn-success']) ?>
-<?php $this->endBlock(); ?>
+<?php //$this->beginBlock(ThemeHelper::BLOCK_HEADER_BUTTONS); ?>
+<?//= Html::a(Yii::t('app', 'Добавить внутренний расход'), ['pay-check-intl-create'], ['class' => 'btn btn-sm btn-success']) ?>
+<?php //$this->endBlock(); ?>
 
 <div class="pay-check-intl-tb-index">
 
-    <!--<h1><?= Html::encode($this->title) ?></h1>-->
-    <?//php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
+    <? echo ExportMenu::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => $gridColumns,
+    ]); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'pjax'=>true,
+        /*
         'autoXlFormat'=>true,
         'toggleDataContainer' => ['class' => 'btn-group mr-2'],
         'export'=>[
             'showConfirmAlert'=>false,
             'target'=>GridView::TARGET_BLANK
         ],
-        'pjax'=>true,
         'panel'=>[
             'type'=>'primary',
             'heading'=>$this->title
         ],
+        */
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -50,8 +62,10 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'SMENA_ID',
                 'label' => Yii::t('app', 'Смена'),
+                //'value' => 'smenaData',
                 'value' => function($model) {
-                    return Smena::getSmenaName($model->POS_ID);
+                    return Smena::getSmenaName($model->POS_ID, $model->payCheckIntl->SMENA_ID);
+                    //return $model->smenaData;
                 },
                 'filter' => Html::activeDropDownList($searchModel, 'SMENA_ID',
                     Smena::getSmenaList($searchModel->POS_ID),
@@ -65,8 +79,9 @@ $this->params['breadcrumbs'][] = $this->title;
             //'CHECKNO',
             //'STRNO',
             [
-                'attribute' => 'TOVAR_ID',
+                'attribute' => 'TOVAR_NAME',
                 'value' => 'tovar.NAME',
+                'label' => Yii::t('app', 'Товар'),
             ],
             'KVO',
             'PRICE',
@@ -83,9 +98,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'filter' => \app\models\PayCheckIntlTb::$valuePublished,
             ],
-
-            //['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
-    <?//php Pjax::end(); ?>
 </div>
