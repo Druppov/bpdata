@@ -75,6 +75,7 @@ $gridColumns4 = [
                 'attribute' => 'WORK_ID',
                 'value' => 'work.WORKNAME',
             ],
+            /*
             [
                 'class' => '\kartik\grid\BooleanColumn',
                 'attribute' => 'PUBLISHED',
@@ -83,6 +84,7 @@ $gridColumns4 = [
                 'falseLabel' => SmenaTb::$valuePublished['U'],
                 'filter' => Html::activeDropDownList($searchModel, 'PUBLISHED', SmenaTb::$valuePublished,['class'=>'form-control','prompt' => 'Публикация']),
             ],
+            */
             //['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
@@ -97,6 +99,10 @@ $gridColumns4 = [
     <?= GridView::widget([
         'dataProvider' => $dataPayCheckTbProvider,
         'pjax'=>true,
+        'showPageSummary' => true,
+        'showFooter' => true,
+        'striped' => true,
+        'hover' => true,
         'autoXlFormat'=>true,
         'toggleDataContainer' => ['class' => 'btn-group mr-2'],
         'export'=>[
@@ -108,14 +114,23 @@ $gridColumns4 = [
             'heading'=>Yii::t('app', 'Продажи по смене')
         ],
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            //['class' => 'yii\grid\SerialColumn'],
 
             [
                 'attribute' => 'TOVAR_ID',
                 'value' => 'tovar.NAME',
+                'group' => true,
             ],
-            'KVO',
-            'SUMMA',
+            [
+                'attribute' => 'KVO',
+                'pageSummary' => true,
+            ],
+            [
+                'attribute' => 'SUMMA',
+                'format' => ['currency', ''],
+                'pageSummary' => true,
+            ],
+            /*
             [
                 'class' => '\kartik\grid\BooleanColumn',
                 'attribute' => 'PUBLISHED',
@@ -124,6 +139,7 @@ $gridColumns4 = [
                 'falseLabel' => SmenaTb::$valuePublished['U'],
                 'filter' => Html::activeDropDownList($searchModel, 'PUBLISHED', SmenaTb::$valuePublished,['class'=>'form-control','prompt' => 'Публикация']),
             ],
+            */
         ],
     ]); ?>
 
@@ -152,7 +168,12 @@ $gridColumns4 = [
                 'value' => 'tovar.NAME',
             ],
             'KVO',
-            'SUMMA',
+            [
+                'attribute' => 'SUMMA',
+                'format' => ['currency', ''],
+                'pageSummary' => true,
+            ],
+            /*
             [
                 'class' => '\kartik\grid\BooleanColumn',
                 'attribute' => 'PUBLISHED',
@@ -161,6 +182,7 @@ $gridColumns4 = [
                 'falseLabel' => SmenaTb::$valuePublished['U'],
                 'filter' => Html::activeDropDownList($searchModel, 'PUBLISHED', SmenaTb::$valuePublished,['class'=>'form-control','prompt' => 'Публикация']),
             ],
+            */
         ],
     ]); ?>
 
@@ -199,7 +221,12 @@ $gridColumns4 = [
                 'value' => 'tovar.NAME',
             ],
             'KVO',
-            'SUMMA',
+            [
+                'attribute' => 'SUMMA',
+                'format' => ['currency', ''],
+                'pageSummary' => true,
+            ],
+            /*
             [
                 'class' => '\kartik\grid\BooleanColumn',
                 'attribute' => 'PUBLISHED',
@@ -208,6 +235,7 @@ $gridColumns4 = [
                 'falseLabel' => SmenaTb::$valuePublished['U'],
                 'filter' => Html::activeDropDownList($searchModel, 'PUBLISHED', SmenaTb::$valuePublished,['class'=>'form-control','prompt' => 'Публикация']),
             ],
+            */
         ],
     ]); ?>
 

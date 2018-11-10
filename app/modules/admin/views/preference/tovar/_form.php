@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use app\models\TovarType;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Tovar */
@@ -12,13 +13,22 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <?= $form->errorSummary($model); ?>
+
     <?//= $form->field($model, 'TOVAR_ID')->textInput() ?>
 
     <?= $form->field($model, 'NAME')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'PRINTNAME')->textInput(['maxlength' => true]) ?>
 
-    <?//= $form->field($model, 'TYPE_ID')->textInput() ?>
+    <?= $form->field($model, 'TYPE_ID')->dropDownList(TovarType::find()
+        ->select(['TYPE_NAME','TYPE_ID'])
+        ->indexBy('TYPE_ID')
+        ->where(['SHOWASCATEGORY'=>'Y'])
+        ->column(), [
+            'prompt' => Yii::t('app', 'Укажите тип товара')
+        ]
+    ); ?>
 
     <?//= $form->field($model, 'TAX_ID')->textInput() ?>
 

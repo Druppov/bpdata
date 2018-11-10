@@ -416,6 +416,7 @@ class PreferenceController extends Controller
     public function actionTovarCreate($type=null)
     {
         $model = new Tovar();
+        $model->TAX_ID=2;
         if (!is_null($type)) {
             $model->TYPE_ID = $type;
         }

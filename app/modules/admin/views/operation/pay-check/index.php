@@ -23,18 +23,44 @@ $gridColumns = [
     'SUMMA',
     'PUBLISHED'
 ];
+$fullExportMenu = ExportMenu::widget([
+    'dataProvider' => $dataProvider,
+    'columns' => $gridColumns,
+    'target' => ExportMenu::TARGET_BLANK,
+    'showConfirmAlert' => false,
+    //'pjaxContainerId' => 'kv-pjax-container',
+    'exportContainer' => [
+        'class' => 'btn-group mr-2'
+    ],
+    'dropdownOptions' => [
+        'label' => 'Экспорт',
+        'class' => 'btn btn-secondary',
+        'itemsBefore' => [
+            '<div class="dropdown-header">Все данные</div>',
+        ],
+    ],
+]);
 ?>
 
 <div class="pay-check-tb-index">
 
-    <? echo ExportMenu::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => $gridColumns,
-    ]); ?>
+    <? //echo $fullExportMenu; ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'id' => 'grid-pay-check',
         'filterModel' => $searchModel,
         'pjax'=>true,
+        'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container']],
+        'showPageSummary' => true,
+        'panel' => [
+            'type' => 'primary',
+            //'heading' => false,
+            //'heading'=>$this->title,
+        ],
+        'toolbar' => [
+            //'{export}',
+            $fullExportMenu,
+        ],
         /*
         'autoXlFormat'=>true,
         'toggleDataContainer' => ['class' => 'btn-group mr-2'],
@@ -48,12 +74,11 @@ $gridColumns = [
         ],
         */
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
             [
                 'attribute' => 'POS_ID',
                 'value' => 'bpos.POS_NAME',
                 'filter' => PayCheckTb::getBposFilter($searchModel, 'smena-selector-id'),
+                //'group' => true,
             ],
             [
                 'attribute' => 'SMENA_ID',
@@ -68,18 +93,27 @@ $gridColumns = [
                         'class'=>'form-control',
                         'prompt'=>'Выберите смену',
                         ]
-                )
+                ),
             ],
-            //'CHECKNO',
-            //'STRNO',
             [
                 'attribute' => 'TOVAR_NAME',
                 'label' => Yii::t('app', 'Товар'),
                 'value' => 'tovar.NAME',
             ],
-            'KVO',
-            'PRICE',
-            'SUMMA',
+            [
+                'attribute' => 'KVO',
+            ],
+            [
+                'attribute' => 'PRICE',
+                'format' => ['currency', ''],
+            ],
+            [
+                'attribute' => 'SUMMA',
+                'format' => ['currency', ''],
+                'pageSummary' => true,
+                'pageSummaryFunc' => GridView::F_SUM,
+            ],
+            /*
             [
                 'attribute' => 'PUBLISHED',
                 'format' => 'raw',
@@ -92,6 +126,7 @@ $gridColumns = [
                 },
                 'filter' => \app\models\PayCheck::$valuePublished,
             ],
+            */
         ],
     ]); ?>
 </div>

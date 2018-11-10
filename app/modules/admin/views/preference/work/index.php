@@ -25,8 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'pjax' => true,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
+            //['class' => 'yii\grid\SerialColumn'],
             [
                 'attribute' => 'WORK_ID',
                 'headerOptions' => ['width'=>'80'],

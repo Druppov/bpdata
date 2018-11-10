@@ -8,6 +8,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\TovarPrice;
+use yii\db\Expression;
 
 /**
  * TovarProceSearch represents the model behind the search form of `app\models\TovarPrice`.
@@ -15,6 +16,7 @@ use app\models\TovarPrice;
 class TovarPriceSearch extends TovarPrice
 {
     public $TOVAR_NAME;
+    public $IS_USE_MAX_DATE = false;
 
     /**
      * {@inheritdoc}
@@ -23,9 +25,19 @@ class TovarPriceSearch extends TovarPrice
     {
         return [
             [['POS_ID', 'TOVAR_ID'], 'integer'],
-            [['PRICE_DATE', 'PUBLISHED', 'ISUSED', 'POS_NAME', 'TOVAR_NAME'], 'safe'],
+            [['PRICE_DATE', 'PUBLISHED', 'ISUSED', 'POS_NAME', 'TOVAR_NAME', 'IS_USE_MAX_DATE'], 'safe'],
             [['PRICE_VALUE'], 'number'],
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return array_merge(parent::attributeLabels(), [
+            'IS_USE_MAX_DATE' => Yii::t('app', 'Последние данные'),
+        ]);
     }
 
     /**
@@ -49,7 +61,19 @@ class TovarPriceSearch extends TovarPrice
         $query = TovarPrice::find();
 
         // add conditions that should always apply here
-        $query->joinWith(['tovar']);
+        $query->innerJoinWith(['tovar']);
+
+        if ($this->IS_USE_MAX_DATE) {
+            $subQuery = TovarPrice::find()
+                ->alias('tv2')
+                ->select('tv2.`POS_ID`,tv2.`TOVAR_ID`,MAX(tv2.PRICE_DATE) AS `PRICE_DATE`')
+                ->groupBy('tv2.`POS_ID`,tv2.`TOVAR_ID`');
+
+            $query->leftJoin(
+                ['tvg' => $subQuery],
+                '`TOVARY_PRICES`.`POS_ID`=tvg.POS_ID AND `TOVARY_PRICES`.`TOVAR_ID`=tvg.TOVAR_ID AND `TOVARY_PRICES`.`PRICE_DATE`=tvg.PRICE_DATE'
+            );
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -70,14 +94,22 @@ class TovarPriceSearch extends TovarPrice
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'POS_ID' => $this->POS_ID,
+            self::tableName().'.POS_ID' => $this->POS_ID,
             self::tableName().'.TOVAR_ID' => $this->TOVAR_ID,
-            'PRICE_DATE' => $this->PRICE_DATE,
-            'PRICE_VALUE' => $this->PRICE_VALUE,
+            //self::tableName().'.PRICE_DATE' => $this->PRICE_DATE,
+            self::tableName().'.PRICE_VALUE' => $this->PRICE_VALUE,
         ]);
 
-        $query->andFilterWhere(['like', 'PUBLISHED', $this->PUBLISHED])
-            ->andFilterWhere(['like', 'ISUSED', $this->ISUSED])
+        if ($this->IS_USE_MAX_DATE && !empty($this->PRICE_DATE)) {
+            $query->andFilterWhere(['>=', self::tableName().'.PRICE_DATE', date('Y-m-d',strtotime($this->PRICE_DATE))]);
+        } elseif ($this->IS_USE_MAX_DATE && empty($this->PRICE_DATE)) {
+            $query->andFilterWhere(['IS NOT', 'tvg.PRICE_DATE', new Expression('null')]);
+        } else {
+            $query->andFilterWhere(['>=', self::tableName().'.PRICE_DATE', date('Y-m-d',strtotime($this->PRICE_DATE))]);
+        }
+
+        $query->andFilterWhere(['like', self::tableName().'.PUBLISHED', $this->PUBLISHED])
+            ->andFilterWhere(['like', self::tableName().'.ISUSED', $this->ISUSED])
             ->andFilterWhere(['like', Tovar::tableName().'.NAME', $this->TOVAR_NAME]);
 
         return $dataProvider;

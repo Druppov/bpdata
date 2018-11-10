@@ -84,8 +84,14 @@ $gridColumns = [
                 'label' => Yii::t('app', 'Товар'),
             ],
             'KVO',
-            'PRICE',
-            'SUMMA',
+            [
+                'attribute' => 'PRICE',
+                'format' => ['currency', ''],
+            ],
+            [
+                'attribute' => 'SUMMA',
+                'format' => ['currency', ''],
+            ],
             [
                 'attribute' => 'PUBLISHED',
                 'format' => 'raw',

@@ -13,12 +13,40 @@ use kartik\dialog\Dialog;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 ?>
 
+<?php $this->beginBlock(ThemeHelper::BLOCK_HEADER_BUTTONS); ?>
+<?= Html::a("<span class='glyphicon glyphicon-new-window'></span>",
+    ['/admin/preference/tovar-price-create', 'POS_ID'=>$model->POS_ID, 'TOVAR_ID'=>$model->TOVAR_ID],
+    [
+        'value'=>Yii::$app->urlManager->createUrl('/admin/preference/tovar-price-create'),
+        //<---- here is where you define the action that handles the ajax request
+        'class'=>'add-modal-click grid-action popupModal',
+        'data-toggle'=>'tooltip',
+        'data-placement'=>'bottom',
+        'title'=>'Добавить'
+    ]); ?>
+<?php $this->endBlock(); ?>
 <div class="tovar-price-index">
     <?= GridView::widget([
         'id' => 'grid-tovar-price',
         'pjax' => true,
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
+        'headerRowOptions' => ['class' => 'kartik-sheet-style'],
+        'toolbar' => [
+            [
+                'content'=>
+                    Html::a("<span class='glyphicon glyphicon-new-window'></span>",
+                        ['/admin/preference/tovar-price-create', 'POS_ID'=>$model->POS_ID, 'TOVAR_ID'=>$model->TOVAR_ID],
+                        [
+                            'value'=>Yii::$app->urlManager->createUrl('/admin/preference/tovar-price-create'),
+                            //<---- here is where you define the action that handles the ajax request
+                            'class'=>'add-modal-click grid-action popupModal',
+                            'data-toggle'=>'tooltip',
+                            'data-placement'=>'bottom',
+                            'title'=>'Добавить'
+                        ]),
+            ],
+        ],
         'columns' => [
             ['class' => 'kartik\grid\SerialColumn'],
             [
@@ -32,7 +60,7 @@ use kartik\dialog\Dialog;
                 ]),
                 'format' => 'html',
             ],
-            'PRICE_VALUE',
+
             [
                 'attribute' => 'ISUSED',
                 'format' => 'raw',

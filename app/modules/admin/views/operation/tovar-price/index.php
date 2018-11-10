@@ -13,7 +13,7 @@ $this->title = Yii::t('app', 'Отчет `Цена товара`');
 $this->params['breadcrumbs'][] = $this->title;
 
 $gridColumns = [
-    'bpos.POS_NAME',
+    //'bpos.POS_NAME',
     'tovar.NAME',
     'PRICE_DATE',
     'PRICE_VALUE',
@@ -23,7 +23,7 @@ $gridColumns = [
 
 <div class="tovar-price-index">
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <? echo ExportMenu::widget([
         'dataProvider' => $dataProvider,
@@ -33,6 +33,7 @@ $gridColumns = [
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'pjax'=>true,
+        'showPageSummary' => true,
         /*
         'autoXlFormat'=>true,
         'toggleDataContainer' => ['class' => 'btn-group mr-2'],
@@ -75,7 +76,11 @@ $gridColumns = [
                 ],
                 'format' => 'html',
             ],
-            'PRICE_VALUE',
+            [
+                'attribute' => 'PRICE_VALUE',
+                'format' => ['currency', ''],
+                'pageSummary' => true,
+            ],
             [
                 'attribute' => 'ISUSED',
                 'format' => 'raw',

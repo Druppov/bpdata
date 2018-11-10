@@ -3,6 +3,7 @@
 use app\modules\admin\assets\ThemeHelper;
 use app\modules\admin\models\BposSearch;
 use app\modules\admin\models\TovarPriceSearch;
+use app\models\TovarType;
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\helpers\Url;
@@ -67,7 +68,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'filter' => \app\models\Tovar::$valueYesNo,
             ],
-            //'TYPE_ID',
+            /*
+            [
+                'TAX_ID',
+                'value' => 'TAX_ID',
+                'filter' => Tax::find()->select(['TYPE_NAME', 'TYPE_ID'])->indexBy('TYPE_ID')->column()
+            ],
+            */
             //'TAX_ID',
             //'ISACTIVE',
             //'PUBLISHED',

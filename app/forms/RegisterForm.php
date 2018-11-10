@@ -3,6 +3,7 @@
 namespace app\forms;
 
 use app\models\User;
+use app\models\Personal;
 use yii\base\Model;
 
 /**
@@ -61,6 +62,17 @@ class RegisterForm extends Model
 				
 				return false;
 			}
+
+			$personal = new Personal();
+			$personal->PERSON_ID = $user->id;
+			$personal->FIO = $user->getFullName();
+			$personal->ISACTIVE = 'Y';
+			$personal->PUBLISHED = 'P';
+			if (!$personal->save()) {
+                $this->addErrors($personal->errors);
+
+                return false;
+            }
 			
 			return true;
 		}

@@ -18,6 +18,7 @@ class PayCheckTbSearch extends PayCheckTb
     public $SMENA_ID;
     public $RET;
     public $TOVAR_NAME;
+    public $IS_GROUP = false;
 
     /**
      * {@inheritdoc}
@@ -27,7 +28,7 @@ class PayCheckTbSearch extends PayCheckTb
         return [
             [['POS_ID', 'CHECKNO', 'STRNO', 'TOVAR_ID', 'KVO', 'ROW_NPP'], 'integer'],
             [['PRICE', 'SUMMA'], 'number'],
-            [['PUBLISHED', 'SMENA_ID', 'RET', 'TOVAR_NAME'], 'safe'],
+            [['PUBLISHED', 'SMENA_ID', 'RET', 'TOVAR_NAME', 'IS_GROUP'], 'safe'],
         ];
     }
 
@@ -53,6 +54,24 @@ class PayCheckTbSearch extends PayCheckTb
 
         // add conditions that should always apply here
         $query->joinWith(['payCheck', 'tovar']);
+        if ($this->IS_GROUP) {
+            $query->select([
+                self::tableName().'.POS_ID',
+                PayCheck::tableName().'.SMENA_ID',
+                PayCheck::tableName().'.RET',
+                self::tableName().'.CHECKNO',
+                self::tableName().'.TOVAR_ID',
+                'SUM(KVO) AS KVO',
+                self::tableName().'.PRICE',
+                'SUM('.self::tableName().'.SUMMA) AS SUMMA',
+            ])
+                ->groupBy([
+                    self::tableName().'.POS_ID',
+                    PayCheck::tableName().'.SMENA_ID',
+                    //self::tableName().'.CHECKNO',
+                    self::tableName().'.TOVAR_ID',
+                ]);
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -78,17 +97,16 @@ class PayCheckTbSearch extends PayCheckTb
         // grid filtering conditions
         $query->andFilterWhere([
             self::tableName().'.POS_ID' => $this->POS_ID,
-            'CHECKNO' => $this->CHECKNO,
-            'STRNO' => $this->STRNO,
+            //'CHECKNO' => $this->CHECKNO,
+            //'STRNO' => $this->STRNO,
             'TOVAR_ID' => $this->TOVAR_ID,
             'KVO' => $this->KVO,
             'PRICE' => $this->PRICE,
             'SUMMA' => $this->SUMMA,
-            'ROW_NPP' => $this->ROW_NPP,
+            //'ROW_NPP' => $this->ROW_NPP,
         ]);
 
-        $query->andFilterWhere(['like', self::tableName().'.PUBLISHED', $this->PUBLISHED])
-            ->andFilterWhere([PayCheck::tableName().'.SMENA_ID'=>$this->SMENA_ID])
+        $query->andFilterWhere([PayCheck::tableName().'.SMENA_ID'=>$this->SMENA_ID])
             ->andFilterWhere([PayCheck::tableName().'.RET'=>$this->RET])
             ->andFilterWhere(['like', Tovar::tableName().'.NAME', $this->TOVAR_NAME])
         ;

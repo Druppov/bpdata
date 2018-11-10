@@ -156,6 +156,7 @@ class OperationController extends Controller
     public function actionTovarPriceReport()
     {
         $searchModel = new TovarPriceSearch();
+        $searchModel->IS_USE_MAX_DATE = true;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('tovar-price/index', [
@@ -261,7 +262,10 @@ class OperationController extends Controller
     public function actionPayCheckIndex()
     {
         $searchModel = new PayCheckTbSearch();
+        $searchModel->IS_GROUP = true;
+        //$searchModel->POS_ID = -1;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        //$dataProvider->pagination = false;
 
         return $this->render('pay-check/index', [
             'searchModel' => $searchModel,

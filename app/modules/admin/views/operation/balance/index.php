@@ -85,8 +85,9 @@ $gridColumns = [
                 'vAlign'=>'middle',
                 'width'=>'100px',
                 'format'=>['decimal', 2],
-                'pageSummary'=>true
+                //'pageSummary'=>true
             ],
+            /*
             [
                 'attribute' => 'PUBLISHED',
                 'format' => 'raw',
@@ -99,6 +100,7 @@ $gridColumns = [
                 },
                 'filter' => Balance::$valuePublished,
             ],
+            */
         ],
     ]); ?>
 </div>

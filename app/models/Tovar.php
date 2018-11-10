@@ -32,7 +32,7 @@ class Tovar extends ActiveRecord
     public function rules()
     {
         return [
-            [['TOVAR_ID', 'TAX_ID'], 'required'],
+            [['TAX_ID','NAME', 'PRINTNAME','ISACTIVE'], 'required'],
             [['TOVAR_ID', 'TYPE_ID', 'TAX_ID', 'FKEY_1C'], 'integer'],
             [['NAME', 'PRINTNAME'], 'string', 'max' => 60],
             [['ISACTIVE', 'PUBLISHED'], 'string', 'max' => 1],

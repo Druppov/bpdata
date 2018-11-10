@@ -67,8 +67,7 @@ class TovarSearch extends Tovar
 
         $query->andFilterWhere(['like', 'NAME', $this->NAME])
             ->andFilterWhere(['like', 'PRINTNAME', $this->PRINTNAME])
-            ->andFilterWhere(['like', 'ISACTIVE', $this->ISACTIVE])
-            ->andFilterWhere(['like', 'PUBLISHED', $this->PUBLISHED]);
+            ->andFilterWhere(['like', 'ISACTIVE', $this->ISACTIVE]);
 
         return $dataProvider;
     }

@@ -52,7 +52,7 @@ class Balance extends ActiveRecord
             'POS_ID' => Yii::t('app', 'Торговая точка'),
             'BALANCEDATE' => Yii::t('app', 'Дата'),
             'TOVAR_ID' => Yii::t('app', 'Товар'),
-            'AMOUNT' => Yii::t('app', 'Цена'),
+            'AMOUNT' => Yii::t('app', 'Количество'),
             'PUBLISHED' => Yii::t('app', 'Опубликовано'),
         ];
     }
