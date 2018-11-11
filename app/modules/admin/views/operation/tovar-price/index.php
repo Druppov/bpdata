@@ -13,12 +13,28 @@ $this->title = Yii::t('app', 'Отчет `Цена товара`');
 $this->params['breadcrumbs'][] = $this->title;
 
 $gridColumns = [
-    //'bpos.POS_NAME',
     'tovar.NAME',
     'PRICE_DATE',
     'PRICE_VALUE',
     'ISUSED',
 ];
+$fullExportMenu = ExportMenu::widget([
+    'dataProvider' => $dataProvider,
+    'columns' => $gridColumns,
+    'target' => ExportMenu::TARGET_BLANK,
+    'showConfirmAlert' => false,
+    //'pjaxContainerId' => 'kv-pjax-container',
+    'exportContainer' => [
+        'class' => 'btn-group mr-2'
+    ],
+    'dropdownOptions' => [
+        'label' => 'Экспорт',
+        'class' => 'btn btn-secondary',
+        'itemsBefore' => [
+            '<div class="dropdown-header">Все данные</div>',
+        ],
+    ],
+]);
 ?>
 
 <div class="tovar-price-index">
@@ -33,6 +49,23 @@ $gridColumns = [
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'pjax'=>true,
+        'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container']],
+        'showPageSummary' => true,
+        'panel' => [
+            'type' => 'primary',
+            //'heading' => false,
+            //'heading'=>$this->title,
+        ],
+        'toolbar' => [
+            '{export}',
+            $fullExportMenu,
+        ],
+        'autoXlFormat'=>true,
+        'toggleDataContainer' => ['class' => 'btn-group mr-2'],
+        'export'=>[
+            'showConfirmAlert'=>false,
+            'target'=>GridView::TARGET_BLANK
+        ],
         'showPageSummary' => true,
         /*
         'autoXlFormat'=>true,

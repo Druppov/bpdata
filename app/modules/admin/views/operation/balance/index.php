@@ -21,7 +21,25 @@ $gridColumns = [
     'tovar.NAME',
     'AMOUNT',
     'PUBLISHED'
-];?>
+];
+$fullExportMenu = ExportMenu::widget([
+    'dataProvider' => $dataProvider,
+    'columns' => $gridColumns,
+    'target' => ExportMenu::TARGET_BLANK,
+    'showConfirmAlert' => false,
+    //'pjaxContainerId' => 'kv-pjax-container',
+    'exportContainer' => [
+        'class' => 'btn-group mr-2'
+    ],
+    'dropdownOptions' => [
+        'label' => 'Экспорт',
+        'class' => 'btn btn-secondary',
+        'itemsBefore' => [
+            '<div class="dropdown-header">Все данные</div>',
+        ],
+    ],
+]);
+?>
 
 <div class="balance-index">
 
@@ -33,6 +51,15 @@ $gridColumns = [
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'pjax'=>true,
+        'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container']],
+        'showPageSummary' => true,
+        'panel' => [
+            'type' => 'primary',
+        ],
+        'toolbar' => [
+            //'{export}',
+            $fullExportMenu,
+        ],
         /*
         'autoXlFormat'=>true,
         'toggleDataContainer' => ['class' => 'btn-group mr-2'],
@@ -46,8 +73,7 @@ $gridColumns = [
         ],
         */
         'columns' => [
-            ['class' => 'kartik\grid\SerialColumn'],
-
+            //['class' => 'kartik\grid\SerialColumn'],
             [
                 'attribute' => 'POS_ID',
                 'value' => 'bpos.POS_NAME',

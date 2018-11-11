@@ -23,6 +23,23 @@ $gridColumns = [
     'SUMMA',
     'PUBLISHED'
 ];
+$fullExportMenu = ExportMenu::widget([
+    'dataProvider' => $dataProvider,
+    'columns' => $gridColumns,
+    'target' => ExportMenu::TARGET_BLANK,
+    'showConfirmAlert' => false,
+    //'pjaxContainerId' => 'kv-pjax-container',
+    'exportContainer' => [
+        'class' => 'btn-group mr-2'
+    ],
+    'dropdownOptions' => [
+        'label' => 'Экспорт',
+        'class' => 'btn btn-secondary',
+        'itemsBefore' => [
+            '<div class="dropdown-header">Все данные</div>',
+        ],
+    ],
+]);
 ?>
 
 <?php //$this->beginBlock(ThemeHelper::BLOCK_HEADER_BUTTONS); ?>
@@ -39,6 +56,17 @@ $gridColumns = [
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'pjax'=>true,
+        'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container']],
+        'showPageSummary' => true,
+        'panel' => [
+            'type' => 'primary',
+            //'heading' => false,
+            //'heading'=>$this->title,
+        ],
+        'toolbar' => [
+            //'{export}',
+            $fullExportMenu,
+        ],
         /*
         'autoXlFormat'=>true,
         'toggleDataContainer' => ['class' => 'btn-group mr-2'],
@@ -52,8 +80,6 @@ $gridColumns = [
         ],
         */
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
             [
                 'attribute' => 'POS_ID',
                 'value' => 'bpos.POS_NAME',
@@ -76,14 +102,14 @@ $gridColumns = [
                         ]
                 )
             ],
-            //'CHECKNO',
-            //'STRNO',
             [
                 'attribute' => 'TOVAR_NAME',
                 'value' => 'tovar.NAME',
                 'label' => Yii::t('app', 'Товар'),
             ],
-            'KVO',
+            [
+                'attribute' => 'KVO',
+            ],
             [
                 'attribute' => 'PRICE',
                 'format' => ['currency', ''],
@@ -91,7 +117,10 @@ $gridColumns = [
             [
                 'attribute' => 'SUMMA',
                 'format' => ['currency', ''],
+                'pageSummary' => true,
+                'pageSummaryFunc' => GridView::F_SUM,
             ],
+            /*
             [
                 'attribute' => 'PUBLISHED',
                 'format' => 'raw',
@@ -104,6 +133,7 @@ $gridColumns = [
                 },
                 'filter' => \app\models\PayCheckIntlTb::$valuePublished,
             ],
+            */
         ],
     ]); ?>
 </div>

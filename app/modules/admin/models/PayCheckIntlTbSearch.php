@@ -18,6 +18,7 @@ class PayCheckIntlTbSearch extends PayCheckIntlTb
     public $RASHOD_ID;
     public $PERSON_ID;
     public $TOVAR_NAME;
+    public $IS_GROUP = false;
 
     /**
      * {@inheritdoc}
@@ -27,7 +28,7 @@ class PayCheckIntlTbSearch extends PayCheckIntlTb
         return [
             [['POS_ID', 'CHECKNO', 'STRNO', 'TOVAR_ID', 'KVO', 'ROW_NPP'], 'integer'],
             [['PRICE', 'SUMMA'], 'number'],
-            [['PUBLISHED', 'SMENA_ID', 'RASHOD_ID', 'PERSON_ID', 'TOVAR_NAME'], 'safe'],
+            [['PUBLISHED', 'SMENA_ID', 'RASHOD_ID', 'PERSON_ID', 'TOVAR_NAME', 'IS_GROUP'], 'safe'],
         ];
     }
 
@@ -53,6 +54,24 @@ class PayCheckIntlTbSearch extends PayCheckIntlTb
 
         // add conditions that should always apply here
         $query->joinWith(['payCheckIntl', 'tovar']);
+        if ($this->IS_GROUP) {
+            $query->select([
+                self::tableName().'.POS_ID',
+                PayCheckIntl::tableName().'.SMENA_ID',
+                PayCheckIntl::tableName().'.PERSON_ID',
+                self::tableName().'.CHECKNO',
+                self::tableName().'.TOVAR_ID',
+                'SUM(KVO) AS KVO',
+                self::tableName().'.PRICE',
+                'SUM('.self::tableName().'.SUMMA) AS SUMMA',
+            ])
+                ->groupBy([
+                    self::tableName().'.POS_ID',
+                    PayCheckIntl::tableName().'.SMENA_ID',
+                    PayCheckIntl::tableName().'.PERSON_ID',
+                    self::tableName().'.TOVAR_ID',
+                ]);
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -87,20 +106,25 @@ class PayCheckIntlTbSearch extends PayCheckIntlTb
         // grid filtering conditions
         $query->andFilterWhere([
             self::tableName().'.POS_ID' => $this->POS_ID,
-            'CHECKNO' => $this->CHECKNO,
-            'STRNO' => $this->STRNO,
+            //'CHECKNO' => $this->CHECKNO,
+            //'STRNO' => $this->STRNO,
             'TOVAR_ID' => $this->TOVAR_ID,
             'KVO' => $this->KVO,
             'PRICE' => $this->PRICE,
             'SUMMA' => $this->SUMMA,
-            'ROW_NPP' => $this->ROW_NPP,
+            //'ROW_NPP' => $this->ROW_NPP,
         ]);
 
-        $query->andFilterWhere(['like', PayCheckIntl::tableName().'.PUBLISHED', $this->PUBLISHED])
-            ->andFilterWhere([PayCheckIntl::tableName().'.SMENA_ID'=>$this->SMENA_ID])
-            ->andFilterWhere([PayCheckIntl::tableName().'.RASHOD_ID'=>$this->RASHOD_ID])
-            ->andFilterWhere([PayCheckIntl::tableName().'.PERSON_ID'=>$this->PERSON_ID])
+        $query->andFilterWhere([PayCheckIntl::tableName().'.SMENA_ID'=>$this->SMENA_ID])
+            //->andFilterWhere(['like', PayCheckIntl::tableName().'.PUBLISHED', $this->PUBLISHED])
+            //->andFilterWhere([PayCheckIntl::tableName().'.RASHOD_ID'=>$this->RASHOD_ID])
+            //->andFilterWhere([PayCheckIntl::tableName().'.PERSON_ID'=>$this->PERSON_ID])
+            //->andFilterWhere(['like', Tovar::tableName().'.NAME', $this->TOVAR_NAME])
             ->andFilterWhere(['like', Tovar::tableName().'.NAME', $this->TOVAR_NAME]);
+
+        if (!empty($this->POS_ID) && !empty($this->SMENA_ID)) {
+            $dataProvider->pagination = false;
+        }
 
         return $dataProvider;
     }

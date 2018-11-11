@@ -247,6 +247,7 @@ class OperationController extends Controller
     public function actionPayCheckIntlIndex()
     {
         $searchModel = new PayCheckIntlTbSearch();
+        $searchModel->IS_GROUP = true;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('pay-check-intl/index', [

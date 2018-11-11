@@ -9,7 +9,8 @@ dotenv()->required('APP_KEY')->notEmpty();
 
 $config = [
 	'id'         => 'main',
-	'basePath'   => dirname(__DIR__) . '/app',
+    'name'       => 'BPOS',
+    'basePath'   => dirname(__DIR__) . '/app',
 	'runtimePath'   => dirname(__DIR__) . '/runtime',
 	'vendorPath'   => dirname(__DIR__) . '/vendor',
 	'bootstrap'  => ['log', 'settings'],

@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use DateTime;
 use DOMDocument;
 use Yii;
 use \wapmorgan\UnifiedArchive\UnifiedArchive;
@@ -17,10 +18,6 @@ use \wapmorgan\UnifiedArchive\UnifiedArchive;
  */
 class PacketIn extends ActiveRecord
 {
-    public static $processed = [
-        'Y' => 'Обработан',
-        'N' => 'Не обработан',
-    ];
     public static $uploadPath = '/uploads/packages/';
 
     public $created_at;
@@ -134,18 +131,13 @@ class PacketIn extends ActiveRecord
 
     public function unzipping()
     {
-        $path = Yii::$app->basePath . self::$uploadPath;
-        $archive = UnifiedArchive::open($path . $this->PACKETFILENAME);
-        //print_r($path.'tmp');
-        //$archive->extractFiles($path.'tmp');
-        //var_dump($archive->getFileNames());
+        $fileName = $path = Yii::$app->basePath . self::$uploadPath . $this->PACKETFILENAME;
+        $archive = UnifiedArchive::open($fileName);
         $files = $archive->getFileNames();
         foreach ($files as $file) {
             $ext = pathinfo($file, PATHINFO_EXTENSION);
             $tableName = pathinfo($file, PATHINFO_FILENAME);
             if ($ext=='xml') {
-                print_r($tableName);
-                //var_dump($archive->getFileData($file));
                 $fileContent = $archive->getFileContent($file);
 
                 $xml = simplexml_load_string($fileContent);
@@ -179,11 +171,20 @@ class PacketIn extends ActiveRecord
                         $model = new $modelName();
                         $data = json_encode($row);
                         $data = json_decode($data, true);
+                        if (isset($data['@attributes']['DATEOPEN'])) {
+                            $date = DateTime::createFromFormat('Ymd\TH:i:su', $data['@attributes']['DATEOPEN']); //20180924T21:26:19000
+                            $data['@attributes']['DATEOPEN'] = $date->format('Y-m-d H:i:s');
+                        }
+                        if (isset($data['@attributes']['DATECLOSE'])) {
+                            $date = DateTime::createFromFormat('Ymd\TH:i:su', $data['@attributes']['DATECLOSE']); //20180924T21:26:19000
+                            $data['@attributes']['DATECLOSE'] = $date->format('Y-m-d H:i:s');
+                        }
                         $model->setAttributes($data['@attributes']);
                         if ($model->validate()) {
                             $model->save(false);
                         } else {
-                            print_r($model->getErrorSummary(true));
+                            //echo \yii\helpers\Json::encode($model->getErrorSummary(true));
+                            //die();
                         }
                     }
                 }
@@ -200,6 +201,32 @@ class PacketIn extends ActiveRecord
                 */
                 //print_r($archive->getFileContent($file));
             }
+        }
+
+        return true;
+    }
+
+    public static function processingAll()
+    {
+        $models = PacketIn::find()->where(['PROCESSED'=>'N'])->all();
+        foreach ($models as $model) {
+            $model->processing();
+        }
+    }
+
+    public function processing()
+    {
+        $fileName = Yii::$app->basePath . self::$uploadPath . $this->PACKETFILENAME;
+        if (is_file($fileName)) {
+            @unlink($fileName);
+        }
+        $fp = fopen($fileName, 'w');
+        fwrite($fp, $this->DATA);
+        fclose($fp);
+
+        if ($this->unzipping()) {
+            $this->save(false);
+            @unlink($fileName);
         }
     }
 }

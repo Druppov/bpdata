@@ -1,5 +1,6 @@
 <?php
 
+use app\modules\admin\assets\ThemeHelper;
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
@@ -9,26 +10,23 @@ use app\models\PacketIn;
 /* @var $searchModel app\modules\admin\models\PacketInSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Packet Ins');
+$this->title = Yii::t('app', 'Обработка пакета');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<?php $this->beginBlock(ThemeHelper::BLOCK_HEADER_BUTTONS); ?>
+<?= Html::a(Yii::t('app', 'Загрузить пакет'), ['create'], ['class' => 'btn btn-sm btn-success']) ?>
+<?php $this->endBlock(); ?>
+
 <div class="packet-in-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php //Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::a(Yii::t('app', 'Create Packet In'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'pjax' => true,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
             [
                 'attribute' => 'POS_ID',
                 'value' => 'bpos.POS_NAME',
@@ -48,21 +46,19 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             */
             [
-                'class' => '\kartik\grid\BooleanColumn',
                 'attribute' => 'PROCESSED',
-                'value' => 'PROCESSED',
-                'trueLabel' => PacketIn::$processed['Y'],
-                'falseLabel' => PacketIn::$processed['N'],
-                'filter' => Html::activeDropDownList(
-                    $searchModel,
-                    'PROCESSED',
-                    PacketIn::$processed,
-                    ['class'=>'form-control','prompt' => 'Все']
-                ),
+                'format' => 'raw',
+                'value' => function ($model, $index, $widget) {
+                    if ($model->PROCESSED=='Y') {
+                        return '<span class="glyphicon glyphicon-ok text-success"></span>';
+                    } else {
+                        return '<span class="glyphicon glyphicon-remove text-danger"></span>';
+                    }
+                },
+                'filter' => PacketIn::$valueYesNo,
             ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
-    <?php //Pjax::end(); ?>
 </div>

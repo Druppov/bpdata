@@ -44,13 +44,14 @@ use yii\helpers\Url;
     <?//= $form->field($model, 'DATA')->textInput() ?>
 
     <? if (!$model->isNewRecord) {
-        echo $form->field($model, 'PROCESSED')->checkbox();
+        echo $form->field($model, 'PROCESSED')->dropDownList(\app\models\PacketIn::$valueYesNo);
     }
     ?>
     <?//= $form->field($model, 'PROCESSED')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton(Yii::t('app', 'Сохранить'), ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Отменить'), Yii::$app->request->referrer, ['class' => 'btn btn-info'])?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -75,12 +75,35 @@ class PacketController extends Controller
                 $model->POS_ID = (int)$output[1];
                 $model->PACKETNO = (int)$output[3];
             }
+            /*
+             * Сохраняем архив в БД
+             */
+            if (!$file->hasError              //checks for errors
+                && is_uploaded_file($file->tempName)) { //checks that file is uploaded
+                //echo file_get_contents($_FILES['uploadedfile']['tmp_name']);
+                $model->DATA = file_get_contents($file->tempName);
+                $model->PROCESSED = 'N';
+                if ($model->save()) {
+                    //Обработка информации
+                    PacketIn::processingAll();
+                    return $this->redirect(['view', 'POS_ID' => $model->POS_ID, 'PACKETNO' => $model->PACKETNO]);
+                }  else {
+                    //var_dump ($model->getErrors());
+                    echo \yii\helpers\Json::encode($model->getErrors());
+                    die();
+                }
+            }
+            /*******************************************/
+
+            /*
+             * Временно отключили распаковку файлв
+             */
+            /*
             Yii::$app->params['uploadPath'] = Yii::$app->basePath . PacketIn::$uploadPath;
             $path = Yii::$app->params['uploadPath'] . $file->name;
             $file->saveAs($path);
             $model->DATA = file_get_contents($path);
             $model->PROCESSED = 'N';
-            //$model->PACKETFILENAME = $path;
             if ($model->save()) {
                 //Обработка информации
                 $model->unzipping();
@@ -89,6 +112,8 @@ class PacketController extends Controller
                 var_dump ($model->getErrors());
                 die();
             }
+            */
+
             /*
             if ($model->upload()) {
                 // file is uploaded successfully
@@ -136,11 +161,6 @@ class PacketController extends Controller
         $this->findModel($POS_ID, $PACKETNO)->delete();
 
         return $this->redirect(['index']);
-    }
-
-    public function zipped($acrName)
-    {
-        //
     }
 
     /**

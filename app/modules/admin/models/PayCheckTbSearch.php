@@ -111,6 +111,10 @@ class PayCheckTbSearch extends PayCheckTb
             ->andFilterWhere(['like', Tovar::tableName().'.NAME', $this->TOVAR_NAME])
         ;
 
+        if (!empty($this->POS_ID) && !empty($this->SMENA_ID)) {
+            $dataProvider->pagination = false;
+        }
+
         return $dataProvider;
     }
 }
