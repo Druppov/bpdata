@@ -8,6 +8,9 @@ use kartik\export\ExportMenu;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\admin\models\SmenaTbSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $dataPayCheckTbProvider yii\data\ActiveDataProvider */
+/* @var $dataPayCheckTbRetProvider yii\data\ActiveDataProvider */
+/* @var $dataPayCheckIntlTbProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', 'Смена');
 $this->params['breadcrumbs'][] = $this->title;
@@ -122,6 +125,7 @@ $fullExportMenu4 = ExportMenu::widget([
     ]);*/
     ?>
     <?= GridView::widget([
+        'id' => 'id-grid-smena',
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
         'showFooter' => true,
@@ -175,6 +179,7 @@ $fullExportMenu4 = ExportMenu::widget([
     }
     ?>
     <?= GridView::widget([
+        'id' => 'id-grid-smena-paycheck',
         'dataProvider' => $dataPayCheckTbProvider,
         'showFooter' => true,
         'striped' => true,
@@ -228,6 +233,7 @@ $fullExportMenu4 = ExportMenu::widget([
     ]);*/
     ?>
     <?= GridView::widget([
+        'id' => 'id-grid-smena-paycheck-return',
         'dataProvider' => $dataPayCheckTbRetProvider,
         'showFooter' => true,
         'striped' => true,
@@ -289,6 +295,7 @@ $fullExportMenu4 = ExportMenu::widget([
     ]);*/
     ?>
     <?= GridView::widget([
+        'id' => 'id-grid-smena-paycheck-intl',
         'dataProvider' => $dataPayCheckIntlTbProvider,
         'showFooter' => true,
         'striped' => true,

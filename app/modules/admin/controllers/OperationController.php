@@ -213,7 +213,7 @@ class OperationController extends Controller
         $searchPayCheckIntlTbModel = new PayCheckIntlTbSearch();
         $searchPayCheckIntlTbModel->IS_GROUP = true;
 
-        if (Yii::$app->request->isGet) {
+        if (Yii::$app->request->isGet || Yii::$app->request->isPost) {
             $searchModel->load(Yii::$app->request->queryParams);
 
             $searchPayCheckTbModel->POS_ID = $searchModel->POS_ID;
