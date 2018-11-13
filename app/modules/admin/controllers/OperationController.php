@@ -203,8 +203,12 @@ class OperationController extends Controller
     {
         $searchModel = new SmenaTbSearch();
         $searchModel->POS_ID = -1;
+
         $searchPayCheckTbModel = new PayCheckTbSearch();
+
         $searchPayCheckTbRetModel = new PayCheckTbSearch();
+        $searchPayCheckTbModel->IS_GROUP = true;
+
         $searchPayCheckIntlTbModel = new PayCheckIntlTbSearch();
 
         if (Yii::$app->request->isGet) {

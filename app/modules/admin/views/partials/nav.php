@@ -48,8 +48,8 @@
                         'items' => [
                             ['label' => 'Торговые точки', 'icon' => 'file-code-o', 'url' => ['/admin/operation/bpos-report'],],
                             ['label' => 'Цены', 'icon' => 'file-code-o', 'url' => ['/admin/operation/tovar-price-report'],],
-                            ['label' => 'Чеки', 'icon' => 'file-code-o', 'url' => ['/admin/operation/pay-check-index'],],
-                            ['label' => 'Внутренний расход', 'icon' => 'file-code-o', 'url' => ['/admin/operation/pay-check-intl-index'],],
+                            //['label' => 'Чеки', 'icon' => 'file-code-o', 'url' => ['/admin/operation/pay-check-index'],],
+                            //['label' => 'Внутренний расход', 'icon' => 'file-code-o', 'url' => ['/admin/operation/pay-check-intl-index'],],
                             ['label' => 'Отчет смены', 'icon' => 'file-code-o', 'url' => ['/admin/operation/smena-tb-index'],],
                             ['label' => 'Остатки на торрговых точках', 'icon' => 'file-code-o', 'url' => ['/admin/operation/balance-index'],],
                         ]
@@ -60,10 +60,10 @@
                         'url' => '#',
                         'items' => [
                             ['label' => 'Свойства', 'icon'  =>  'gears', 'url' => ['/admin/settings/app']],
-                            ['label' => 'Роли/Права', 'icon' => 'lock', 'url' => ['/admin/rbac/permissions'], 'active' => 'permissions' === Yii::$app->controller->id,],
+                            //['label' => 'Роли/Права', 'icon' => 'lock', 'url' => ['/admin/rbac/permissions'], 'active' => 'permissions' === Yii::$app->controller->id,],
                         ],
                     ],
-                    ['label' => 'Окна', 'icon' => 'tasks', 'url' => ['/admin/#']],
+                    //['label' => 'Окна', 'icon' => 'tasks', 'url' => ['/admin/#']],
                     ['label' => 'О программе', 'icon' => 'tasks', 'url' => ['/admin/#']],
 					/*
 					[

@@ -23,6 +23,23 @@ $gridColumns2 = [
     'SUMMA',
     'PUBLISHED'
 ];
+$fullExportMenu2 = ExportMenu::widget([
+    'dataProvider' => $dataPayCheckTbProvider,
+    'columns' => $gridColumns2,
+    'target' => ExportMenu::TARGET_BLANK,
+    'showConfirmAlert' => false,
+    'pjaxContainerId' => 'kv-pjax-container',
+    'exportContainer' => [
+        'class' => 'btn-group mr-2'
+    ],
+    'dropdownOptions' => [
+        'label' => 'Экспорт',
+        'class' => 'btn btn-secondary',
+        'itemsBefore' => [
+            '<div class="dropdown-header">Все данные</div>',
+        ],
+    ],
+]);
 $gridColumns3 = [
     'tovar.NAME',
     'PUBLISHED'
@@ -90,19 +107,32 @@ $gridColumns4 = [
     ]); ?>
 
     <? if (isset($dataPayCheckTbRetProvider)) {
+        /*
         echo ExportMenu::widget([
             'dataProvider' => $dataPayCheckTbProvider,
             'columns' => $gridColumns2,
         ]);
+        */
     }
     ?>
     <?= GridView::widget([
         'dataProvider' => $dataPayCheckTbProvider,
-        'pjax'=>true,
-        'showPageSummary' => true,
         'showFooter' => true,
         'striped' => true,
         'hover' => true,
+        'pjax'=>true,
+        'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container']],
+        'showPageSummary' => true,
+        'panel' => [
+            'type' => 'primary',
+            //'heading' => false,
+            //'heading'=>$this->title,
+        ],
+        'toolbar' => [
+            //'{export}',
+            $fullExportMenu2,
+        ],
+        /*
         'autoXlFormat'=>true,
         'toggleDataContainer' => ['class' => 'btn-group mr-2'],
         'export'=>[
@@ -110,12 +140,11 @@ $gridColumns4 = [
             'target'=>GridView::TARGET_BLANK
         ],
         'panel'=>[
-            'type'=>'primary',
-            'heading'=>Yii::t('app', 'Продажи по смене')
+            'heading'=>Yii::t('app', 'Продажи по смене'),
+            'type'=>'primary'
         ],
+        */
         'columns' => [
-            //['class' => 'yii\grid\SerialColumn'],
-
             [
                 'attribute' => 'TOVAR_ID',
                 'value' => 'tovar.NAME',
