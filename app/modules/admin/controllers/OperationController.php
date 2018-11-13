@@ -205,11 +205,13 @@ class OperationController extends Controller
         $searchModel->POS_ID = -1;
 
         $searchPayCheckTbModel = new PayCheckTbSearch();
-
-        $searchPayCheckTbRetModel = new PayCheckTbSearch();
         $searchPayCheckTbModel->IS_GROUP = true;
 
+        $searchPayCheckTbRetModel = new PayCheckTbSearch();
+        $searchPayCheckTbRetModel->IS_GROUP = true;
+
         $searchPayCheckIntlTbModel = new PayCheckIntlTbSearch();
+        $searchPayCheckIntlTbModel->IS_GROUP = true;
 
         if (Yii::$app->request->isGet) {
             $searchModel->load(Yii::$app->request->queryParams);

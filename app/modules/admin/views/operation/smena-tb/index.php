@@ -40,10 +40,29 @@ $fullExportMenu2 = ExportMenu::widget([
         ],
     ],
 ]);
+
 $gridColumns3 = [
     'tovar.NAME',
     'PUBLISHED'
 ];
+$fullExportMenu3 = ExportMenu::widget([
+    'dataProvider' => $dataPayCheckTbRetProvider,
+    'columns' => $gridColumns3,
+    'target' => ExportMenu::TARGET_BLANK,
+    'showConfirmAlert' => false,
+    'pjaxContainerId' => 'kv-pjax-container',
+    'exportContainer' => [
+        'class' => 'btn-group mr-2'
+    ],
+    'dropdownOptions' => [
+        'label' => 'Экспорт',
+        'class' => 'btn btn-secondary',
+        'itemsBefore' => [
+            '<div class="dropdown-header">Все данные</div>',
+        ],
+    ],
+]);
+
 $gridColumns4 = [
     'payCheckIntl.rashodType.RASHODNAME',
     'payCheckIntl.personal.FIO',
@@ -51,6 +70,23 @@ $gridColumns4 = [
     'SUMMA',
     'PUBLISHED'
 ];
+$fullExportMenu4 = ExportMenu::widget([
+    'dataProvider' => $dataPayCheckIntlTbProvider,
+    'columns' => $gridColumns4,
+    'target' => ExportMenu::TARGET_BLANK,
+    'showConfirmAlert' => false,
+    'pjaxContainerId' => 'kv-pjax-container',
+    'exportContainer' => [
+        'class' => 'btn-group mr-2'
+    ],
+    'dropdownOptions' => [
+        'label' => 'Экспорт',
+        'class' => 'btn btn-secondary',
+        'itemsBefore' => [
+            '<div class="dropdown-header">Все данные</div>',
+        ],
+    ],
+]);
 ?>
 
 <?php $this->beginBlock(ThemeHelper::BLOCK_HEADER_BUTTONS); ?>
@@ -125,6 +161,7 @@ $gridColumns4 = [
         'showPageSummary' => true,
         'panel' => [
             'type' => 'primary',
+            'heading'=>Yii::t('app', 'Продажи по смене'),
             //'heading' => false,
             //'heading'=>$this->title,
         ],
@@ -172,12 +209,31 @@ $gridColumns4 = [
         ],
     ]); ?>
 
-    <? echo ExportMenu::widget([
+    <?
+    /*echo ExportMenu::widget([
         'dataProvider' => $dataPayCheckTbRetProvider,
         'columns' => $gridColumns3,
-    ]); ?>
+    ]);*/
+    ?>
     <?= GridView::widget([
         'dataProvider' => $dataPayCheckTbRetProvider,
+        'showFooter' => true,
+        'striped' => true,
+        'hover' => true,
+        'pjax'=>true,
+        'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container']],
+        'showPageSummary' => true,
+        'panel' => [
+            'type' => 'primary',
+            'heading'=>Yii::t('app', 'Возврат')
+            //'heading' => false,
+            //'heading'=>$this->title,
+        ],
+        'toolbar' => [
+            //'{export}',
+            $fullExportMenu2,
+        ],
+        /*
         'autoXlFormat'=>true,
         'toggleDataContainer' => ['class' => 'btn-group mr-2'],
         'export'=>[
@@ -189,14 +245,16 @@ $gridColumns4 = [
             'type'=>'primary',
             'heading'=>Yii::t('app', 'Возврат')
         ],
+        */
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
             [
                 'attribute' => 'TOVAR_ID',
                 'value' => 'tovar.NAME',
             ],
-            'KVO',
+            [
+                'attribute' => 'KVO',
+                'pageSummary' => true,
+            ],
             [
                 'attribute' => 'SUMMA',
                 'format' => ['currency', ''],
@@ -215,12 +273,29 @@ $gridColumns4 = [
         ],
     ]); ?>
 
-    <? echo ExportMenu::widget([
+    <?
+    /*echo ExportMenu::widget([
         'dataProvider' => $dataPayCheckIntlTbProvider,
         'columns' => $gridColumns4,
-    ]); ?>
+    ]);*/
+    ?>
     <?= GridView::widget([
         'dataProvider' => $dataPayCheckIntlTbProvider,
+        'showFooter' => true,
+        'striped' => true,
+        'hover' => true,
+        'pjax'=>true,
+        'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container']],
+        'showPageSummary' => true,
+        'panel' => [
+            'type' => 'primary',
+            'heading'=>Yii::t('app', 'Прочий расход'),
+        ],
+        'toolbar' => [
+            //'{export}',
+            $fullExportMenu4,
+        ],
+        /*
         'autoXlFormat'=>true,
         'toggleDataContainer' => ['class' => 'btn-group mr-2'],
         'export'=>[
@@ -232,9 +307,8 @@ $gridColumns4 = [
             'type'=>'primary',
             'heading'=>Yii::t('app', 'Прочий расход')
         ],
+        */
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
             [
                 'attribute' => 'RASHOD_ID',
                 'value' => 'payCheckIntl.rashodType.RASHODNAME',
@@ -255,16 +329,6 @@ $gridColumns4 = [
                 'format' => ['currency', ''],
                 'pageSummary' => true,
             ],
-            /*
-            [
-                'class' => '\kartik\grid\BooleanColumn',
-                'attribute' => 'PUBLISHED',
-                'value' => 'PUBLISHED',
-                'trueLabel' => SmenaTb::$valuePublished['P'],
-                'falseLabel' => SmenaTb::$valuePublished['U'],
-                'filter' => Html::activeDropDownList($searchModel, 'PUBLISHED', SmenaTb::$valuePublished,['class'=>'form-control','prompt' => 'Публикация']),
-            ],
-            */
         ],
     ]); ?>
 
