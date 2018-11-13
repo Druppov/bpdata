@@ -17,6 +17,24 @@ $gridColumns1 = [
     'work.WORKNAME',
     'PUBLISHED'
 ];
+$fullExportMenu1 = ExportMenu::widget([
+    'dataProvider' => $dataProvider,
+    'columns' => $gridColumns1,
+    'target' => ExportMenu::TARGET_BLANK,
+    'showConfirmAlert' => false,
+    'pjaxContainerId' => 'kv-pjax-container',
+    'exportContainer' => [
+        'class' => 'btn-group mr-2'
+    ],
+    'dropdownOptions' => [
+        'label' => 'Экспорт',
+        'class' => 'btn btn-secondary',
+        'itemsBefore' => [
+            '<div class="dropdown-header">Все данные</div>',
+        ],
+    ],
+]);
+
 $gridColumns2 = [
     'tovar.NAME',
     'KVO',
@@ -97,14 +115,29 @@ $fullExportMenu4 = ExportMenu::widget([
 
     <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <? echo ExportMenu::widget([
+    <?
+    /* echo ExportMenu::widget([
         'dataProvider' => $dataProvider,
         'columns' => $gridColumns1,
-    ]); ?>
+    ]);*/
+    ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
+        'showFooter' => true,
+        'striped' => true,
+        'hover' => true,
         'pjax'=>true,
+        'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container']],
+        'panel' => [
+            'type' => 'primary',
+            'heading'=>$this->title,
+        ],
+        'toolbar' => [
+            //'{export}',
+            $fullExportMenu1,
+        ],
+        /*
         'autoXlFormat'=>true,
         'toggleDataContainer' => ['class' => 'btn-group mr-2'],
         'export'=>[
@@ -115,6 +148,7 @@ $fullExportMenu4 = ExportMenu::widget([
             'type'=>'primary',
             'heading'=>$this->title
         ],
+        */
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -128,17 +162,6 @@ $fullExportMenu4 = ExportMenu::widget([
                 'attribute' => 'WORK_ID',
                 'value' => 'work.WORKNAME',
             ],
-            /*
-            [
-                'class' => '\kartik\grid\BooleanColumn',
-                'attribute' => 'PUBLISHED',
-                'value' => 'PUBLISHED',
-                'trueLabel' => SmenaTb::$valuePublished['P'],
-                'falseLabel' => SmenaTb::$valuePublished['U'],
-                'filter' => Html::activeDropDownList($searchModel, 'PUBLISHED', SmenaTb::$valuePublished,['class'=>'form-control','prompt' => 'Публикация']),
-            ],
-            */
-            //['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 
@@ -189,23 +212,12 @@ $fullExportMenu4 = ExportMenu::widget([
             ],
             [
                 'attribute' => 'KVO',
-                'pageSummary' => true,
             ],
             [
                 'attribute' => 'SUMMA',
                 'format' => ['currency', ''],
                 'pageSummary' => true,
             ],
-            /*
-            [
-                'class' => '\kartik\grid\BooleanColumn',
-                'attribute' => 'PUBLISHED',
-                'value' => 'PUBLISHED',
-                'trueLabel' => SmenaTb::$valuePublished['P'],
-                'falseLabel' => SmenaTb::$valuePublished['U'],
-                'filter' => Html::activeDropDownList($searchModel, 'PUBLISHED', SmenaTb::$valuePublished,['class'=>'form-control','prompt' => 'Публикация']),
-            ],
-            */
         ],
     ]); ?>
 
@@ -226,8 +238,6 @@ $fullExportMenu4 = ExportMenu::widget([
         'panel' => [
             'type' => 'primary',
             'heading'=>Yii::t('app', 'Возврат')
-            //'heading' => false,
-            //'heading'=>$this->title,
         ],
         'toolbar' => [
             //'{export}',
@@ -253,7 +263,6 @@ $fullExportMenu4 = ExportMenu::widget([
             ],
             [
                 'attribute' => 'KVO',
-                'pageSummary' => true,
             ],
             [
                 'attribute' => 'SUMMA',
