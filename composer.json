@@ -22,6 +22,7 @@
     "kartik-v/yii2-widget-datepicker": "dev-master",
     "kartik-v/yii2-widget-fileinput": "dev-master",
     "kartik-v/yii2-widget-touchspin": "dev-master",
+    "kop/yii2-scroll-pager": "dev-master",
     "vlucas/phpdotenv": "~2.2",
     "wapmorgan/unified-archive": "dev-master",
     "yiisoft/yii2": "~2.0.12",

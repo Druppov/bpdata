@@ -1736,12 +1736,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/kartik-v/yii2-export.git",
-            "reference": "e4c2fd584ef69af7abf5dd19f0e40af9bf9e961c"
+            "reference": "35b6766cd1dfe3d1b661e36b8f6bab783233c1d9"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/kartik-v/yii2-export/zipball/e4c2fd584ef69af7abf5dd19f0e40af9bf9e961c",
-            "reference": "e4c2fd584ef69af7abf5dd19f0e40af9bf9e961c",
+            "url": "https://api.github.com/repos/kartik-v/yii2-export/zipball/35b6766cd1dfe3d1b661e36b8f6bab783233c1d9",
+            "reference": "35b6766cd1dfe3d1b661e36b8f6bab783233c1d9",
             "shasum": ""
         },
         "require": {
@@ -1749,7 +1749,7 @@
             "kartik-v/yii2-mpdf": "~1.0",
             "phpoffice/phpspreadsheet": "~1.0"
         },
-        "time": "2018-11-10T15:21:33+00:00",
+        "time": "2018-11-15T15:18:34+00:00",
         "type": "yii2-extension",
         "extra": {
             "branch-alias": {
@@ -1798,12 +1798,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/kartik-v/yii2-grid.git",
-            "reference": "31ccd84cdd3dcb793bde509bcade8b75bfd94c35"
+            "reference": "5fdfcfc2c7cd285411d97e4ab4baae508d6d896a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/kartik-v/yii2-grid/zipball/31ccd84cdd3dcb793bde509bcade8b75bfd94c35",
-            "reference": "31ccd84cdd3dcb793bde509bcade8b75bfd94c35",
+            "url": "https://api.github.com/repos/kartik-v/yii2-grid/zipball/5fdfcfc2c7cd285411d97e4ab4baae508d6d896a",
+            "reference": "5fdfcfc2c7cd285411d97e4ab4baae508d6d896a",
             "shasum": ""
         },
         "require": {
@@ -1812,7 +1812,7 @@
         "suggest": {
             "kartik-v/yii2-mpdf": "For exporting grids to PDF"
         },
-        "time": "2018-11-09T15:48:59+00:00",
+        "time": "2018-11-20T04:15:55+00:00",
         "type": "yii2-extension",
         "extra": {
             "branch-alias": {
@@ -1847,24 +1847,24 @@
     },
     {
         "name": "kartik-v/yii2-krajee-base",
-        "version": "v2.0.1",
-        "version_normalized": "2.0.1.0",
+        "version": "v2.0.2",
+        "version_normalized": "2.0.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/kartik-v/yii2-krajee-base.git",
-            "reference": "0690e9b119d9116098cbae4f15703c14f9c264b2"
+            "reference": "e23b914399c77df45123d1ac848cf129f0d3d740"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/0690e9b119d9116098cbae4f15703c14f9c264b2",
-            "reference": "0690e9b119d9116098cbae4f15703c14f9c264b2",
+            "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/e23b914399c77df45123d1ac848cf129f0d3d740",
+            "reference": "e23b914399c77df45123d1ac848cf129f0d3d740",
             "shasum": ""
         },
         "suggest": {
             "yiisoft/yii2-bootstrap": "for Krajee extensions to work with Bootstrap 3.x version",
             "yiisoft/yii2-bootstrap4": "for Krajee extensions to work with Bootstrap 4.x version"
         },
-        "time": "2018-11-10T11:06:12+00:00",
+        "time": "2018-11-26T06:13:21+00:00",
         "type": "yii2-extension",
         "extra": {
             "branch-alias": {
@@ -2390,6 +2390,56 @@
             "spinner",
             "touch",
             "widget",
+            "yii2"
+        ]
+    },
+    {
+        "name": "kop/yii2-scroll-pager",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/kop/yii2-scroll-pager.git",
+            "reference": "9b9727ce441fbfc487044535ab6ce0b7694d810b"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/kop/yii2-scroll-pager/zipball/9b9727ce441fbfc487044535ab6ce0b7694d810b",
+            "reference": "9b9727ce441fbfc487044535ab6ce0b7694d810b",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.4.0",
+            "webcreate/jquery-ias": "^2.2.1",
+            "yiisoft/yii2": "*"
+        },
+        "time": "2016-07-06T19:56:33+00:00",
+        "type": "yii2-extension",
+        "installation-source": "source",
+        "autoload": {
+            "psr-4": {
+                "kop\\y2sp\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Ivan Koptiev",
+                "email": "ivan.koptiev@codex.systems",
+                "role": "Developer"
+            }
+        ],
+        "description": "Infinite AJAX scrolling for Yii2 ListView widget",
+        "homepage": "http://kop.github.io/yii2-scroll-pager/",
+        "keywords": [
+            "pager",
+            "pagination",
+            "scroll",
+            "scrolling",
+            "yii",
             "yii2"
         ]
     },
@@ -2976,17 +3026,17 @@
     },
     {
         "name": "phpoffice/phpspreadsheet",
-        "version": "1.5.0",
-        "version_normalized": "1.5.0.0",
+        "version": "1.5.2",
+        "version_normalized": "1.5.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
-            "reference": "2dfd06c59825914a1a325f2a2ed13634b9d8c411"
+            "reference": "cd60531c44f580fbdfbd55dfb935af791f09be5d"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/2dfd06c59825914a1a325f2a2ed13634b9d8c411",
-            "reference": "2dfd06c59825914a1a325f2a2ed13634b9d8c411",
+            "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/cd60531c44f580fbdfbd55dfb935af791f09be5d",
+            "reference": "cd60531c44f580fbdfbd55dfb935af791f09be5d",
             "shasum": ""
         },
         "require": {
@@ -3011,6 +3061,7 @@
             "friendsofphp/php-cs-fixer": "@stable",
             "jpgraph/jpgraph": "^4.0",
             "mpdf/mpdf": "^7.0.0",
+            "phpcompatibility/php-compatibility": "^8.0",
             "phpunit/phpunit": "^5.7",
             "squizlabs/php_codesniffer": "^3.3",
             "tecnickcom/tcpdf": "^6.2"
@@ -3021,7 +3072,7 @@
             "mpdf/mpdf": "Option for rendering PDF with PDF Writer",
             "tecnickcom/tcpdf": "Option for rendering PDF with PDF Writer"
         },
-        "time": "2018-10-21T10:04:54+00:00",
+        "time": "2018-11-25T17:40:15+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -3035,19 +3086,22 @@
         ],
         "authors": [
             {
-                "name": "Maarten Balliauw",
-                "homepage": "http://blog.maartenballiauw.be"
-            },
-            {
                 "name": "Erik Tilt"
             },
             {
-                "name": "Franck Lefevre",
-                "homepage": "http://rootslabs.net"
+                "name": "Adrien Crivelli"
+            },
+            {
+                "name": "Maarten Balliauw",
+                "homepage": "https://blog.maartenballiauw.be"
             },
             {
                 "name": "Mark Baker",
-                "homepage": "http://markbakeruk.net"
+                "homepage": "https://markbakeruk.net"
+            },
+            {
+                "name": "Franck Lefevre",
+                "homepage": "https://rootslabs.net"
             }
         ],
         "description": "PHPSpreadsheet - Read, Create and Write Spreadsheet documents in PHP - Spreadsheet engine",
@@ -3570,23 +3624,23 @@
     },
     {
         "name": "psr/log",
-        "version": "1.0.2",
-        "version_normalized": "1.0.2.0",
+        "version": "1.1.0",
+        "version_normalized": "1.1.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/php-fig/log.git",
-            "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d"
+            "reference": "6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/php-fig/log/zipball/4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
-            "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
+            "url": "https://api.github.com/repos/php-fig/log/zipball/6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd",
+            "reference": "6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.0"
         },
-        "time": "2016-10-10T12:19:37+00:00",
+        "time": "2018-11-20T15:27:04+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -4489,17 +4543,17 @@
     },
     {
         "name": "symfony/browser-kit",
-        "version": "v4.1.7",
-        "version_normalized": "4.1.7.0",
+        "version": "v4.1.8",
+        "version_normalized": "4.1.8.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/browser-kit.git",
-            "reference": "c55fe9257003b2d95c0211b3f6941e8dfd26dffd"
+            "reference": "1c4e2f368a09cd33bf4b6e4a4a32b361a16ef1db"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/browser-kit/zipball/c55fe9257003b2d95c0211b3f6941e8dfd26dffd",
-            "reference": "c55fe9257003b2d95c0211b3f6941e8dfd26dffd",
+            "url": "https://api.github.com/repos/symfony/browser-kit/zipball/1c4e2f368a09cd33bf4b6e4a4a32b361a16ef1db",
+            "reference": "1c4e2f368a09cd33bf4b6e4a4a32b361a16ef1db",
             "shasum": ""
         },
         "require": {
@@ -4513,7 +4567,7 @@
         "suggest": {
             "symfony/process": ""
         },
-        "time": "2018-07-26T09:10:45+00:00",
+        "time": "2018-11-26T10:26:29+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -4548,17 +4602,17 @@
     },
     {
         "name": "symfony/console",
-        "version": "v4.1.7",
-        "version_normalized": "4.1.7.0",
+        "version": "v4.1.8",
+        "version_normalized": "4.1.8.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/console.git",
-            "reference": "432122af37d8cd52fba1b294b11976e0d20df595"
+            "reference": "c74f4d1988dfcd8760273e53551694da32b056d0"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/console/zipball/432122af37d8cd52fba1b294b11976e0d20df595",
-            "reference": "432122af37d8cd52fba1b294b11976e0d20df595",
+            "url": "https://api.github.com/repos/symfony/console/zipball/c74f4d1988dfcd8760273e53551694da32b056d0",
+            "reference": "c74f4d1988dfcd8760273e53551694da32b056d0",
             "shasum": ""
         },
         "require": {
@@ -4583,7 +4637,7 @@
             "symfony/lock": "",
             "symfony/process": ""
         },
-        "time": "2018-10-31T09:30:44+00:00",
+        "time": "2018-11-26T14:00:40+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -4618,23 +4672,23 @@
     },
     {
         "name": "symfony/css-selector",
-        "version": "v4.1.7",
-        "version_normalized": "4.1.7.0",
+        "version": "v4.1.8",
+        "version_normalized": "4.1.8.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/css-selector.git",
-            "reference": "d67de79a70a27d93c92c47f37ece958bf8de4d8a"
+            "reference": "9e4dc57949853315561f0cd5eb84d0707465502a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/css-selector/zipball/d67de79a70a27d93c92c47f37ece958bf8de4d8a",
-            "reference": "d67de79a70a27d93c92c47f37ece958bf8de4d8a",
+            "url": "https://api.github.com/repos/symfony/css-selector/zipball/9e4dc57949853315561f0cd5eb84d0707465502a",
+            "reference": "9e4dc57949853315561f0cd5eb84d0707465502a",
             "shasum": ""
         },
         "require": {
             "php": "^7.1.3"
         },
-        "time": "2018-10-02T16:36:10+00:00",
+        "time": "2018-11-11T19:51:29+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -4673,17 +4727,17 @@
     },
     {
         "name": "symfony/dom-crawler",
-        "version": "v4.1.7",
-        "version_normalized": "4.1.7.0",
+        "version": "v4.1.8",
+        "version_normalized": "4.1.8.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/dom-crawler.git",
-            "reference": "80e60271bb288de2a2259662cff125cff4f93f95"
+            "reference": "a9f533524dcc3970a2c06ee1ec0bba35d3f5910e"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/80e60271bb288de2a2259662cff125cff4f93f95",
-            "reference": "80e60271bb288de2a2259662cff125cff4f93f95",
+            "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/a9f533524dcc3970a2c06ee1ec0bba35d3f5910e",
+            "reference": "a9f533524dcc3970a2c06ee1ec0bba35d3f5910e",
             "shasum": ""
         },
         "require": {
@@ -4697,7 +4751,7 @@
         "suggest": {
             "symfony/css-selector": ""
         },
-        "time": "2018-10-02T12:40:59+00:00",
+        "time": "2018-11-26T10:26:29+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -4732,17 +4786,17 @@
     },
     {
         "name": "symfony/event-dispatcher",
-        "version": "v4.1.7",
-        "version_normalized": "4.1.7.0",
+        "version": "v4.1.8",
+        "version_normalized": "4.1.8.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/event-dispatcher.git",
-            "reference": "552541dad078c85d9414b09c041ede488b456cd5"
+            "reference": "8b93ce06506d58485893e2da366767dcc5390862"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/552541dad078c85d9414b09c041ede488b456cd5",
-            "reference": "552541dad078c85d9414b09c041ede488b456cd5",
+            "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/8b93ce06506d58485893e2da366767dcc5390862",
+            "reference": "8b93ce06506d58485893e2da366767dcc5390862",
             "shasum": ""
         },
         "require": {
@@ -4762,7 +4816,7 @@
             "symfony/dependency-injection": "",
             "symfony/http-kernel": ""
         },
-        "time": "2018-10-10T13:52:42+00:00",
+        "time": "2018-11-26T10:26:29+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -4797,23 +4851,23 @@
     },
     {
         "name": "symfony/finder",
-        "version": "v4.1.7",
-        "version_normalized": "4.1.7.0",
+        "version": "v4.1.8",
+        "version_normalized": "4.1.8.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/finder.git",
-            "reference": "1f17195b44543017a9c9b2d437c670627e96ad06"
+            "reference": "68fbdcafe915db67adb13fddaec4532e684f6689"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/finder/zipball/1f17195b44543017a9c9b2d437c670627e96ad06",
-            "reference": "1f17195b44543017a9c9b2d437c670627e96ad06",
+            "url": "https://api.github.com/repos/symfony/finder/zipball/68fbdcafe915db67adb13fddaec4532e684f6689",
+            "reference": "68fbdcafe915db67adb13fddaec4532e684f6689",
             "shasum": ""
         },
         "require": {
             "php": "^7.1.3"
         },
-        "time": "2018-10-03T08:47:56+00:00",
+        "time": "2018-11-11T19:51:29+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -5026,17 +5080,17 @@
     },
     {
         "name": "symfony/var-dumper",
-        "version": "v4.1.7",
-        "version_normalized": "4.1.7.0",
+        "version": "v4.1.8",
+        "version_normalized": "4.1.8.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/var-dumper.git",
-            "reference": "60319b45653580b0cdacca499344577d87732f16"
+            "reference": "42a55e4a4a7421124636f6f15845187704be0423"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/var-dumper/zipball/60319b45653580b0cdacca499344577d87732f16",
-            "reference": "60319b45653580b0cdacca499344577d87732f16",
+            "url": "https://api.github.com/repos/symfony/var-dumper/zipball/42a55e4a4a7421124636f6f15845187704be0423",
+            "reference": "42a55e4a4a7421124636f6f15845187704be0423",
             "shasum": ""
         },
         "require": {
@@ -5058,7 +5112,7 @@
             "ext-intl": "To show region name in time zone dump",
             "symfony/console": "To use the ServerDumpCommand and/or the bin/var-dump-server script"
         },
-        "time": "2018-10-02T16:36:10+00:00",
+        "time": "2018-11-20T16:14:00+00:00",
         "bin": [
             "Resources/bin/var-dump-server"
         ],
@@ -5103,17 +5157,17 @@
     },
     {
         "name": "symfony/yaml",
-        "version": "v4.1.7",
-        "version_normalized": "4.1.7.0",
+        "version": "v4.1.8",
+        "version_normalized": "4.1.8.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/yaml.git",
-            "reference": "367e689b2fdc19965be435337b50bc8adf2746c9"
+            "reference": "fe87e3b24d15ec8948f0280ee867a65ca44fdbaa"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/yaml/zipball/367e689b2fdc19965be435337b50bc8adf2746c9",
-            "reference": "367e689b2fdc19965be435337b50bc8adf2746c9",
+            "url": "https://api.github.com/repos/symfony/yaml/zipball/fe87e3b24d15ec8948f0280ee867a65ca44fdbaa",
+            "reference": "fe87e3b24d15ec8948f0280ee867a65ca44fdbaa",
             "shasum": ""
         },
         "require": {
@@ -5129,7 +5183,7 @@
         "suggest": {
             "symfony/console": "For validating YAML files using the lint command"
         },
-        "time": "2018-10-02T16:36:10+00:00",
+        "time": "2018-11-11T19:51:29+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -5334,6 +5388,48 @@
             "rar",
             "tar",
             "zip"
+        ]
+    },
+    {
+        "name": "webcreate/jquery-ias",
+        "version": "v2.3.1",
+        "version_normalized": "2.3.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/webcreate/infinite-ajax-scroll.git",
+            "reference": "97ba99a34e68a3fc186ceb518c9cff51370be24b"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/webcreate/infinite-ajax-scroll/zipball/97ba99a34e68a3fc186ceb518c9cff51370be24b",
+            "reference": "97ba99a34e68a3fc186ceb518c9cff51370be24b",
+            "shasum": ""
+        },
+        "time": "2018-03-21T20:14:31+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "proprietary",
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "fieg",
+                "email": "jeroen@webcreate.nl",
+                "homepage": "http://webcreate.nl"
+            }
+        ],
+        "description": "Infinite Ajax Scroll: A jQuery plugin that turns your server-side pagination into an infinite scrolling one using AJAX",
+        "homepage": "https://infiniteajaxscroll.com",
+        "keywords": [
+            "ajax",
+            "ias",
+            "infinite",
+            "jquery",
+            "pagination",
+            "scroll",
+            "scrolling"
         ]
     },
     {

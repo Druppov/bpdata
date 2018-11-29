@@ -90,6 +90,7 @@ class ComposerStaticInit287811450eaed4aff5a9a7bbf06a7d51
         ),
         'k' => 
         array (
+            'kop\\y2sp\\' => 9,
             'kartik\\touchspin\\' => 17,
             'kartik\\sortable\\' => 16,
             'kartik\\select2\\' => 15,
@@ -241,6 +242,10 @@ class ComposerStaticInit287811450eaed4aff5a9a7bbf06a7d51
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
             1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
             2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+        ),
+        'kop\\y2sp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kop/yii2-scroll-pager',
         ),
         'kartik\\touchspin\\' => 
         array (
@@ -2428,6 +2433,7 @@ class ComposerStaticInit287811450eaed4aff5a9a7bbf06a7d51
         'PhpOffice\\PhpSpreadsheet\\Reader\\IReadFilter' => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Reader/IReadFilter.php',
         'PhpOffice\\PhpSpreadsheet\\Reader\\IReader' => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Reader/IReader.php',
         'PhpOffice\\PhpSpreadsheet\\Reader\\Ods' => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Reader/Ods.php',
+        'PhpOffice\\PhpSpreadsheet\\Reader\\Security\\XmlScanner' => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Reader/Security/XmlScanner.php',
         'PhpOffice\\PhpSpreadsheet\\Reader\\Slk' => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Reader/Slk.php',
         'PhpOffice\\PhpSpreadsheet\\Reader\\Xls' => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Reader/Xls.php',
         'PhpOffice\\PhpSpreadsheet\\Reader\\Xls\\Color' => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Reader/Xls/Color.php',
@@ -2875,6 +2881,7 @@ class ComposerStaticInit287811450eaed4aff5a9a7bbf06a7d51
         'Psr\\Log\\NullLogger' => __DIR__ . '/..' . '/psr/log/Psr/Log/NullLogger.php',
         'Psr\\Log\\Test\\DummyTest' => __DIR__ . '/..' . '/psr/log/Psr/Log/Test/LoggerInterfaceTest.php',
         'Psr\\Log\\Test\\LoggerInterfaceTest' => __DIR__ . '/..' . '/psr/log/Psr/Log/Test/LoggerInterfaceTest.php',
+        'Psr\\Log\\Test\\TestLogger' => __DIR__ . '/..' . '/psr/log/Psr/Log/Test/TestLogger.php',
         'Psr\\SimpleCache\\CacheException' => __DIR__ . '/..' . '/psr/simple-cache/src/CacheException.php',
         'Psr\\SimpleCache\\CacheInterface' => __DIR__ . '/..' . '/psr/simple-cache/src/CacheInterface.php',
         'Psr\\SimpleCache\\InvalidArgumentException' => __DIR__ . '/..' . '/psr/simple-cache/src/InvalidArgumentException.php',
@@ -3518,6 +3525,8 @@ class ComposerStaticInit287811450eaed4aff5a9a7bbf06a7d51
         'kartik\\sortable\\SortableAsset' => __DIR__ . '/..' . '/kartik-v/yii2-sortable/src/SortableAsset.php',
         'kartik\\touchspin\\TouchSpin' => __DIR__ . '/..' . '/kartik-v/yii2-widget-touchspin/src/TouchSpin.php',
         'kartik\\touchspin\\TouchSpinAsset' => __DIR__ . '/..' . '/kartik-v/yii2-widget-touchspin/src/TouchSpinAsset.php',
+        'kop\\y2sp\\ScrollPager' => __DIR__ . '/..' . '/kop/yii2-scroll-pager/ScrollPager.php',
+        'kop\\y2sp\\assets\\InfiniteAjaxScrollAsset' => __DIR__ . '/..' . '/kop/yii2-scroll-pager/assets/InfiniteAjaxScrollAsset.php',
         'pdf_context' => __DIR__ . '/..' . '/setasign/fpdi/pdf_context.php',
         'phpDocumentor\\Reflection\\DocBlock' => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src/DocBlock.php',
         'phpDocumentor\\Reflection\\DocBlockFactory' => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src/DocBlockFactory.php',
