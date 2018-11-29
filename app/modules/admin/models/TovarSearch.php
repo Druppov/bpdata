@@ -63,11 +63,11 @@ class TovarSearch extends Tovar
             'TYPE_ID' => $this->TYPE_ID,
             'TAX_ID' => $this->TAX_ID,
             'FKEY_1C' => $this->FKEY_1C,
+            'ISACTIVE' => $this->ISACTIVE,
         ]);
 
         $query->andFilterWhere(['like', 'NAME', $this->NAME])
-            ->andFilterWhere(['like', 'PRINTNAME', $this->PRINTNAME])
-            ->andFilterWhere(['like', 'ISACTIVE', $this->ISACTIVE]);
+            ->andFilterWhere(['like', 'PRINTNAME', $this->PRINTNAME]);
 
         return $dataProvider;
     }

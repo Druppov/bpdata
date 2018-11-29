@@ -52,7 +52,7 @@ class BalanceSearch extends Balance
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-        $query->joinWith(['tovar']);
+        $query->innerJoinWith(['tovar']);
 
         $dataProvider->sort->attributes['TOVAR_NAME'] = [
             'asc' => [Tovar::tableName().'.NAME' => SORT_ASC],

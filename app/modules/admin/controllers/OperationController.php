@@ -5,6 +5,7 @@ namespace app\modules\admin\controllers;
 use app\models\PayCheckIntlTb;
 use app\models\Smena;
 use app\models\SmenaTb;
+use app\models\TovarPrice;
 use app\modules\admin\models\BposSearch;
 use app\modules\admin\models\PayCheckIntlTbSearch;
 use app\modules\admin\models\PayCheckTbSearch;
@@ -156,6 +157,7 @@ class OperationController extends Controller
     public function actionTovarPriceReport()
     {
         $searchModel = new TovarPriceSearch();
+        $searchModel->ISUSED = 'Y';
         $searchModel->IS_USE_MAX_DATE = true;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

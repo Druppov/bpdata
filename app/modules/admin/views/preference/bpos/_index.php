@@ -13,7 +13,7 @@ use yii\widgets\Pjax;
 <div class="bpos-index">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
         'pjax' => true,
         'columns' => [
             [
@@ -27,10 +27,12 @@ use yii\widgets\Pjax;
                     return GridView::ROW_COLLAPSED;
                 },
 
+                /*
                 'detail' => function ($modelTovarPrice,$key,$index,$column) use ($model, $tovarId) {
                     $searchTovarPriceModel = new TovarPriceSearch();
                     $searchTovarPriceModel->POS_ID = $modelTovarPrice->POS_ID;
                     $searchTovarPriceModel->TOVAR_ID = $tovarId;
+                    $searchTovarPriceModel->ISUSED = TovarPriceSearch::$valueYes;
                     $dataTovarPriceProvider = $searchTovarPriceModel->search(Yii::$app->request->queryParams);
 
                     return Yii::$app->controller->renderPartial('tovar-price/_index',[
@@ -38,9 +40,11 @@ use yii\widgets\Pjax;
                         'dataProvider' => $dataTovarPriceProvider,
                     ]);
                 },
+                */
+                'detailUrl'=> Url::toRoute(Yii::$app->request->getBaseUrl().'/admin/preference/tovar-price-detail?TOVAR_ID='.$tovarId),
             ],
             'POS_NAME',
-            'ADDR',
+            //'ADDR',
         ],
 
     ]); ?>

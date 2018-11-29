@@ -60,7 +60,7 @@
                         'url' => '#',
                         'items' => [
                             ['label' => 'Свойства', 'icon'  =>  'gears', 'url' => ['/admin/settings/app']],
-                            //['label' => 'Роли/Права', 'icon' => 'lock', 'url' => ['/admin/rbac/permissions'], 'active' => 'permissions' === Yii::$app->controller->id,],
+                            ['label' => 'Роли/Права', 'icon' => 'lock', 'url' => ['/admin/rbac/permissions'], 'active' => 'permissions' === Yii::$app->controller->id,],
                         ],
                     ],
                     //['label' => 'Окна', 'icon' => 'tasks', 'url' => ['/admin/#']],

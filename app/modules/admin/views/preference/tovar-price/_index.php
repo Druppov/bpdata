@@ -48,7 +48,23 @@ use kartik\dialog\Dialog;
             ],
         ],
         'columns' => [
-            ['class' => 'kartik\grid\SerialColumn'],
+            //['class' => 'kartik\grid\SerialColumn'],
+            [
+                'class' => '\kartik\grid\DataColumn',
+                'attribute' => 'PRICE_DATE',
+                'value' => 'PRICE_DATE',
+                'filterType'=> GridView::FILTER_DATE,
+                'filterWidgetOptions' => [
+                    'language'=>'ru',
+                    'options' => ['placeholder' => 'Выберите дату'],
+                    'pluginOptions' => [
+                        'autoclose'=>true,
+                        'todayHighlight' => true,
+                    ]
+                ],
+                'format' => 'html',
+            ],
+            /*
             [
                 'attribute' => 'PRICE_DATE',
                 'value' => 'PRICE_DATE',
@@ -60,7 +76,7 @@ use kartik\dialog\Dialog;
                 ]),
                 'format' => 'html',
             ],
-
+            */
             [
                 'attribute' => 'ISUSED',
                 'format' => 'raw',

@@ -127,6 +127,25 @@ class PreferenceController extends Controller
         return $this->redirect(['bpod-index']);
     }
 
+    public function actionBposDetail()
+    {
+        if(isset($_POST['expandRowKey'])) {
+            $searchBposModel = new BposSearch();
+            $dataBposProvider = $searchBposModel->search(Yii::$app->request->queryParams);
+
+            return Yii::$app->controller->renderPartial('bpos/_index',[
+                'searchModel' => $searchBposModel,
+                'dataProvider' => $dataBposProvider,
+                'tovarId' => $_POST['expandRowKey'],
+            ]);
+        }
+        else
+        {
+            return '<div class="alert alert-danger">No data found</div>';
+
+        }
+    }
+
     /**
      * Lists all TovarType models.
      * @return mixed
@@ -383,6 +402,7 @@ class PreferenceController extends Controller
     public function actionTovarIndex($type=null)
     {
         $searchModel = new TovarSearch();
+        $searchModel->ISACTIVE = 'Y';
         if (!is_null($type)) {
             $searchModel->TYPE_ID = $type;
         }
@@ -591,6 +611,24 @@ class PreferenceController extends Controller
         $this->findTovarPriceModel($POS_ID, $TOVAR_ID, $PRICE_DATE)->delete();
 
         return $this->redirect(['tovar-price-index']);
+    }
+
+    public function actionTovarPriceDetail($TOVAR_ID)
+    {
+        if (isset($_POST['expandRowKey'])) {
+            $searchTovarPriceModel = new TovarPriceSearch();
+            $searchTovarPriceModel->POS_ID = $_POST['expandRowKey'];
+            $searchTovarPriceModel->TOVAR_ID = $TOVAR_ID;
+            $searchTovarPriceModel->ISUSED = TovarPrice::$valueYes;
+            $dataTovarPriceProvider = $searchTovarPriceModel->search(Yii::$app->request->queryParams);
+
+            return Yii::$app->controller->renderPartial('tovar-price/_index',[
+                'searchModel' => $searchTovarPriceModel,
+                'dataProvider' => $dataTovarPriceProvider,
+            ]);
+        } else {
+            return '<div class="alert alert-danger">No data found</div>';
+        }
     }
 
     /**

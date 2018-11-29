@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use app\models\TovarPrice;
 use kartik\export\ExportMenu;
+use kop\y2sp\ScrollPager;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\admin\models\TovarPriceSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -41,12 +42,24 @@ $fullExportMenu = ExportMenu::widget([
 
     <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <? echo ExportMenu::widget([
+    <? /*echo ExportMenu::widget([
         'dataProvider' => $dataProvider,
         'columns' => $gridColumns,
-    ]); ?>
+    ]);*/ ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'pager' => [
+            'class' => ScrollPager::className(),
+            'container' => '.grid-view tbody',
+            'item' => 'tr',
+            'paginationSelector' => '.grid-view .pagination',
+            'triggerTemplate' => '<tr class="ias-trigger"><td colspan="100%" style="text-align: center"><a style="cursor: pointer">{text}</a></td></tr>',
+            'enabledExtensions'  => [
+                ScrollPager::EXTENSION_SPINNER,
+                //ScrollPager::EXTENSION_NONE_LEFT,
+                ScrollPager::EXTENSION_PAGING,
+            ],
+        ],
         'filterModel' => $searchModel,
         'pjax'=>true,
         'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container']],

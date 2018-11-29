@@ -1,6 +1,7 @@
 <?php
 
 use app\modules\admin\assets\ThemeHelper;
+use kop\y2sp\ScrollPager;
 use yii\helpers\Html;
 //use yii\grid\GridView;
 use kartik\grid\GridView;
@@ -43,12 +44,24 @@ $fullExportMenu = ExportMenu::widget([
 
 <div class="balance-index">
 
-    <? echo ExportMenu::widget([
+    <? /*echo ExportMenu::widget([
         'dataProvider' => $dataProvider,
         'columns' => $gridColumns,
-    ]); ?>
+    ]);*/ ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'pager' => [
+            'class' => ScrollPager::className(),
+            'container' => '.grid-view tbody',
+            'item' => 'tr',
+            'paginationSelector' => '.grid-view .pagination',
+            'triggerTemplate' => '<tr class="ias-trigger"><td colspan="100%" style="text-align: center"><a style="cursor: pointer">{text}</a></td></tr>',
+            'enabledExtensions'  => [
+                ScrollPager::EXTENSION_SPINNER,
+                //ScrollPager::EXTENSION_NONE_LEFT,
+                ScrollPager::EXTENSION_PAGING,
+            ],
+        ],
         'filterModel' => $searchModel,
         'pjax'=>true,
         'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container']],

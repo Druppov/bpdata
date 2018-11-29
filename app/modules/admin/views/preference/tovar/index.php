@@ -4,6 +4,7 @@ use app\modules\admin\assets\ThemeHelper;
 use app\modules\admin\models\BposSearch;
 use app\modules\admin\models\TovarPriceSearch;
 use app\models\TovarType;
+use kop\y2sp\ScrollPager;
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\helpers\Url;
@@ -28,6 +29,20 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        /*
+        'pager' => [
+            'class' => ScrollPager::className(),
+            'container' => '.grid-view tbody',
+            'item' => 'tr',
+            'paginationSelector' => '.grid-view .pagination',
+            'triggerTemplate' => '<tr class="ias-trigger"><td colspan="100%" style="text-align: center"><a style="cursor: pointer">{text}</a></td></tr>',
+            'enabledExtensions'  => [
+                ScrollPager::EXTENSION_SPINNER,
+                //ScrollPager::EXTENSION_NONE_LEFT,
+                ScrollPager::EXTENSION_PAGING,
+            ],
+        ],
+        */
         'filterModel' => $searchModel,
         'pjax' => true,
         'columns' => [
@@ -48,6 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'tovarId' => $model->TOVAR_ID,
                     ]);
                 },
+                //'detailUrl'=> Yii::$app->request->getBaseUrl().'/admin/preference/bpos-detail',
             ],
 
             [

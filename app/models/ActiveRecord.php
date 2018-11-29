@@ -12,11 +12,15 @@ use yii\behaviors\TimestampBehavior;
  */
 abstract class ActiveRecord extends \yii\db\ActiveRecord
 {
+    public static $valuePublishedP = 'P';
+    public static $valuePublishedU = 'U';
     public static $valuePublished = [
         'P' => 'Да',
         'U' => 'Нет'
     ];
 
+    public static $valueYes = 'Y';
+    public static $valueNo = 'N';
     public static $valueYesNo = [
         'Y' => 'Да',
         'N' => 'Нет'
