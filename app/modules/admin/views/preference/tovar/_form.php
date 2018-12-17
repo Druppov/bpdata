@@ -1,5 +1,6 @@
 <?php
 
+use kartik\date\DatePicker;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\TovarType;
@@ -31,6 +32,18 @@ use app\models\TovarType;
     ); ?>
 
     <?//= $form->field($model, 'TAX_ID')->textInput() ?>
+
+    <? //if ($model->isNewRecord) { ?>
+        <?= $form->field($model, 'PRICE_DATE')->widget(DatePicker::classname(), [
+            'options' => ['placeholder' => 'Введите дату ...'],
+            'value' => date('Y-m-d'),
+            'pluginOptions' => [
+                'autoclose'=>true,
+                'format' => 'yyyy-mm-dd'
+            ]
+        ]); ?>
+        <?= $form->field($model, 'PRICE_VALUE')->textInput() ?>
+    <? //} //if ($model->isNewRecord) ?>
 
     <?= $form->field($model, 'ISACTIVE')->dropDownList(\app\models\Tovar::$valueYesNo) ?>
 

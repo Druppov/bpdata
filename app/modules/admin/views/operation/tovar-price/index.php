@@ -63,11 +63,9 @@ $fullExportMenu = ExportMenu::widget([
         'filterModel' => $searchModel,
         'pjax'=>true,
         'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container']],
-        'showPageSummary' => true,
+        //'showPageSummary' => true,
         'panel' => [
             'type' => 'primary',
-            //'heading' => false,
-            //'heading'=>$this->title,
         ],
         'toolbar' => [
             '{export}',
@@ -79,7 +77,6 @@ $fullExportMenu = ExportMenu::widget([
             'showConfirmAlert'=>false,
             'target'=>GridView::TARGET_BLANK
         ],
-        'showPageSummary' => true,
         /*
         'autoXlFormat'=>true,
         'toggleDataContainer' => ['class' => 'btn-group mr-2'],
@@ -125,7 +122,7 @@ $fullExportMenu = ExportMenu::widget([
             [
                 'attribute' => 'PRICE_VALUE',
                 'format' => ['currency', ''],
-                'pageSummary' => true,
+                //'pageSummary' => true,
             ],
             [
                 'attribute' => 'ISUSED',

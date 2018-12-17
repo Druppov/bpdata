@@ -27,10 +27,12 @@ use kartik\date\DatePicker;
 
     <?= $form->field($model, 'PRICE_DATE')->widget(DatePicker::classname(), [
         'options' => ['placeholder' => 'Введите дату ...'],
+        'value' => date('Y-m-d'),
         'pluginOptions' => [
-            'autoclose'=>true
+            'autoclose'=>true,
+            'format' => 'yyyy-mm-dd'
         ]
-    ])?>
+    ]); ?>
 
     <?= $form->field($model, 'PRICE_VALUE')->textInput() ?>
 

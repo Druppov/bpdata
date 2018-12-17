@@ -16,16 +16,6 @@ use Yii;
  */
 class TovarPrice extends ActiveRecord
 {
-    public static $valuePublished = [
-        'P' => 'Да',
-        'U' => 'Нет'
-    ];
-
-    public static $valueIsUsed = [
-        'Y' => 'Да',
-        'N' => 'Нет'
-    ];
-
     /**
      * {@inheritdoc}
      */

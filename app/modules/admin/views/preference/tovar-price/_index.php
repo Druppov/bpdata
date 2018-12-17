@@ -78,6 +78,9 @@ use kartik\dialog\Dialog;
             ],
             */
             [
+                'attribute' => 'PRICE_VALUE',
+            ],
+            [
                 'attribute' => 'ISUSED',
                 'format' => 'raw',
                 'value' => function ($model, $index, $widget) {

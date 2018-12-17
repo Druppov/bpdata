@@ -464,8 +464,32 @@ class PreferenceController extends Controller
     {
         $model = $this->findTovarModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['tovar-view', 'id' => $model->TOVAR_ID]);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
+            if ($model->save(false) && !empty($model->PRICE_DATE) && !empty($model->PRICE_VALUE)) {
+                $bposes = Bpos::find(['PUBLISHED'=>'P'])->all();
+                foreach ($bposes as $bpos) {
+                    $tovarPrice = TovarPrice::findOne([
+                        'POS_ID' => $bpos->POS_ID,
+                        'TOVAR_ID' => $model->TOVAR_ID,
+                        'PRICE_DATE' => $model->PRICE_DATE
+                    ]);
+                    if ($tovarPrice===null) {
+                        $tovarPrice = new TovarPrice();
+                    }
+                    $tovarPrice->setAttributes([
+                        'POS_ID' => $bpos->POS_ID,
+                        'TOVAR_ID' => $model->TOVAR_ID,
+                        'PRICE_DATE' => $model->PRICE_DATE,
+                        'PRICE_VALUE' => $model->PRICE_VALUE,
+                        'PUBLISHED' => TovarPrice::$valuePublishedP,
+                        'ISUSED' => TovarPrice::$valueYes,
+                    ]);
+                    $tovarPrice->save(false);
+                }
+            }
+            //return $this->redirect(['tovar-view', 'id' => $model->TOVAR_ID]);
+            return $this->redirect(['tovar-index', 'type'=>$model->TYPE_ID]);
         }
 
         return $this->render('tovar/update', [
@@ -543,12 +567,13 @@ class PreferenceController extends Controller
             $model->TOVAR_ID = $TOVAR_ID;
         }
         $model->PUBLISHED = 'P';
+        $model->ISUSED = 'Y';
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->save(false);
 
-            return ;
             //return $this->redirect(['tovar-price-view', 'POS_ID' => $model->POS_ID, 'TOVAR_ID' => $model->TOVAR_ID, 'PRICE_DATE' => $model->PRICE_DATE]);
+            return $this->redirect([]);
         } else {
             if (Yii::$app->request->isAjax) {
                 return $this->renderAjax('tovar-price/create', [
@@ -620,6 +645,7 @@ class PreferenceController extends Controller
             $searchTovarPriceModel->POS_ID = $_POST['expandRowKey'];
             $searchTovarPriceModel->TOVAR_ID = $TOVAR_ID;
             $searchTovarPriceModel->ISUSED = TovarPrice::$valueYes;
+            $searchTovarPriceModel->PRICE_DATE = null;
             $dataTovarPriceProvider = $searchTovarPriceModel->search(Yii::$app->request->queryParams);
 
             return Yii::$app->controller->renderPartial('tovar-price/_index',[

@@ -73,6 +73,8 @@ class TovarPriceSearch extends TovarPrice
                 ['tvg' => $subQuery],
                 '`TOVARY_PRICES`.`POS_ID`=tvg.POS_ID AND `TOVARY_PRICES`.`TOVAR_ID`=tvg.TOVAR_ID AND `TOVARY_PRICES`.`PRICE_DATE`=tvg.PRICE_DATE'
             );
+        } else {
+            $query->orderBy(['PRICE_DATE'=>SORT_DESC]);
         }
 
         $dataProvider = new ActiveDataProvider([
@@ -104,8 +106,8 @@ class TovarPriceSearch extends TovarPrice
             $query->andFilterWhere(['>=', self::tableName().'.PRICE_DATE', date('Y-m-d',strtotime($this->PRICE_DATE))]);
         } elseif ($this->IS_USE_MAX_DATE && empty($this->PRICE_DATE)) {
             $query->andFilterWhere(['IS NOT', 'tvg.PRICE_DATE', new Expression('null')]);
-        } else {
-            $query->andFilterWhere(['>=', self::tableName().'.PRICE_DATE', date('Y-m-d',strtotime($this->PRICE_DATE))]);
+        } elseif (!empty($this->PRICE_DATE)) {
+            $query->andFilterWhere(['<=', self::tableName().'.PRICE_DATE', date('Y-m-d',strtotime($this->PRICE_DATE))]);
         }
 
         $query->andFilterWhere(['like', self::tableName().'.PUBLISHED', $this->PUBLISHED])

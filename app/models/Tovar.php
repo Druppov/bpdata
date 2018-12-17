@@ -15,9 +15,13 @@ use Yii;
  * @property string $ISACTIVE
  * @property string $PUBLISHED
  * @property int $FKEY_1C
+ * @property string $PRICE_DATE
+ * @property double $PRICE_VALUE
  */
 class Tovar extends ActiveRecord
 {
+    public $PRICE_DATE;
+    public $PRICE_VALUE;
     /**
      * {@inheritdoc}
      */
@@ -36,6 +40,8 @@ class Tovar extends ActiveRecord
             [['TOVAR_ID', 'TYPE_ID', 'TAX_ID', 'FKEY_1C'], 'integer'],
             [['NAME', 'PRINTNAME'], 'string', 'max' => 60],
             [['ISACTIVE', 'PUBLISHED'], 'string', 'max' => 1],
+            [['PRICE_DATE'], 'safe'],
+            [['PRICE_VALUE'], 'number'],
             [['TOVAR_ID'], 'unique'],
         ];
     }
@@ -49,11 +55,13 @@ class Tovar extends ActiveRecord
             'TOVAR_ID' => Yii::t('app', '№'),
             'NAME' => Yii::t('app', 'Наименование'),
             'PRINTNAME' => Yii::t('app', 'Для печати'),
-            'TYPE_ID' => Yii::t('app', 'Type ID'),
+            'TYPE_ID' => Yii::t('app', 'Товар'),
             'TAX_ID' => Yii::t('app', 'Tax ID'),
             'ISACTIVE' => Yii::t('app', 'Активно'),
             'PUBLISHED' => Yii::t('app', 'Published'),
             'FKEY_1C' => Yii::t('app', 'Ключ 1C'),
+            'PRICE_DATE' => Yii::t('app', 'Дата цены'),
+            'PRICE_VALUE' => Yii::t('app', 'Цена'),
         ];
     }
 }

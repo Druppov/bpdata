@@ -86,7 +86,6 @@ $fullExportMenu = ExportMenu::widget([
         ],
         */
         'columns' => [
-            //['class' => 'kartik\grid\SerialColumn'],
             [
                 'attribute' => 'POS_ID',
                 'value' => 'bpos.POS_NAME',
@@ -124,22 +123,7 @@ $fullExportMenu = ExportMenu::widget([
                 'vAlign'=>'middle',
                 'width'=>'100px',
                 'format'=>['decimal', 2],
-                //'pageSummary'=>true
             ],
-            /*
-            [
-                'attribute' => 'PUBLISHED',
-                'format' => 'raw',
-                'value' => function ($model, $index, $widget) {
-                    if ($model->PUBLISHED=='P') {
-                        return '<span class="glyphicon glyphicon-ok text-success"></span>';
-                    } else {
-                        return '<span class="glyphicon glyphicon-remove text-danger"></span>';
-                    }
-                },
-                'filter' => Balance::$valuePublished,
-            ],
-            */
         ],
     ]); ?>
 </div>
