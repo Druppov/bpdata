@@ -10,11 +10,11 @@ use app\modules\admin\widgets\BoxGridView;
 /* @var $searchModel app\modules\admin\models\UserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title                   = 'Users';
+$this->title                   = 'Сотрудники';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php $this->beginBlock(ThemeHelper::BLOCK_HEADER_BUTTONS); ?>
-	<?= Html::a('Add New', ['create'], ['class' => 'btn btn-sm btn-success']) ?>
+	<?= Html::a('Добавить сотрудника', ['create'], ['class' => 'btn btn-sm btn-success']) ?>
 <?php $this->endBlock(); ?>
 
 <div class="user-index">

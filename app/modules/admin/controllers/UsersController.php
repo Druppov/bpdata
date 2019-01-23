@@ -2,6 +2,7 @@
 
 namespace app\modules\admin\controllers;
 
+use app\models\Personal;
 use app\models\User;
 use app\modules\admin\forms\UserForm;
 use app\modules\admin\models\UserSearch;
@@ -69,7 +70,15 @@ class UsersController extends Controller
 		$model->on(User::EVENT_BEFORE_INSERT, [$model, 'generateAuthKey']);
 		
 		if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			return $this->redirect(['update', 'id' => $model->id]);
+		    $personal = new Personal;
+		    $personal->PERSON_ID = $model->id;
+		    $personal->FIO = $model->getFullName();
+		    $personal->PUBLISHED = Personal::$valuePublishedP;
+		    $personal->ISACTIVE = ($model->status==10) ? Personal::$valueYes : Personal::$valueNo;
+		    $personal->save(false);
+
+			//return $this->redirect(['update', 'id' => $model->id]);
+            return $this->redirect(['/admin/preference/personal-index']);
 		}
 		
 		return $this->render('create', [
@@ -93,7 +102,15 @@ class UsersController extends Controller
 		$model = $this->findModel($id);
 		
 		if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			return $this->redirect(['update', 'id' => $model->id]);
+		    $personal = Personal::findOne(['PERSON_ID'=>$model->id]);
+            $personal->PERSON_ID = $model->id;
+            $personal->FIO = $model->getFullName();
+            $personal->PUBLISHED = Personal::$valuePublishedP;
+            $personal->ISACTIVE = ($model->status==10) ? Personal::$valueYes : Personal::$valueNo;
+            $personal->save(false);
+
+			//return $this->redirect(['update', 'id' => $model->id]);
+            return $this->redirect(['/admin/preference/personal-index']);
 		}
 		
 		return $this->render('update', [
@@ -112,8 +129,10 @@ class UsersController extends Controller
 	public function actionDelete($id)
 	{
 		$this->findModel($id)->delete();
+        Personal::findOne(['PERSON_ID'=>$id])->delete();
 		
-		return $this->redirect(['index']);
+		//return $this->redirect(['index']);
+        return $this->redirect(['/admin/preference/personal-index']);
 	}
 	
 }

@@ -38,7 +38,7 @@ class UserForm extends User
 				},
 				'whenClient' => 'function() { return $.trim($("#userform-password").val()).length || false; }',
 			],
-			['passwordRepeat', 'compare', 'compareAttribute' => 'password'],
+			//['passwordRepeat', 'compare', 'compareAttribute' => 'password'],
 			['roles', 'in', 'range' => array_keys(static::getRolesList()), 'allowArray' => true],
 		]);
 	}
@@ -53,10 +53,21 @@ class UserForm extends User
 			$this->setPassword($this->password);
 		}
 		
-		$this->updateUserRoles($this->roles);
+		//$this->updateUserRoles($this->roles);
 		
 		return parent::beforeSave($insert);
 	}
+
+    /**
+     * @inheritdoc
+     * @return bool
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        $this->updateUserRoles($this->roles);
+    }
 	
 	/**
 	 * @inheritdoc

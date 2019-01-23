@@ -4,10 +4,10 @@
 /* @var $model \app\modules\admin\forms\UserForm */
 /* @var $roles array */
 
-$this->title = "Update {$model->fullName}";
-$this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
+$this->title = "Редактировать сотрудника {$model->fullName}";
+$this->params['breadcrumbs'][] = ['label' => 'Сотрудники', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->fullName, 'url' => ['update', 'id' => $model->id]];
-$this->params['heading'] = 'Users';
+$this->params['heading'] = 'Сотрудники';
 $this->params['subheading'] = $model->fullName;
 ?>
 <div class="user-update">

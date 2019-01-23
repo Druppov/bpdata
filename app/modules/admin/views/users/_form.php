@@ -37,7 +37,7 @@ use yii\helpers\Html;
 		]) ?>
 	</div>
 	<div class="box-footer text-right">
-		<?= Html::submitButton($model->isNewRecord ? 'Save' : 'Update', ['class' => 'btn btn-success']) ?>
+		<?= Html::submitButton($model->isNewRecord ? 'Сохранить' : 'Изменить', ['class' => 'btn btn-success']) ?>
 	</div>
 	
 	<?php ActiveForm::end(); ?>

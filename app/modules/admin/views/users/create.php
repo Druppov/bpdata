@@ -5,11 +5,11 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model \app\modules\admin\forms\UserForm */
 
-$this->title                   = 'Create User';
-$this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
+$this->title                   = 'Добавить сотрудника';
+$this->params['breadcrumbs'][] = ['label' => 'Сотрудники', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-$this->params['heading']       = 'Users';
-$this->params['subheading']    = 'Add New';
+$this->params['heading']       = 'Сотрудники';
+$this->params['subheading']    = $this->title;
 ?>
 <div class="user-create">
 

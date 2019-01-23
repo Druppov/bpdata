@@ -52,8 +52,25 @@ class User extends ActiveRecord implements IdentityInterface
 			['email', 'email'],
 		];
 	}
-	
-	/**
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'first_name' => Yii::t('app', 'Фамилия'),
+            'last_name' => Yii::t('app', 'Имя Отчество'),
+            'username' => Yii::t('app', 'Логин'),
+            'email' => Yii::t('app', 'Е-майл'),
+            'password' => Yii::t('app', 'Пароль'),
+            'passwordRepeat' => Yii::t('app', 'Повторный пароль'),
+            'status' => Yii::t('app', 'Состояние'),
+            'roles' => Yii::t('app', 'Роли'),
+        ];
+    }
+
+    /**
 	 * User full name
 	 * (as first/last name)
 	 *
