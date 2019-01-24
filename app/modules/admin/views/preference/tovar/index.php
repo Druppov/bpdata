@@ -56,6 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'detail' => function ($model,$key,$index,$column) use ($searchModel) {
                     $searchBposModel = new BposSearch();
                     $dataBposProvider = $searchBposModel->search(Yii::$app->request->queryParams);
+                    $dataBposProvider->sort->defaultOrder = ['POS_NAME' => SORT_ASC];
 
                     return Yii::$app->controller->renderPartial('bpos/_index',[
                         'searchModel' => $searchBposModel,

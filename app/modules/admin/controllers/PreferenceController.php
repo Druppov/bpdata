@@ -52,6 +52,7 @@ class PreferenceController extends Controller
     {
         $searchModel = new BposSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->sort->defaultOrder = ['POS_NAME' => SORT_ASC];
 
         return $this->render('bpos/index', [
             'searchModel' => $searchModel,
@@ -154,6 +155,7 @@ class PreferenceController extends Controller
     {
         $searchModel = new TovarTypeSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->sort->defaultOrder = ['TYPE_NAME' => SORT_ASC];
 
         return $this->render('tovar-type/index', [
             'searchModel' => $searchModel,
@@ -237,6 +239,7 @@ class PreferenceController extends Controller
     {
         $searchModel = new WorkSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->sort->defaultOrder = ['WORKNAME' => SORT_ASC];
 
         return $this->render('work/index', [
             'searchModel' => $searchModel,
@@ -317,6 +320,7 @@ class PreferenceController extends Controller
     {
         $searchModel = new PersonalSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->sort->defaultOrder = ['FIO' => SORT_ASC];
 
         return $this->render('personal/index', [
             'searchModel' => $searchModel,
@@ -407,6 +411,7 @@ class PreferenceController extends Controller
             $searchModel->TYPE_ID = $type;
         }
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->sort->defaultOrder = ['NAME' => SORT_ASC];
 
         return $this->render('tovar/index', [
             'searchModel' => $searchModel,
@@ -647,6 +652,7 @@ class PreferenceController extends Controller
             $searchTovarPriceModel->ISUSED = TovarPrice::$valueYes;
             $searchTovarPriceModel->PRICE_DATE = null;
             $dataTovarPriceProvider = $searchTovarPriceModel->search(Yii::$app->request->queryParams);
+            $dataTovarPriceProvider->sort->defaultOrder = ['PRICE_DATE' => SORT_DESC];
 
             return Yii::$app->controller->renderPartial('tovar-price/_index',[
                 'searchModel' => $searchTovarPriceModel,
