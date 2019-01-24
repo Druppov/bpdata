@@ -186,10 +186,11 @@ class PreferenceController extends Controller
         $model = new TovarType();
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $model->PUBLISHED = 'N';
+            $model->PUBLISHED = TovarType::$valuePublishedP;
             $model->save(false);
 
-            return $this->redirect(['tovar-type-view', 'id' => $model->TYPE_ID]);
+            //return $this->redirect(['tovar-type-view', 'id' => $model->TYPE_ID]);
+            return $this->redirect(['tovar-type-index']);
         }
 
         return $this->render('tovar-type/create', [
@@ -209,7 +210,8 @@ class PreferenceController extends Controller
         $model = $this->findTovarTypeModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['tovar-type-view', 'id' => $model->TYPE_ID]);
+            //return $this->redirect(['tovar-type-view', 'id' => $model->TYPE_ID]);
+            return $this->redirect(['tovar-type-index']);
         }
 
         return $this->render('tovar-type/update', [
@@ -270,7 +272,8 @@ class PreferenceController extends Controller
         $model = new Work();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['work-view', 'id' => $model->WORK_ID]);
+            //return $this->redirect(['work-view', 'id' => $model->WORK_ID]);
+            return $this->redirect(['work-index']);
         }
 
         return $this->render('work/create', [
@@ -290,7 +293,8 @@ class PreferenceController extends Controller
         $model = $this->findWorkModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->WORK_ID]);
+            //return $this->redirect(['view', 'id' => $model->WORK_ID]);
+            return $this->redirect(['work-index']);
         }
 
         return $this->render('work/update', [
