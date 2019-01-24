@@ -30,9 +30,9 @@ class TovarType extends ActiveRecord
         return [
             [['TYPE_ID', 'TYPE_NAME'], 'required'],
             [['TYPE_ID'], 'integer'],
+            [['TYPE_ID'], 'unique'],
             [['TYPE_NAME'], 'string', 'max' => 40],
             [['SHOWASCATEGORY', 'PUBLISHED'], 'string', 'max' => 1],
-            [['TYPE_ID'], 'unique'],
         ];
     }
 
@@ -47,5 +47,34 @@ class TovarType extends ActiveRecord
             'SHOWASCATEGORY' => Yii::t('app', 'Активно'),
             'PUBLISHED' => Yii::t('app', 'Published'),
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        /*
+        if (parent::beforeSave($insert)) {
+            if ($insert) {
+                $this->TYPE_ID = $this->getMaxId();
+            //    Yii::$app->session->setFlash('success', 'Запись добавлена!');
+            //} else {
+            //    Yii::$app->session->setFlash('success', 'Запись обновлена!');
+            }
+            return true;
+        } else {
+            return false;
+        }
+        */
+        if ($insert) {
+            //$this->TYPE_ID = $this->getMaxId();
+            $this->TYPE_ID = TovarType::find()->max('TYPE_ID') + 1;
+        }
+        return parent::beforeSave($insert);
+    }
+
+    public function getMaxId()
+    {
+        $newId = TovarType::find()->max('TYPE_ID') + 1;
+
+        return $newId;
     }
 }

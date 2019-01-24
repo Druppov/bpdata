@@ -184,14 +184,16 @@ class PreferenceController extends Controller
     public function actionTovarTypeCreate()
     {
         $model = new TovarType();
+        $model->TYPE_ID = TovarType::find()->max('TYPE_ID') + 1;
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $model->PUBLISHED = TovarType::$valuePublishedP;
-            $model->save(false);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            //$model->PUBLISHED = TovarType::$valuePublishedP;
+            //$model->save(true);
 
             //return $this->redirect(['tovar-type-view', 'id' => $model->TYPE_ID]);
             return $this->redirect(['tovar-type-index']);
         }
+        //die('+++++++++');
 
         return $this->render('tovar-type/create', [
             'model' => $model,

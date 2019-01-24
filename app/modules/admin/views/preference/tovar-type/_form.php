@@ -18,10 +18,13 @@ use app\models\TovarType;
     ]); ?>
 
     <?//= $form->field($model, 'TYPE_ID')->textInput() ?>
+    <?= $form->errorSummary($model); ?>
 
     <?= $form->field($model, 'TYPE_NAME')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'SHOWASCATEGORY')->dropDownList(TovarType::$valueYesNo); ?>
+
+    <?= $form->field($model, 'PUBLISHED')->hiddenInput(['valule'=>TovarType::$valuePublishedP])->label(false)?>
 
     <?//= $form->field($model, 'PUBLISHED')->textInput(['maxlength' => true]) ?>
 
