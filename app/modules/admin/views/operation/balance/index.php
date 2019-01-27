@@ -13,7 +13,20 @@ use kartik\export\ExportMenu;
 /* @var $searchModel app\modules\admin\models\BalanceSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Остатки');
+$addTitle = '';
+if (!empty($searchModel->POS_ID)) {
+    $addTitle .= Bpos::getName($searchModel->POS_ID);
+}
+if (!empty($searchModel->BALANCEDATE)) {
+    if (!empty($addTitle)) {
+        $addTitle .= ' : ';
+    }
+    $addTitle .= $searchModel->BALANCEDATE;
+}
+if (!empty($addTitle)) {
+    $addTitle = ' ('.$addTitle.')';
+}
+$this->title = Yii::t('app', 'Остатки'.$addTitle);
 $this->params['breadcrumbs'][] = $this->title;
 
 $gridColumns = [
@@ -43,6 +56,8 @@ $fullExportMenu = ExportMenu::widget([
 ?>
 
 <div class="balance-index">
+
+    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <? /*echo ExportMenu::widget([
         'dataProvider' => $dataProvider,
@@ -90,6 +105,7 @@ $fullExportMenu = ExportMenu::widget([
                 'attribute' => 'POS_ID',
                 'value' => 'bpos.POS_NAME',
                 'filter' => Balance::getBposFilter($searchModel),
+                'visible' => empty($searchModel->POS_ID),
             ],
             [
                 'class' => '\kartik\grid\DataColumn',
@@ -106,6 +122,7 @@ $fullExportMenu = ExportMenu::widget([
                     ]
                 ],
                 'format' => 'html',
+                'visible' => empty($searchModel->BALANCEDATE),
             ],
             [
                 'attribute' => 'TOVAR_NAME',

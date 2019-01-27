@@ -1,5 +1,7 @@
 <?php
 
+use app\models\Bpos;
+use kartik\date\DatePicker;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -11,26 +13,46 @@ use yii\widgets\ActiveForm;
 <div class="balance-search">
 
     <?php $form = ActiveForm::begin([
-        'action' => ['index'],
+        'action' => ['balance-index'],
         'method' => 'get',
         'options' => [
             'data-pjax' => 1
         ],
     ]); ?>
 
-    <?= $form->field($model, 'POS_ID') ?>
+    <?= $form->field($model, 'POS_ID')->dropDownList(
+        Bpos::find()->select(['POS_NAME', 'POS_ID'])->indexBy('POS_ID')->column(),
+        [
+            'id' => 'balancesearch-pos-id',
+            'prompt'=>'Выберите точку продаж',
+            /*
+            'onchange'=>'
+				$.post( "'.Yii::$app->urlManager->createUrl('admin/operation/smena-lists?pos_id=').'"+$(this).val(), function( data ) {
+				  $( "select#smenatbsearch-smena-id" ).html( data );
+				});
+			'
+            */
+        ]
+    ); ?>
 
-    <?= $form->field($model, 'BALANCEDATE') ?>
+    <?= $form->field($model, 'BALANCEDATE')->widget(DatePicker::classname(), [
+        'options' => ['placeholder' => 'Введите дату ...'],
+        'value' => date('Y-m-d'),
+        'pluginOptions' => [
+            'autoclose'=>true,
+            'format' => 'yyyy-mm-dd'
+        ]
+    ]); ?>
 
-    <?= $form->field($model, 'TOVAR_ID') ?>
+    <?//= $form->field($model, 'TOVAR_ID') ?>
 
-    <?= $form->field($model, 'AMOUNT') ?>
+    <?//= $form->field($model, 'AMOUNT') ?>
 
-    <?= $form->field($model, 'PUBLISHED') ?>
+    <?//= $form->field($model, 'PUBLISHED') ?>
 
     <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
+        <?= Html::submitButton(Yii::t('app', 'Применить'), ['class' => 'btn btn-primary']) ?>
+        <?= Html::resetButton(Yii::t('app', 'Отмена'), ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Bpos;
 use app\modules\admin\assets\ThemeHelper;
 use yii\helpers\Html;
 use kartik\grid\GridView;
@@ -10,7 +11,21 @@ use kop\y2sp\ScrollPager;
 /* @var $searchModel app\modules\admin\models\TovarPriceSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Отчет `Цена товара`');
+$addTitle = '';
+if (!empty($searchModel->POS_ID)) {
+    $addTitle .= Bpos::getName($searchModel->POS_ID);
+}
+if (!empty($searchModel->PRICE_DATE)) {
+    if (!empty($addTitle)) {
+        $addTitle .= ' : ';
+    }
+    $addTitle .= $searchModel->PRICE_DATE;
+}
+if (!empty($addTitle)) {
+    $addTitle = ' ('.$addTitle.')';
+}
+$this->title = Yii::t('app', 'Отчет `Цена товара`'.$addTitle);
+
 $this->params['breadcrumbs'][] = $this->title;
 
 $gridColumns = [
@@ -97,6 +112,8 @@ $fullExportMenu = ExportMenu::widget([
                 'attribute' => 'POS_ID',
                 'value' => 'bpos.POS_NAME',
                 'filter' => TovarPrice::getBposFilter($searchModel),
+                'visible' => empty($searchModel->POS_ID),
+
             ],
             [
                 'attribute' => 'TOVAR_NAME',
@@ -118,6 +135,7 @@ $fullExportMenu = ExportMenu::widget([
                     ]
                 ],
                 'format' => 'html',
+                'visible' => empty($searchModel->PRICE_DATE),
             ],
             [
                 'attribute' => 'PRICE_VALUE',

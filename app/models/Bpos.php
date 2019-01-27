@@ -27,6 +27,13 @@ class Bpos extends ActiveRecord
         return 'BPOS';
     }
 
+    public static function getName($BPOS_ID)
+    {
+        $model = Bpos::findOne($BPOS_ID);
+
+        return isset($model->POS_NAME) ? $model->POS_NAME : '';
+    }
+
     /**
      * {@inheritdoc}
      */

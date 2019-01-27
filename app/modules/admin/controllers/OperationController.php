@@ -157,7 +157,7 @@ class OperationController extends Controller
     public function actionTovarPriceReport()
     {
         $searchModel = new TovarPriceSearch();
-        $searchModel->ISUSED = 'Y';
+        $searchModel->ISUSED = TovarPrice::$valueYes;
         $searchModel->IS_USE_MAX_DATE = true;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
