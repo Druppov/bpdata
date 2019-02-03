@@ -81,12 +81,12 @@ class PreferenceController extends Controller
     public function actionBposCreate()
     {
         $model = new Bpos();
+        $model->PUBLISHED = Bpos::$valuePublishedP;
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $model->PUBLISHED = 'U';
             $model->save(false);
 
-            return $this->redirect(['bpod-view', 'id' => $model->POS_ID]);
+            return $this->redirect(['bpos-index']);
         }
 
         return $this->render('bpos/create', [
@@ -125,7 +125,7 @@ class PreferenceController extends Controller
     {
         $this->findBposModel($id)->delete();
 
-        return $this->redirect(['bpod-index']);
+        return $this->redirect(['bpos-index']);
     }
 
     public function actionBposDetail()
@@ -184,11 +184,10 @@ class PreferenceController extends Controller
     public function actionTovarTypeCreate()
     {
         $model = new TovarType();
+        $model->PUBLISHED = TovarType::$valuePublishedP;
         $model->TYPE_ID = TovarType::find()->max('TYPE_ID') + 1;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            //$model->PUBLISHED = TovarType::$valuePublishedP;
-            //$model->save(true);
 
             //return $this->redirect(['tovar-type-view', 'id' => $model->TYPE_ID]);
             return $this->redirect(['tovar-type-index']);
@@ -355,12 +354,13 @@ class PreferenceController extends Controller
     public function actionPersonalCreate()
     {
         $model = new Personal();
+        $model->PUBLISHED = Personal::$valuePublishedP;
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $model->PUBLISHED = 'P';
             $model->save(false);
 
-            return $this->redirect(['personal-view', 'id' => $model->PERSON_ID]);
+            //return $this->redirect(['personal-view', 'id' => $model->PERSON_ID]);
+            return $this->redirect(['personal-index']);
         }
 
         return $this->render('personal/create', [

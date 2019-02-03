@@ -13,6 +13,8 @@ use app\models\Bpos;
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <?= $form->errorSummary($model); ?>
+
     <?//= $form->field($model, 'POS_ID')->textInput() ?>
 
     <?= $form->field($model, 'POS_NAME')->textInput(['maxlength' => true]) ?>

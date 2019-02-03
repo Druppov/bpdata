@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?php $this->beginBlock(ThemeHelper::BLOCK_HEADER_BUTTONS); ?>
-<?= Html::a(Yii::t('app', 'Добавить сотрудника'), ['/admin/users/create'], ['class' => 'btn btn-sm btn-success']) ?>
+<?= Html::a(Yii::t('app', 'Добавить сотрудника'), ['/admin/preference/personal-create'], ['class' => 'btn btn-sm btn-success']) ?>
 <?php $this->endBlock(); ?>
 
 <div class="personal-index">
@@ -51,11 +51,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['width'=>'120'],
                 'header' => Yii::t('app', 'Действия'),
                 'urlCreator' => function ($action, $model, $key, $index) {
-                    //$action = 'personal-'.$action;
-                    //return Url::to(['preference/'.$action, 'id' => $model->PERSON_ID]);
+                    $action = 'personal-'.$action;
+                    return Url::to(['preference/'.$action, 'id' => $model->PERSON_ID]);
+                    /*
                     if ($action=='view') {
                         $action = 'update';
                     }
+                    */
                     return Url::to(['/admin/users/'.$action, 'id' => $model->PERSON_ID]);
                 }
             ],

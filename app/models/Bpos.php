@@ -40,7 +40,7 @@ class Bpos extends ActiveRecord
     public function rules()
     {
         return [
-            [['POS_ID', 'POS_NAME'], 'required'],
+            [['POS_NAME'], 'required'],
             [['POS_ID'], 'integer'],
             [['POS_NAME'], 'string', 'max' => 30],
             [['ADDR'], 'string', 'max' => 120],

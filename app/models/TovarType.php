@@ -28,7 +28,7 @@ class TovarType extends ActiveRecord
     public function rules()
     {
         return [
-            [['TYPE_ID', 'TYPE_NAME'], 'required'],
+            [['TYPE_NAME'], 'required'],
             [['TYPE_ID'], 'integer'],
             [['TYPE_ID'], 'unique'],
             [['TYPE_NAME'], 'string', 'max' => 40],
@@ -51,19 +51,6 @@ class TovarType extends ActiveRecord
 
     public function beforeSave($insert)
     {
-        /*
-        if (parent::beforeSave($insert)) {
-            if ($insert) {
-                $this->TYPE_ID = $this->getMaxId();
-            //    Yii::$app->session->setFlash('success', 'Запись добавлена!');
-            //} else {
-            //    Yii::$app->session->setFlash('success', 'Запись обновлена!');
-            }
-            return true;
-        } else {
-            return false;
-        }
-        */
         if ($insert) {
             //$this->TYPE_ID = $this->getMaxId();
             $this->TYPE_ID = TovarType::find()->max('TYPE_ID') + 1;
