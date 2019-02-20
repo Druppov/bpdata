@@ -63,7 +63,8 @@ class TovarPriceSearch extends TovarPrice
         // add conditions that should always apply here
         $query->innerJoinWith(['tovar']);
 
-        if ($this->IS_USE_MAX_DATE) {
+        /*
+        if ($this->IS_USE_MAX_DATE && empty($this->PRICE_DATE)) {
             $subQuery = TovarPrice::find()
                 ->alias('tv2')
                 ->select('tv2.`POS_ID`,tv2.`TOVAR_ID`,MAX(tv2.PRICE_DATE) AS `PRICE_DATE`')
@@ -76,6 +77,7 @@ class TovarPriceSearch extends TovarPrice
         } else {
             $query->orderBy(['PRICE_DATE'=>SORT_DESC]);
         }
+        */
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -102,12 +104,32 @@ class TovarPriceSearch extends TovarPrice
             self::tableName().'.PRICE_VALUE' => $this->PRICE_VALUE,
         ]);
 
-        if ($this->IS_USE_MAX_DATE && !empty($this->PRICE_DATE)) {
-            $query->andFilterWhere(['>=', self::tableName().'.PRICE_DATE', date('Y-m-d',strtotime($this->PRICE_DATE))]);
-        } elseif ($this->IS_USE_MAX_DATE && empty($this->PRICE_DATE)) {
-            $query->andFilterWhere(['IS NOT', 'tvg.PRICE_DATE', new Expression('null')]);
+        //if ($this->IS_USE_MAX_DATE && !empty($this->PRICE_DATE)) {
+        //    $query->andFilterWhere(['>=', self::tableName().'.PRICE_DATE', date('Y-m-d',strtotime($this->PRICE_DATE))]);
+        //} elseif ($this->IS_USE_MAX_DATE && empty($this->PRICE_DATE)) {
+        if ($this->IS_USE_MAX_DATE && empty($this->PRICE_DATE)) {
+            //$query->andFilterWhere(['IS NOT', 'tvg.PRICE_DATE', new Expression('null')]);
+            $subQuery = TovarPrice::find()
+                ->alias('tv2')
+                ->select('tv2.`POS_ID`,tv2.`TOVAR_ID`,MAX(tv2.PRICE_DATE) AS `PRICE_DATE`')
+                ->groupBy('tv2.`POS_ID`,tv2.`TOVAR_ID`');
+
+            $query->innerJoin(
+                ['tvg' => $subQuery],
+                '`TOVARY_PRICES`.`POS_ID`=tvg.POS_ID AND `TOVARY_PRICES`.`TOVAR_ID`=tvg.TOVAR_ID AND `TOVARY_PRICES`.`PRICE_DATE`=tvg.PRICE_DATE'
+            );
         } elseif (!empty($this->PRICE_DATE)) {
-            $query->andFilterWhere(['<=', self::tableName().'.PRICE_DATE', date('Y-m-d',strtotime($this->PRICE_DATE))]);
+            //$query->andFilterWhere(['<=', self::tableName().'.PRICE_DATE', date('Y-m-d',strtotime($this->PRICE_DATE))]);
+            $subQuery = TovarPrice::find()
+                ->alias('tv2')
+                ->select('tv2.`POS_ID`,tv2.`TOVAR_ID`,MAX(tv2.PRICE_DATE) AS `PRICE_DATE`')
+                ->where(['<=', 'tv2.PRICE_DATE', date('Y-m-d',strtotime($this->PRICE_DATE))])
+                ->groupBy('tv2.`POS_ID`,tv2.`TOVAR_ID`');
+
+            $query->innerJoin(
+                ['tvg' => $subQuery],
+                '`TOVARY_PRICES`.`POS_ID`=tvg.POS_ID AND `TOVARY_PRICES`.`TOVAR_ID`=tvg.TOVAR_ID AND `TOVARY_PRICES`.`PRICE_DATE`=tvg.PRICE_DATE'
+            );
         }
 
         $query->andFilterWhere(['like', self::tableName().'.PUBLISHED', $this->PUBLISHED])
