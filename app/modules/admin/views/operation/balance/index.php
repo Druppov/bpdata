@@ -139,7 +139,7 @@ $fullExportMenu = ExportMenu::widget([
                 'hAlign'=>'right',
                 'vAlign'=>'middle',
                 'width'=>'100px',
-                'format'=>['decimal', 2],
+                'format'=>['decimal', 3],
             ],
         ],
     ]); ?>

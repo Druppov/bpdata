@@ -51,7 +51,7 @@
                             //['label' => 'Чеки', 'icon' => 'file-code-o', 'url' => ['/admin/operation/pay-check-index'],],
                             //['label' => 'Внутренний расход', 'icon' => 'file-code-o', 'url' => ['/admin/operation/pay-check-intl-index'],],
                             ['label' => 'Отчет смены', 'icon' => 'file-code-o', 'url' => ['/admin/operation/smena-tb-index'],],
-                            ['label' => 'Остатки на торрговых точках', 'icon' => 'file-code-o', 'url' => ['/admin/operation/balance-index'],],
+                            ['label' => 'Остатки на торговых точках', 'icon' => 'file-code-o', 'url' => ['/admin/operation/balance-index'],],
                         ]
                     ],
                     [
