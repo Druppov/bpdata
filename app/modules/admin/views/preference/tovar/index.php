@@ -2,13 +2,10 @@
 
 use app\modules\admin\assets\ThemeHelper;
 use app\modules\admin\models\BposSearch;
-use app\modules\admin\models\TovarPriceSearch;
-use app\models\TovarType;
-use kop\y2sp\ScrollPager;
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\helpers\Url;
-use yii\widgets\Pjax;
+use kop\y2sp\ScrollPager;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\admin\models\TovarSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -29,7 +26,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        /*
         'pager' => [
             'class' => ScrollPager::className(),
             'container' => '.grid-view tbody',
@@ -38,11 +34,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'triggerTemplate' => '<tr class="ias-trigger"><td colspan="100%" style="text-align: center"><a style="cursor: pointer">{text}</a></td></tr>',
             'enabledExtensions'  => [
                 ScrollPager::EXTENSION_SPINNER,
-                //ScrollPager::EXTENSION_NONE_LEFT,
+                ScrollPager::EXTENSION_NONE_LEFT,
                 ScrollPager::EXTENSION_PAGING,
             ],
+            'eventOnScroll' => 'function() {$(".ias-trigger a").trigger("click")}',
         ],
-        */
         'filterModel' => $searchModel,
         'pjax' => true,
         'columns' => [

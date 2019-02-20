@@ -62,7 +62,8 @@ use kartik\dialog\Dialog;
                         'todayHighlight' => true,
                     ]
                 ],
-                'format' => 'html',
+                //'format' => 'html',
+                'format' => ['date', 'php:d.m.Y'],
             ],
             /*
             [

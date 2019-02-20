@@ -40,7 +40,9 @@ use yii\widgets\ActiveForm;
         'value' => date('Y-m-d'),
         'pluginOptions' => [
             'autoclose'=>true,
-            'format' => 'yyyy-mm-dd'
+            'language' => 'ru',
+            'format' => 'dd.mm.yyyy'
+            //'format' => 'yyyy-mm-dd'
         ]
     ]); ?>
 

@@ -117,11 +117,12 @@ $fullExportMenu = ExportMenu::widget([
                     'options' => ['placeholder' => 'Укажите дату'],
                     'pluginOptions' => [
                         'autoclose'=>true,
-                        'format' => 'yyyy-mm-dd',
+                        'format' => 'dd.mm.yyyy',
                         'todayHighlight' => true
                     ]
                 ],
-                'format' => 'html',
+                //'format' => 'html',
+                'format' => ['date', 'php:d.m.Y'],
                 'visible' => empty($searchModel->BALANCEDATE),
             ],
             [

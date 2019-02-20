@@ -69,10 +69,14 @@ class BalanceSearch extends Balance
         // grid filtering conditions
         $query->andFilterWhere([
             'POS_ID' => $this->POS_ID,
-            'BALANCEDATE' => $this->BALANCEDATE,
+            //'BALANCEDATE' => date('Y-m-d', strtotime($this->BALANCEDATE)),
             'TOVAR_ID' => $this->TOVAR_ID,
             'AMOUNT' => $this->AMOUNT,
         ]);
+
+        if (isset($this->BALANCEDATE) && !empty($this->BALANCEDATE)) {
+            $query->andFilterWhere(['BALANCEDATE' => date('Y-m-d', strtotime($this->BALANCEDATE))]);
+        }
 
         $query->andFilterWhere(['like', 'PUBLISHED', $this->PUBLISHED])
             ->andFilterWhere(['like', Tovar::tableName().'NAME', $this->TOVAR_NAME]);

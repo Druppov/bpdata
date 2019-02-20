@@ -134,7 +134,8 @@ $fullExportMenu = ExportMenu::widget([
                         'todayHighlight' => true,
                     ]
                 ],
-                'format' => 'html',
+                //'format' => 'html',
+                'format' => ['date', 'php:d.m.Y'],
                 'visible' => empty($searchModel->PRICE_DATE),
             ],
             [
