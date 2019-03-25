@@ -143,6 +143,7 @@ class OperationController extends Controller
     {
         $searchModel = new BalanceSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->sort->defaultOrder = ['TOVAR_NAME' => SORT_ASC];
 
         return $this->render('balance/index', [
             'searchModel' => $searchModel,
