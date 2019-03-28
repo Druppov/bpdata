@@ -216,7 +216,10 @@ class PacketIn extends ActiveRecord
     {
         $models = PacketIn::find()->where(['PROCESSED'=>'N'])->all();
         foreach ($models as $model) {
-            $model->processing();
+            if ($model->processing()) {
+                $model->PROCESSED = 'Y';
+                $model->save(false);
+            }
         }
     }
 
@@ -233,6 +236,10 @@ class PacketIn extends ActiveRecord
         if ($this->unzipping()) {
             $this->save(false);
             @unlink($fileName);
+
+            return true;
         }
+
+        return false;
     }
 }
