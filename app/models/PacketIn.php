@@ -166,6 +166,8 @@ class PacketIn extends ActiveRecord
                         $modelName = null;
                 }
 
+                //echo $tableName . ' Model: '.$modelName.'<br/>'.PHP_EOL;
+
                 if (!is_null($modelName)) {
                     foreach ($rows as $row) {
                         $model = new $modelName();
@@ -178,6 +180,10 @@ class PacketIn extends ActiveRecord
                         if (isset($data['@attributes']['DATECLOSE'])) {
                             $date = DateTime::createFromFormat('Ymd\TH:i:su', $data['@attributes']['DATECLOSE']); //20180924T21:26:19000
                             $data['@attributes']['DATECLOSE'] = $date->format('Y-m-d H:i:s');
+                        }
+                        if (isset($data['@attributes']['STAMP'])) {
+                            $date = DateTime::createFromFormat('Ymd\TH:i:su', $data['@attributes']['STAMP']); //20180924T21:26:19000
+                            $data['@attributes']['STAMP'] = $date->format('Y-m-d H:i:s');
                         }
                         $model->setAttributes($data['@attributes']);
                         if ($model->validate()) {

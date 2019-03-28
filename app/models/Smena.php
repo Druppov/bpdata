@@ -62,7 +62,7 @@ class Smena extends ActiveRecord
         return [
             [['POS_ID'], 'required'],
             [['POS_ID', 'CHIEF', 'ZOTCHENO'], 'integer'],
-            [['DATEOPEN', 'DATECLOSE', 'data'], 'safe'],
+            [['DATEOPEN', 'DATECLOSE', 'SMENA_ID', 'data'], 'safe'],
             [['PUBLISHED'], 'string', 'max' => 1],
         ];
     }

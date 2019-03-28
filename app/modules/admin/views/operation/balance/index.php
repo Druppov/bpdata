@@ -141,6 +141,7 @@ $fullExportMenu = ExportMenu::widget([
                 'vAlign'=>'middle',
                 'width'=>'100px',
                 'format'=>['decimal', 3],
+                //'refreshGrid'=>true,
             ],
         ],
     ]); ?>
