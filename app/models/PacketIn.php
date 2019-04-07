@@ -131,6 +131,8 @@ class PacketIn extends ActiveRecord
 
     public function unzipping()
     {
+        $errors = '';
+
         $fileName = $path = Yii::$app->basePath . self::$uploadPath . $this->PACKETFILENAME;
         $archive = UnifiedArchive::open($fileName);
         $files = $archive->getFileNames();
@@ -189,6 +191,7 @@ class PacketIn extends ActiveRecord
                         if ($model->validate()) {
                             $model->save(false);
                         } else {
+                            //Json::encode($model->getErrors());
                             //echo \yii\helpers\Json::encode($model->getErrorSummary(true));
                             //die();
                         }
@@ -209,7 +212,7 @@ class PacketIn extends ActiveRecord
             }
         }
 
-        return true;
+        return empty($errors) ? true : $errors;
     }
 
     public static function processingAll()
@@ -233,7 +236,7 @@ class PacketIn extends ActiveRecord
         fwrite($fp, $this->DATA);
         fclose($fp);
 
-        if ($this->unzipping()) {
+        if ($this->unzipping()===true) {
             $this->save(false);
             @unlink($fileName);
 

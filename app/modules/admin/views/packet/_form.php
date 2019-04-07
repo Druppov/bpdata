@@ -28,7 +28,7 @@ use yii\helpers\Url;
 
     <?//= $form->field($model, 'PACKETNO')->textInput() ?>
 
-    <?= $form->field($model, 'PACKETFILENAME')->widget(FileInput::classname(), [
+    <?= $form->field($model, 'PACKETFILENAME[]')->widget(FileInput::classname(), [
         'language' => 'ru',
         'options' => [
             'accept' => '.zip,.rar',

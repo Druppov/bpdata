@@ -64,6 +64,7 @@ class Smena extends ActiveRecord
             [['POS_ID', 'CHIEF', 'ZOTCHENO'], 'integer'],
             [['DATEOPEN', 'DATECLOSE', 'SMENA_ID', 'data'], 'safe'],
             [['PUBLISHED'], 'string', 'max' => 1],
+            [['POS_ID', 'SMENA_ID'], 'unique', 'targetAttribute' => ['POS_ID', 'SMENA_ID']],
         ];
     }
 

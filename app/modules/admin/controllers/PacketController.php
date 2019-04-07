@@ -5,7 +5,12 @@ namespace app\modules\admin\controllers;
 use Yii;
 use app\models\PacketIn;
 use app\modules\admin\models\PacketInSearch;
+use yii\db\Exception;
+use yii\db\IntegrityException;
+use yii\helpers\Html;
+use yii\helpers\Json;
 use yii\web\Controller;
+use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
@@ -68,58 +73,53 @@ class PacketController extends Controller
     {
         $model = new PacketIn();
 
-        if ($model->load(Yii::$app->request->post())) {
-            $file = UploadedFile::getInstance($model, 'PACKETFILENAME');
-            $model->PACKETFILENAME = $file->name;
-            if (preg_match('/mgt-(\d+)-(\d+)-(\d+)\.(zip|rar)/', $file->name, $output)) {
-                $model->POS_ID = (int)$output[1];
-                $model->PACKETNO = (int)$output[3];
-            }
-            /*
-             * Сохраняем архив в БД
-             */
-            if (!$file->hasError              //checks for errors
-                && is_uploaded_file($file->tempName)) { //checks that file is uploaded
-                //echo file_get_contents($_FILES['uploadedfile']['tmp_name']);
-                $model->DATA = file_get_contents($file->tempName);
-                $model->PROCESSED = 'N';
-                if ($model->save()) {
-                    //Обработка информации
-                    PacketIn::processingAll();
-                    return $this->redirect(['view', 'POS_ID' => $model->POS_ID, 'PACKETNO' => $model->PACKETNO]);
-                }  else {
-                    //var_dump ($model->getErrors());
-                    echo \yii\helpers\Json::encode($model->getErrors());
-                    die();
+        if (Yii::$app->request->isPost) {
+            $attrubute = Html::getInputName(new PacketIn(), 'PACKETFILENAME');
+            $files = UploadedFile::getInstancesByName($attrubute);
+            foreach ($files as $file) {
+                /*
+                 * Сохраняем архив в БД
+                 */
+                if (!$file->hasError              //checks for errors
+                    && is_uploaded_file($file->tempName)) { //checks that file is uploaded
+                    //echo file_get_contents($_FILES['uploadedfile']['tmp_name']);
+                    $model = new PacketIn();
+                    $model->PACKETFILENAME = $file->name;
+                    if (preg_match('/mgt-(\d+)-(\d+)-(\d+)\.(zip|rar)/', $file->name, $output)) {
+                        $model->POS_ID = (int)$output[1];
+                        $model->PACKETNO = (int)$output[3];
+                        $model->DATA = file_get_contents($file->tempName);
+                        $model->PROCESSED = 'N';
+
+                        $connection = Yii::$app->db;
+                        $transaction = $connection->beginTransaction();
+                        try {
+                            if ($model->save()) {
+                                //Обработка информации
+                                PacketIn::processingAll();
+                                $transaction->commit();
+                            }  else {
+                                //var_dump ($model->getErrors());
+                                $transaction->rollBack();
+                                //echo Json::encode($model->getErrors());
+                                //die();
+                            }
+                        } catch (IntegrityException $e) {
+                            $transaction->rollBack();
+                            throw new HttpException(500,"YOUR MESSAGE.", 405);
+                        } catch (Exception $e) {
+                            $transaction->rollBack();
+                            throw new HttpException(500,"YOUR MESSAGE", 405);
+                        }
+                    } else {
+                        //ToDo: Ошибка, имя файла не по шаблону
+                    }
+                } else {
+                    //ToDo: Ошибка при загрузке
                 }
             }
-            /*******************************************/
 
-            /*
-             * Временно отключили распаковку файлв
-             */
-            /*
-            Yii::$app->params['uploadPath'] = Yii::$app->basePath . PacketIn::$uploadPath;
-            $path = Yii::$app->params['uploadPath'] . $file->name;
-            $file->saveAs($path);
-            $model->DATA = file_get_contents($path);
-            $model->PROCESSED = 'N';
-            if ($model->save()) {
-                //Обработка информации
-                $model->unzipping();
-                return $this->redirect(['view', 'POS_ID' => $model->POS_ID, 'PACKETNO' => $model->PACKETNO]);
-            }  else {
-                var_dump ($model->getErrors());
-                die();
-            }
-            */
-
-            /*
-            if ($model->upload()) {
-                // file is uploaded successfully
-                return $this->redirect(['view', 'POS_ID' => $model->POS_ID, 'PACKETNO' => $model->PACKETNO]);
-            }
-            */
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
