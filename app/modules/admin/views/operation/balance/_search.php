@@ -21,7 +21,8 @@ use yii\widgets\ActiveForm;
     ]); ?>
 
     <?= $form->field($model, 'POS_ID')->dropDownList(
-        Bpos::find()->select(['POS_NAME', 'POS_ID'])->indexBy('POS_ID')->column(),
+        //Bpos::find()->select(['POS_NAME', 'POS_ID'])->indexBy('POS_ID')->column(),
+        Bpos::getBposList(),
         [
             'id' => 'balancesearch-pos-id',
             'prompt'=>'Выберите точку продаж',

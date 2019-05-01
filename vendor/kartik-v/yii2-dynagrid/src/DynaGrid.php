@@ -3,8 +3,8 @@
 /**
  * @package   yii2-dynagrid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2018
- * @version   1.5.0
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2019
+ * @version   1.5.1
  */
 
 namespace kartik\dynagrid;
@@ -25,6 +25,7 @@ use yii\data\Sort;
 use yii\data\SqlDataProvider;
 use yii\db\ActiveQuery;
 use yii\db\ActiveQueryInterface;
+use yii\db\QueryInterface;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Inflector;
@@ -752,7 +753,7 @@ class DynaGrid extends Widget
         if ($this->_isSubmit) {
             $delete = ArrayHelper::getValue($_POST, 'deleteFlag', 0) == 1;
             $this->saveGridConfig($config, $delete);
-            Yii::$app->controller->refresh();
+            return Yii::$app->controller->refresh();
         } else {
             $this->loadGridConfig($config);
             $this->setWidgetColumns();
@@ -1003,12 +1004,15 @@ class DynaGrid extends Widget
             $query = $provider->query;
             $model = new $query->modelClass;
             return $model->getAttributeLabel($attribute);
-        }
-        $models = $provider->getModels();
-        if (($model = reset($models)) instanceof Model) {
-            return $model->getAttributeLabel($attribute);
-        } else {
+        } elseif ($provider instanceof ActiveDataProvider && $provider->query instanceof QueryInterface) {
             return Inflector::camel2words($attribute);
+        } else {
+            $models = $provider->getModels();
+            if (($model = reset($models)) instanceof Model) {
+                return $model->getAttributeLabel($attribute);
+            } else {
+                return Inflector::camel2words($attribute);
+            }
         }
     }
 

@@ -2,6 +2,7 @@
 
 use app\models\Bpos;
 use kartik\date\DatePicker;
+use yii\db\Expression;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -23,7 +24,14 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'IS_USE_MAX_DATE')->checkbox(); ?>
 
     <?= $form->field($model, 'POS_ID')->dropDownList(
-        Bpos::find()->select(['POS_NAME', 'POS_ID'])->indexBy('POS_ID')->column(),
+        /*
+        Bpos::find()
+            ->select([new Expression("concat('[', POS_ID,'] ', POS_NAME) AS POS_NAME"),'POS_ID'])
+            ->orderBy('POS_ID')
+            ->indexBy('POS_ID')
+            ->column(),
+        */
+        Bpos::getBposList(),
         [
             'id' => 'tovarpricesearch-pos-id',
             'prompt'=>'Выберите точку продаж',

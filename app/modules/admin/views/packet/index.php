@@ -30,21 +30,10 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'POS_ID',
                 'value' => 'bpos.POS_NAME',
-                'filter' => \app\models\PacketIn::getBposFilter($searchModel),
+                'filter' => PacketIn::getBposFilter($searchModel),
             ],
             'PACKETNO',
             'PACKETFILENAME',
-            //'DATA',
-            /*
-            [
-                     'attribute' => 'DATA',
-                     'format' => 'raw',
-                     'value' => function ($model) {
-                        if ($model->image_web_filename!='')
-                          return '<img src="'.Yii::$app->homeUrl. '/uploads/packages/'.$model->PACKETFILENAME.'" width="50px" height="auto">'; else return 'no image';
-                     },
-            ],
-            */
             [
                 'attribute' => 'PROCESSED',
                 'format' => 'raw',

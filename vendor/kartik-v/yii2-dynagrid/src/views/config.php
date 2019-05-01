@@ -1,8 +1,8 @@
 <?php
 /**
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2018
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2019
  * @package yii2-dynagrid
- * @version 1.5.0
+ * @version 1.5.1
  */
 
 use kartik\base\Config;
@@ -11,7 +11,6 @@ use kartik\dynagrid\Module;
 use kartik\form\ActiveForm;
 use kartik\select2\Select2;
 use kartik\sortable\Sortable;
-use yii\bootstrap\Modal;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 
@@ -55,14 +54,14 @@ $col = $cols == 0 ? 0 : 12 / $cols;
 ?>
 <?php
 /**
- * @var \yii\bootstrap\Modal $modalClass
+ * @var \yii\bootstrap\Modal|yii\bootstrap4\Modal $modalClass
  */
 $modalClass = $isBs4 ? 'yii\bootstrap4\Modal' : 'yii\bootstrap\Modal';
 $hdr = $iconPersonalize . ' ' . Yii::t('kvdynagrid', 'Personalize Grid Configuration');
 $modalOpts = [
     'footer' => $model->footer,
     'toggleButton' => $toggleButtonGrid,
-    'size' => Modal::SIZE_LARGE,
+    'size' => $modalClass::SIZE_LARGE,
     'options' => ['id' => $id],
 ];
 if ($isBs4) {

@@ -68,6 +68,7 @@ class PacketController extends Controller
      * Creates a new PacketIn model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
+     * @throws HttpException
      */
     public function actionCreate()
     {
@@ -80,40 +81,42 @@ class PacketController extends Controller
                 /*
                  * Сохраняем архив в БД
                  */
+                $res = true;
                 if (!$file->hasError              //checks for errors
                     && is_uploaded_file($file->tempName)) { //checks that file is uploaded
                     //echo file_get_contents($_FILES['uploadedfile']['tmp_name']);
-                    $model = new PacketIn();
-                    $model->PACKETFILENAME = $file->name;
-                    if (preg_match('/mgt-(\d+)-(\d+)-(\d+)\.(zip|rar)/', $file->name, $output)) {
-                        $model->POS_ID = (int)$output[1];
-                        $model->PACKETNO = (int)$output[3];
-                        $model->DATA = file_get_contents($file->tempName);
-                        $model->PROCESSED = 'N';
+                    //$connection = Yii::$app->db;
+                    //$transaction = $connection->beginTransaction();
 
-                        $connection = Yii::$app->db;
-                        $transaction = $connection->beginTransaction();
-                        try {
+                    //$transaction = PacketIn::getDb()->beginTransaction();
+                    //try {
+                        $model = new PacketIn();
+                        $model->PACKETFILENAME = $file->name;
+                        if (preg_match('/mgt-(\d+)-(\d+)-(\d+)\.(zip|rar)/', $file->name, $output)) {
+                            $model->POS_ID = (int)$output[1];
+                            $model->PACKETNO = (int)$output[3];
+                            $model->DATA = file_get_contents($file->tempName);
+                            $model->PROCESSED = 'N';
                             if ($model->save()) {
                                 //Обработка информации
                                 PacketIn::processingAll();
-                                $transaction->commit();
+                                //$transaction->commit();
+
                             }  else {
-                                //var_dump ($model->getErrors());
-                                $transaction->rollBack();
-                                //echo Json::encode($model->getErrors());
-                                //die();
+                                //$transaction->rollBack();
                             }
-                        } catch (IntegrityException $e) {
-                            $transaction->rollBack();
-                            throw new HttpException(500,"YOUR MESSAGE.", 405);
-                        } catch (Exception $e) {
-                            $transaction->rollBack();
-                            throw new HttpException(500,"YOUR MESSAGE", 405);
+                        } else {
+                            //ToDo: Ошибка, имя файла не по шаблону
                         }
-                    } else {
-                        //ToDo: Ошибка, имя файла не по шаблону
+                    /*
+                    } catch (IntegrityException $e) {
+                        $transaction->rollBack();
+                        throw new HttpException(500,"YOUR MESSAGE: ".$e->getMessage(), 405);
+                    } catch (Exception $e) {
+                        $transaction->rollBack();
+                        throw new HttpException(500,"YOUR MESSAGE: ".$e->getMessage(), 405);
                     }
+                    */
                 } else {
                     //ToDo: Ошибка при загрузке
                 }

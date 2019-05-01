@@ -95,10 +95,10 @@ use Symfony\Component\DomCrawler\Crawler;
  *              port: 9515
  *              browser: chrome
  *              capabilities:
- *                  chromeOptions: # additional chrome options
+ *                  "goog:chromeOptions": # additional chrome options
  * ```
  *
- * Additional [Chrome options](https://sites.google.com/a/chromium.org/chromedriver/capabilities) can be set in `chromeOptions` capabilities.
+ * Additional [Chrome options](https://sites.google.com/a/chromium.org/chromedriver/capabilities) can be set in `goog:chromeOptions` capabilities. Note that Selenium 3.8 renamed this capability from `chromeOptions` to `goog:chromeOptions`.
  *
  *
  * ### PhantomJS
@@ -824,6 +824,14 @@ class WebDriver extends CodeceptionModule implements
                 $params['domain'] = $urlParts['host'];
             }
         }
+        // #5401 Supply defaults, otherwise chromedriver 2.46 complains.
+        $params = array_filter($params);
+        $params += [
+            'path' => '/',
+            'expiry' => time() + 86400,
+            'secure' => false,
+            'httpOnly' => false,
+        ];
         $this->webDriver->manage()->addCookie($params);
         $this->debugSection('Cookies', json_encode($this->webDriver->manage()->getCookies()));
     }
@@ -1446,6 +1454,7 @@ class WebDriver extends CodeceptionModule implements
             $this->setBaseElement();
             $this->initialWindowSize();
         } catch (WebDriverCurlException $e) {
+            codecept_debug('Curl error: ' . $e->getMessage());
             throw new ConnectionException("Can't connect to Webdriver at {$this->wdHost}. Please make sure that Selenium Server or PhantomJS is running.");
         }
     }
@@ -3096,7 +3105,7 @@ class WebDriver extends CodeceptionModule implements
         }
         
         foreach ($this->sessionSnapshots[$name] as $cookie) {
-            $this->webDriver->manage()->addCookie($cookie);
+            $this->setCookie($cookie->getName(), $cookie->getValue(), $cookie->toArray());
         }
         $this->debugSection('Snapshot', "Restored \"$name\" session snapshot");
         return true;

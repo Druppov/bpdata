@@ -1,14 +1,14 @@
 /*!
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2018
- * @version   3.2.8
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2019
+ * @version   3.3.0
  *
  * Grid Export Validation Module for Yii's Gridview. Supports export of
  * grid data as CSV, HTML, or Excel.
  *
  * Author: Kartik Visweswaran
- * Copyright: 2014 - 2018, Kartik Visweswaran, Krajee.com
+ * Copyright: 2014 - 2019, Kartik Visweswaran, Krajee.com
  * For more JQuery plugins visit http://plugins.krajee.com
  * For more Yii related demos visit http://demos.krajee.com
  */
@@ -256,7 +256,15 @@
             htmlContent = self.preProcess(htmlContent, expType);
             $table.html(htmlContent);
             $.each(cssStyles, function (key, value) {
-                $table.find(key).css(value);
+                $table.find(key).each(function() {
+                    var $el = $(this), styles = $el.attr('style') || '';
+                    $.each(value, function (fm, to) {
+                        styles += fm + ':' + to + ';'
+                    });
+                    if (styles) {
+                        $el.attr('style', styles);
+                    }
+                });
             });
             return $table;
         },
@@ -277,7 +285,7 @@
         },
         download: function (type, content) {
             var self = this, $el = self.$element, mime = $el.attr('data-mime') || 'text/plain', yiiLib = window.yii,
-                hashData = $el.attr('data-hash') || '', config = $h.isEmpty(self.config) ? {} : self.config,
+                hashData = $el.attr('data-hash') || '', hashConfig = $el.attr('data-hash-export-config'), config = $h.isEmpty(self.config) ? {} : self.config,
                 $csrf, isPopup, target = self.target, getInput = function (name, value) {
                     return $('<textarea/>', {'name': name}).val(value).hide();
                 };
@@ -296,7 +304,7 @@
                 .append(getInput('export_filetype', type), getInput('export_filename', self.filename))
                 .append(getInput('export_encoding', self.encoding), getInput('export_bom', self.bom ? 1 : 0))
                 .append(getInput('export_content', content), getInput('module_id', self.module), $csrf)
-                .append(getInput('export_mime', mime), getInput('export_hash', hashData))
+                .append(getInput('export_mime', mime), getInput('export_hash', hashData), getInput('hash_export_config', hashConfig))
                 .append(getInput('export_config', JSON.stringify(config)))
                 .appendTo('body')
                 .submit()
@@ -357,8 +365,8 @@
                 css = (cfg.cssFile && self.config.cssFile.length) ? '<link href="' + self.config.cssFile + '" rel="stylesheet">' : '';
             $table.find('td[data-raw-value]').each(function () {
                 $td = $(this);
-                if ($td.css('mso-number-format') || $td.css('mso-number-format') === 0 || $td.css(
-                    'mso-number-format') === '0') {
+                if ($td.css('mso-number-format') || $td.css('mso-number-format') === 0 ||
+                    $td.css('mso-number-format') === '0') {
                     $td.html($td.attr('data-raw-value')).removeAttr('data-raw-value');
                 }
             });

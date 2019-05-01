@@ -1,8 +1,23 @@
 Change Log: `yii2-grid`
 =======================
 
-**Date:** 19-Nov-2018
-- (enh #859): harmonized asset namespaces
+## Version 3.3.0
+
+**Date:** 12-Mar-2019
+
+- (enh #881): Allow page summary to be positioned via `pageSummaryPosition` (`GridView::POS_TOP` or `GridView::POS_BOTTOM`). 
+- (enh #879): Implement `itemsLabelAccusative` and message token `items-acc`.
+- (enh #878): Update German Translations.
+- (enh #874): Allow control of export config hashing via new boolean property `GridView::hashExportConfig`.
+- (enh #870): Correct grid grouping rowspan for grouped rows.
+
+## Version 3.2.9
+
+**Date:** 07-Dec-2018
+
+- (enh #864): Unique `columnKey` property in grid columns.
+- (enh #862): Enhance `ExpandRowColumn` behavior to support multiple expand row columns per grid.
+- (enh #859): Harmonized asset namespaces.
 
 ## Version 3.2.8
 

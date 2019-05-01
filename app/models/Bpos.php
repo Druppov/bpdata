@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "BPOS".
@@ -34,6 +35,15 @@ class Bpos extends ActiveRecord
         return isset($model->POS_NAME) ? $model->POS_NAME : '';
     }
 
+    public static function getBposList()
+    {
+        return self::find()
+            ->select([new Expression("concat('[', POS_ID,'] ', POS_NAME) AS POS_NAME"),'POS_ID'])
+            ->orderBy('POS_ID')
+            ->indexBy('POS_ID')
+            ->column();
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -41,6 +51,7 @@ class Bpos extends ActiveRecord
     {
         return [
             [['POS_NAME'], 'required'],
+            //[['POS_FULL_NAME'], 'safe'],
             [['POS_ID'], 'integer'],
             [['POS_NAME'], 'string', 'max' => 30],
             [['ADDR'], 'string', 'max' => 120],
@@ -57,8 +68,14 @@ class Bpos extends ActiveRecord
         return [
             'POS_ID' => Yii::t('app', '№'),
             'POS_NAME' => Yii::t('app', 'Название'),
+            //'POS_FULL_NAME' => Yii::t('app', 'Название'),
             'ADDR' => Yii::t('app', 'Адрес'),
             'PUBLISHED' => Yii::t('app', 'Опубликовано'),
         ];
+    }
+
+    public function getPosFullName()
+    {
+        return '['.$this->POS_ID.'] '.$this->POS_NAME;
     }
 }

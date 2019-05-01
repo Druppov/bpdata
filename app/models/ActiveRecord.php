@@ -4,6 +4,8 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\db\Expression;
+use yii\helpers\Html;
 
 /**
  * ActiveRecord model
@@ -28,13 +30,18 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord
 
     public static function getBposFilter($searchModel, $idSmenaSelector=null)
     {
-        return \yii\helpers\Html::activeDropDownList(
+        return Html::activeDropDownList(
             $searchModel,
             'POS_ID',
+            /*
             Bpos::find()
-                ->select(['POS_NAME','POS_ID'])
+                //->select(['POS_NAME','POS_ID'])
+                ->select([new Expression("concat('[', POS_ID,'] ', POS_NAME) AS POS_NAME"),'POS_ID'])
+                ->orderBy('POS_ID')
                 ->indexBy('POS_ID')
                 ->column(),
+            */
+            Bpos::getBposList(),
             [
                 'class'=>'form-control',
                 'prompt' => 'Все',

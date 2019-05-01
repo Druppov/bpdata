@@ -6,6 +6,7 @@ use DateTime;
 use DOMDocument;
 use Yii;
 use \wapmorgan\UnifiedArchive\UnifiedArchive;
+use yii\helpers\Json;
 
 /**
  * This is the model class for table "MGTPACKETS_IN".
@@ -131,7 +132,7 @@ class PacketIn extends ActiveRecord
 
     public function unzipping()
     {
-        $errors = '';
+        $errors = null;
 
         $fileName = $path = Yii::$app->basePath . self::$uploadPath . $this->PACKETFILENAME;
         $archive = UnifiedArchive::open($fileName);
@@ -146,6 +147,9 @@ class PacketIn extends ActiveRecord
                 $rows = $xml->xpath("ROWDATA/ROW");
                 unset($data);
                 switch ($tableName) {
+                    case 'BALANCES':
+                        $modelName = 'app\models\Balance';
+                        break;
                     case 'PAYCHECKS':
                         $modelName = 'app\models\PayCheck';
                         break;
@@ -168,62 +172,114 @@ class PacketIn extends ActiveRecord
                         $modelName = null;
                 }
 
-                //echo $tableName . ' Model: '.$modelName.'<br/>'.PHP_EOL;
-
                 if (!is_null($modelName)) {
-                    foreach ($rows as $row) {
-                        $model = new $modelName();
-                        $data = json_encode($row);
-                        $data = json_decode($data, true);
-                        if (isset($data['@attributes']['DATEOPEN'])) {
-                            $date = DateTime::createFromFormat('Ymd\TH:i:su', $data['@attributes']['DATEOPEN']); //20180924T21:26:19000
-                            $data['@attributes']['DATEOPEN'] = $date->format('Y-m-d H:i:s');
+                    //$transaction = $modelName::getDb()->beginTransaction();
+                    try {
+                        $isSuccessfull = true;
+                        foreach ($rows as $row) {
+                            $data = json_encode($row);
+                            $data = json_decode($data, true);
+                            //DATEOPEN
+                            if (isset($data['@attributes']['DATEOPEN'])) {
+                                $date = DateTime::createFromFormat('Ymd\TH:i:su', $data['@attributes']['DATEOPEN']); //20180924T21:26:19000
+                                $data['@attributes']['DATEOPEN'] = $date->format('Y-m-d H:i:s');
+                            }
+                            //DATECLOSE
+                            if (isset($data['@attributes']['DATECLOSE'])) {
+                                $date = DateTime::createFromFormat('Ymd\TH:i:su', $data['@attributes']['DATECLOSE']); //20180924T21:26:19000
+                                $data['@attributes']['DATECLOSE'] = $date->format('Y-m-d H:i:s');
+                            }
+                            //STAMP
+                            if (isset($data['@attributes']['STAMP'])) {
+                                $date = DateTime::createFromFormat('Ymd\TH:i:su', $data['@attributes']['STAMP']); //20180924T21:26:19000
+                                $data['@attributes']['STAMP'] = $date->format('Y-m-d H:i:s');
+                            }
+                            //BALANCEDATE
+                            if (isset($data['@attributes']['BALANCEDATE'])) {
+                                $date = DateTime::createFromFormat('Ymd', $data['@attributes']['BALANCEDATE']); //20190403
+                                $data['@attributes']['BALANCEDATE'] = $date->format('Y-m-d');
+                            }
+                            //TIME_START="08:30:00000"
+                            if (isset($data['@attributes']['TIME_START'])) {
+                                $date = DateTime::createFromFormat('H:i:su', $data['@attributes']['TIME_START']); //20190403
+                                $data['@attributes']['TIME_START'] = $date->format('H:i:s');
+                            }
+                            //TIME_END="21:30:00000"
+                            if (isset($data['@attributes']['TIME_END'])) {
+                                $date = DateTime::createFromFormat('H:i:su', $data['@attributes']['TIME_END']); //20190403
+                                $data['@attributes']['TIME_END'] = $date->format('H:i:s');
+                            }
+                            if (isset($data['@attributes']['PUBLISHED'])) {
+                                $data['@attributes']['PUBLISHED'] = 'P';
+                            }
+
+                            $model = false;
+                            if ($tableName=='SMENY') {
+                                $model = $modelName::findOne([
+                                    'POS_ID' => $data['@attributes']['POS_ID'],
+                                    'SMENA_ID' => $data['@attributes']['SMENA_ID'],
+                                ]);
+                            } elseif ($tableName=='SMENY_TB') {
+                                $model = $modelName::findOne([
+                                    'POS_ID' => $data['@attributes']['POS_ID'],
+                                    'SMENA_ID' => $data['@attributes']['SMENA_ID'],
+                                    'PERSON_ID' => $data['@attributes']['PERSON_ID'],
+                                ]);
+                            }
+                            if (!$model) {
+                                $model = new $modelName();
+                                Yii::info("В таблицу : ".$modelName. " добавлена запись:");
+                            } else {
+                                Yii::info("В таблице : ".$modelName. " обновлена запись:");
+                            }
+                            Yii::info(Json::encode($data['@attributes']));
+
+                            $model->setAttributes($data['@attributes']);
+                            if ($model->validate()) {
+                                $model->save(false);
+                                Yii::info("успешно");
+                                //$transaction->commit();
+                            } else {
+                                $isSuccessfull = false;
+                                $errors[] = $model->getErrors();
+                                Yii::error('!!! с ошибкой: ' . Json::encode($model->getErrors()));
+                                //$transaction->rollBack();
+                            }
                         }
-                        if (isset($data['@attributes']['DATECLOSE'])) {
-                            $date = DateTime::createFromFormat('Ymd\TH:i:su', $data['@attributes']['DATECLOSE']); //20180924T21:26:19000
-                            $data['@attributes']['DATECLOSE'] = $date->format('Y-m-d H:i:s');
-                        }
-                        if (isset($data['@attributes']['STAMP'])) {
-                            $date = DateTime::createFromFormat('Ymd\TH:i:su', $data['@attributes']['STAMP']); //20180924T21:26:19000
-                            $data['@attributes']['STAMP'] = $date->format('Y-m-d H:i:s');
-                        }
-                        $model->setAttributes($data['@attributes']);
-                        if ($model->validate()) {
-                            $model->save(false);
+                        /*
+                        if ($isSuccessfull) {
+                            $transaction->commit();
                         } else {
-                            //Json::encode($model->getErrors());
-                            //echo \yii\helpers\Json::encode($model->getErrorSummary(true));
-                            //die();
+                            $transaction->rollBack();
                         }
+                        */
+                    } catch(Throwable $e) {
+                        //$transaction->rollBack();
+                        throw $e;
                     }
                 }
-                /*
-                Yii::$app->db
-                    ->createCommand()
-                    ->batchInsert($tableName, ['column1','column2', 'column3','column4','column5'],$data)
-                    ->execute();
-                */
 
-                /*
-                $result = Yii::$app->db->createCommand("LOAD XML LOCAL INFILE '".Yii::$app->basePath . self::$uploadPath."tmp/SMENY_TB.xml' INTO TABLE person ROWS IDENTIFIED BY '<ROW>';");
-                die($result);
-                */
-                //print_r($archive->getFileContent($file));
             }
         }
 
-        return empty($errors) ? true : $errors;
+        return is_null($errors) ? true : $errors;
     }
 
     public static function processingAll()
     {
+        $errors = null;
+
         $models = PacketIn::find()->where(['PROCESSED'=>'N'])->all();
         foreach ($models as $model) {
-            if ($model->processing()) {
+            if ($result = $model->processing()) {
                 $model->PROCESSED = 'Y';
                 $model->save(false);
+            } else {
+                $errors[] = $result;
             }
         }
+
+        return is_null($errors) ? true : $errors;
     }
 
     public function processing()
@@ -236,13 +292,10 @@ class PacketIn extends ActiveRecord
         fwrite($fp, $this->DATA);
         fclose($fp);
 
-        if ($this->unzipping()===true) {
-            $this->save(false);
-            @unlink($fileName);
+        $result = $this->unzipping();
+        $this->save(false);
+        @unlink($fileName);
 
-            return true;
-        }
-
-        return false;
+        return $result;
     }
 }
