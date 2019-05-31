@@ -1,6 +1,29 @@
 Change Log: `yii2-grid`
 =======================
 
+## Version 3.3.2
+
+**Date:** _under development_
+
+- (bug #910): Float THead minified plugin asset error.
+- (bug #907): Fixed bug with undefined offset inside rendering summary row when using string columns keys (Yuriy Mamaev)
+- (enh #906): Allow setting page summary colspan direction (`ltr` or `rtl`)
+    - set via column's `pageSummaryOptions['data-colspan-dir']` property
+
+## Version 3.3.1
+
+**Date:** 17-May-2019
+
+- Implement stale bot.
+- (enh #902): Ability to merge columns at page summary (via `pageSummaryOptions['colspan']` set at column level).
+- (enh #901): Update Latvian Translations.
+- (enh #896): Enhance generation of pjax container identifier.
+- (bug #889): Correct nested expand row validation.
+- (enh #888): Enhance `BooleanColumn` data rendering for grid export.
+- (bug #885, #886): Fix for `CheckboxColumn::checkboxOptions` to be set as Closure.
+- (enh #884): Fix for jQuery 3.x - replace `jQuery.load` with `jQuery.ajax`.
+- (enh #882): Update Ukranian Translations.
+
 ## Version 3.3.0
 
 **Date:** 12-Mar-2019

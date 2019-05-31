@@ -4,7 +4,7 @@
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2019
- * @version   3.3.0
+ * @version   3.3.2
  */
 
 namespace kartik\grid;
@@ -1092,12 +1092,7 @@ HTML;
         }
         $this->initBsVersion();
         Html::addCssClass($this->options, 'is-bs' . ($this->isBs4() ? '4' : '3'));
-        if (empty($this->options['id'])) {
-            $this->options['id'] = $this->getId();
-        }
-        if (empty($this->pjaxSettings['options']['id'])) {
-            $this->pjaxSettings['options']['id'] = $this->options['id'] . '-pjax';
-        }
+        $this->initPjaxContainerId();
         if (!isset($this->itemLabelSingle)) {
             $this->itemLabelSingle = Yii::t('kvgrid', 'item');
         }
@@ -1139,6 +1134,29 @@ HTML;
         }
         $this->_toggleButtonId = $this->options['id'] . '-togdata-' . ($this->_isShowAll ? 'all' : 'page');
         parent::init();
+    }
+
+    /**
+     * Get pjax container identifier
+     * @return string
+     */
+    public function getPjaxContainerId()
+    {
+        $this->initPjaxContainerId();
+        return $this->pjaxSettings['options']['id'];
+    }
+
+    /**
+     * Initializes pjax container identifier
+     */
+    public function initPjaxContainerId()
+    {
+        if (empty($this->options['id'])) {
+            $this->options['id'] = $this->getId();
+        }
+        if (empty($this->pjaxSettings['options']['id'])) {
+            $this->pjaxSettings['options']['id'] = $this->options['id'] . '-pjax';
+        }
     }
 
     /**
@@ -1201,16 +1219,57 @@ HTML;
         if (!isset($this->pageSummaryRowOptions['class'])) {
             $this->pageSummaryRowOptions['class'] = ($this->isBs4() ? 'table-' : '') . 'warning kv-page-summary';
         }
-        $cells = [];
-        /** @var DataColumn $column */
-        foreach ($this->columns as $column) {
-            $cells[] = $column->renderPageSummaryCell();
+        $row = $this->getPageSummaryRow();
+        if ($row === null) {
+            return '';
         }
         $tag = ArrayHelper::remove($this->pageSummaryContainer, 'tag', 'tbody');
-        $content = Html::tag('tr', implode('', $cells), $this->pageSummaryRowOptions);
+        $content = Html::tag('tr', $row, $this->pageSummaryRowOptions);
         return Html::tag($tag, $content, $this->pageSummaryContainer);
     }
 
+    /**
+     * Get the page summary row markup
+     * @return string
+     */
+    protected function getPageSummaryRow()
+    {
+        $columns = array_values($this->columns);
+        $cols = count($columns);
+        if ($cols === 0) {
+            return null;
+        }
+        $cells = [];
+        $skipped = [];
+        for ($i = 0; $i < $cols; $i++) {
+            /** @var DataColumn $column */
+            $column = $columns[$i];
+            if (!method_exists($column, 'renderPageSummaryCell')) {
+                $cells[] = Html::tag('td');
+                continue;
+            }
+            $cells[] = $column->renderPageSummaryCell();
+            if (!empty($column->pageSummaryOptions['colspan'])) {
+                $span = (int) $column->pageSummaryOptions['colspan'];
+                $dir = ArrayHelper::getValue($column->pageSummaryOptions, 'data-colspan-dir', 'ltr');
+                if ($span > 0) {
+                    $fm = ($dir === 'ltr') ? ($i + 1) : ($i - $span + 1);
+                    $to = ($dir === 'ltr') ? ($i + $span - 1) : ($i - 1);
+                    for ($j = $fm; $j <= $to; $j++) {
+                        $skipped[$j] = true;
+                    }
+                }
+            }
+        }
+        if (!empty($skipped )) {
+            for ($i = 0; $i < $cols; $i++) {
+                if (isset($skipped[$i])) {
+                    $cells[$i] = '';
+                }
+            }
+        }
+        return implode('', $cells);
+    }
     /**
      * @inheritdoc
      * @throws InvalidConfigException
