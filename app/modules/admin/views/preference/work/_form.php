@@ -18,7 +18,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'WORKNAME')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'PUBLISHED')->dropDownList(\app\models\Work::$valuePublished) ?>
+    <?//= $form->field($model, 'PUBLISHED')->dropDownList(\app\models\Work::$valuePublished) ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Сохранить'), ['class' => 'btn btn-success']) ?>

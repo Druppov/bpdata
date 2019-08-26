@@ -1,5 +1,6 @@
 <?php
 
+use app\models\TovarPrice;
 use app\modules\admin\assets\ThemeHelper;
 use yii\helpers\Html;
 //use yii\grid\GridView;
@@ -92,6 +93,18 @@ use kartik\dialog\Dialog;
                     }
                 },
                 'filter' => \app\models\TovarPrice::$valueYesNo,
+            ],
+            [
+                'attribute' => 'PUBLISHED',
+                'format' => 'raw',
+                'value' => function ($model, $index, $widget) {
+                    if ($model->PUBLISHED==TovarPrice::$valuePublished) {
+                        return '<span class="glyphicon glyphicon-ok text-success"></span>';
+                    } else {
+                        return '<span class="glyphicon glyphicon-remove text-danger"></span>';
+                    }
+                },
+                'filter' => TovarPrice::$valuePublished,
             ],
 
             [

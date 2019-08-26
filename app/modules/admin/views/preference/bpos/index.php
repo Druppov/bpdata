@@ -38,13 +38,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'PUBLISHED',
                 'format' => 'raw',
                 'value' => function ($model, $index, $widget) {
-                    if ($model->PUBLISHED=='P') {
+                    if ($model->PUBLISHED==Bpos::$valuePublished) {
                         return '<span class="glyphicon glyphicon-ok text-success"></span>';
                     } else {
                         return '<span class="glyphicon glyphicon-remove text-danger"></span>';
                     }
                 },
-                'filter' => \app\models\Bpos::$valuePublished,
+                'filter' => Bpos::$valuePublished,
             ],
             [
                 'class' => 'yii\grid\ActionColumn',

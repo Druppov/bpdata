@@ -84,6 +84,7 @@ class PreferenceController extends Controller
         $model->PUBLISHED = Bpos::$valuePublishedP;
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->PUBLISHED = Bpos::$valuePublishedU;
             $model->save(false);
 
             return $this->redirect(['bpos-index']);
@@ -187,12 +188,12 @@ class PreferenceController extends Controller
         $model->PUBLISHED = TovarType::$valuePublishedP;
         $model->TYPE_ID = TovarType::find()->max('TYPE_ID') + 1;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->PUBLISHED = TovarType::$valuePublishedU;
 
             //return $this->redirect(['tovar-type-view', 'id' => $model->TYPE_ID]);
             return $this->redirect(['tovar-type-index']);
         }
-        //die('+++++++++');
 
         return $this->render('tovar-type/create', [
             'model' => $model,
@@ -272,8 +273,17 @@ class PreferenceController extends Controller
     {
         $model = new Work();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            //return $this->redirect(['work-view', 'id' => $model->WORK_ID]);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            //$model->WORK_ID = Work::find()->max('WORK_ID') + 1;
+            $model->PUBLISHED = Work::$valuePublishedU;
+            $model->save(false);
+            /*
+             * Пересчитываем WORK_ID, т.к. там нет PK и AI
+             */
+            $model = Work::findOne(['ID'=>$model->ID]);
+            $model->WORK_ID = $model->ID-1;
+            $model->save(false);
+
             return $this->redirect(['work-index']);
         }
 
@@ -357,6 +367,7 @@ class PreferenceController extends Controller
         $model->PUBLISHED = Personal::$valuePublishedP;
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->PUBLISHED = Personal::$valuePublishedU;
             $model->save(false);
 
             //return $this->redirect(['personal-view', 'id' => $model->PERSON_ID]);
@@ -453,7 +464,7 @@ class PreferenceController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $model->PUBLISHED = 'P';
+            $model->PUBLISHED = Tovar::$valuePublishedU;
             $model->save(false);
 
             return $this->redirect(['tovar-view', 'id' => $model->TOVAR_ID]);
@@ -478,7 +489,7 @@ class PreferenceController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
             if ($model->save(false) && !empty($model->PRICE_DATE) && !empty($model->PRICE_VALUE)) {
-                $bposes = Bpos::find(['PUBLISHED'=>'P'])->all();
+                $bposes = Bpos::find()->all();
                 foreach ($bposes as $bpos) {
                     $tovarPrice = TovarPrice::findOne([
                         'POS_ID' => $bpos->POS_ID,
@@ -581,10 +592,11 @@ class PreferenceController extends Controller
         $model->ISUSED = 'Y';
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->PUBLISHED = TovarPrice::$valuePublishedU;
             $model->save(false);
 
             //return $this->redirect(['tovar-price-view', 'POS_ID' => $model->POS_ID, 'TOVAR_ID' => $model->TOVAR_ID, 'PRICE_DATE' => $model->PRICE_DATE]);
-            return $this->redirect([]);
+            return $this->redirect(['tovar-index', 'type'=>$model->tovar->TYPE_ID]);
         } else {
             if (Yii::$app->request->isAjax) {
                 return $this->renderAjax('tovar-price/create', [

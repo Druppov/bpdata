@@ -55,8 +55,8 @@ class BalanceSearch extends Balance
         $query->innerJoinWith(['tovar']);
 
         $dataProvider->sort->attributes['TOVAR_NAME'] = [
-            'asc' => [Tovar::tableName().'.NAME' => SORT_ASC],
-            'desc' => [Tovar::tableName().'.NAME' => SORT_DESC],
+            'asc' => [Tovar::tableName().'.{{%NAME}}' => SORT_ASC],
+            'desc' => [Tovar::tableName().'.{{%NAME}}' => SORT_DESC],
         ];
         $this->load($params);
 
@@ -68,18 +68,18 @@ class BalanceSearch extends Balance
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'POS_ID' => $this->POS_ID,
+            '{{%POS_ID}}' => $this->POS_ID,
             //'BALANCEDATE' => date('Y-m-d', strtotime($this->BALANCEDATE)),
-            'TOVAR_ID' => $this->TOVAR_ID,
-            'AMOUNT' => $this->AMOUNT,
+            '{{%TOVAR_ID}}' => $this->TOVAR_ID,
+            '{{%AMOUNT}}' => $this->AMOUNT,
         ]);
 
         if (isset($this->BALANCEDATE) && !empty($this->BALANCEDATE)) {
-            $query->andFilterWhere(['BALANCEDATE' => date('Y-m-d', strtotime($this->BALANCEDATE))]);
+            $query->andFilterWhere(['{{%BALANCEDATE}}' => date('Y-m-d', strtotime($this->BALANCEDATE))]);
         }
 
-        $query->andFilterWhere(['like', 'PUBLISHED', $this->PUBLISHED])
-            ->andFilterWhere(['like', Tovar::tableName().'NAME', $this->TOVAR_NAME]);
+        $query->andFilterWhere(['like', '{{%PUBLISHED}}', $this->PUBLISHED])
+            ->andFilterWhere(['like', Tovar::tableName().'.{{%NAME}}', $this->TOVAR_NAME]);
 
         return $dataProvider;
     }

@@ -4,6 +4,7 @@ namespace app\models;
 
 use DateTime;
 use DOMDocument;
+use Throwable;
 use Yii;
 use \wapmorgan\UnifiedArchive\UnifiedArchive;
 use yii\helpers\Json;
@@ -19,7 +20,7 @@ use yii\helpers\Json;
  */
 class PacketIn extends ActiveRecord
 {
-    public static $uploadPath = '/uploads/packages/';
+    public static $downloadPath = '/uploads/packages_in/';
 
     public $created_at;
     public $updated_at;
@@ -67,7 +68,7 @@ class PacketIn extends ActiveRecord
     public function upload()
     {
         if ($this->validate()) {
-            $this->PACKETFILENAME->saveAs(self::$uploadPath . $this->PACKETFILENAME->baseName . '.' . $this->PACKETFILENAME->extension);
+            $this->PACKETFILENAME->saveAs(self::$downloadPath . $this->PACKETFILENAME->baseName . '.' . $this->PACKETFILENAME->extension);
             return true;
         } else {
             return false;
@@ -82,59 +83,11 @@ class PacketIn extends ActiveRecord
         return $this->hasOne(Bpos::className(), ['POS_ID' => 'POS_ID']);
     }
 
-    public function zipping()
-    {
-        $rootPath = realpath(self::$uploadPath);
-
-        // Initialize archive object
-        $zip = new \ZipArchive();
-        $zip->open('../web/descargas/Region.zip', ZipArchive::CREATE | ZipArchive::OVERWRITE);
-
-        // Initialize empty "delete list"
-        $filesToDelete = array();
-
-        // Create recursive directory iterator
-        /** @var SplFileInfo[] $files */
-        $files = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($rootPath),
-            RecursiveIteratorIterator::LEAVES_ONLY
-        );
-
-        foreach ($files as $name => $file) {
-
-            // Skip directories (they would be added automatically)
-            if (!$file->isDir()) {
-
-                // Get real and relative path for current file
-                $filePath = $file->getRealPath();
-                $relativePath = substr($filePath, strlen($rootPath) + 1);
-
-                // Add current file to archive
-                $zip->addFile($filePath, $relativePath);
-
-                // Add current file to "delete list"
-                // delete it later cause ZipArchive create archive only after calling close function and ZipArchive lock files until archive created)
-                if ($file->getFilename() != 'important.txt') {
-                    $filesToDelete[] = $filePath;
-                }
-            }
-        }
-
-        // Zip archive will be created only after closing object
-        $zip->close();
-
-        // Delete all files from "delete list"
-        foreach ($filesToDelete as $file) {
-            unlink($file);
-        }
-
-    }
-
     public function unzipping()
     {
         $errors = null;
 
-        $fileName = $path = Yii::$app->basePath . self::$uploadPath . $this->PACKETFILENAME;
+        $fileName = $path = Yii::$app->basePath . self::$downloadPath . $this->PACKETFILENAME;
         $archive = UnifiedArchive::open($fileName);
         $files = $archive->getFileNames();
         foreach ($files as $file) {
@@ -214,6 +167,15 @@ class PacketIn extends ActiveRecord
                             }
 
                             $model = false;
+                            $primaryKeys = $modelName::primaryKey();
+                            if (isset($primaryKeys) && is_array($primaryKeys)) {
+                                unset($params);
+                                foreach ($primaryKeys as $primaryKey) {
+                                    $params[$primaryKey] = $data['@attributes'][$primaryKey];
+                                }
+                                $model = $modelName::findOne($params);
+                            }
+                            /*
                             if ($tableName=='SMENY') {
                                 $model = $modelName::findOne([
                                     'POS_ID' => $data['@attributes']['POS_ID'],
@@ -226,6 +188,7 @@ class PacketIn extends ActiveRecord
                                     'PERSON_ID' => $data['@attributes']['PERSON_ID'],
                                 ]);
                             }
+                            */
                             if (!$model) {
                                 $model = new $modelName();
                                 Yii::info("В таблицу : ".$modelName. " добавлена запись:");
@@ -269,10 +232,10 @@ class PacketIn extends ActiveRecord
     {
         $errors = null;
 
-        $models = PacketIn::find()->where(['PROCESSED'=>'N'])->all();
+        $models = PacketIn::find()->where(['PROCESSED'=>PacketIn::$valueNo])->all();
         foreach ($models as $model) {
             if ($result = $model->processing()) {
-                $model->PROCESSED = 'Y';
+                $model->PROCESSED = PacketIn::$valueYes;
                 $model->save(false);
             } else {
                 $errors[] = $result;
@@ -284,7 +247,7 @@ class PacketIn extends ActiveRecord
 
     public function processing()
     {
-        $fileName = Yii::$app->basePath . self::$uploadPath . $this->PACKETFILENAME;
+        $fileName = Yii::$app->basePath . self::$downloadPath . $this->PACKETFILENAME;
         if (is_file($fileName)) {
             @unlink($fileName);
         }

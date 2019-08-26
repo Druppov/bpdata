@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Work;
 use app\modules\admin\assets\ThemeHelper;
 use yii\helpers\Html;
 use kartik\grid\GridView;
@@ -35,13 +36,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'PUBLISHED',
                 'format' => 'raw',
                 'value' => function ($model, $index, $widget) {
-                    if ($model->PUBLISHED=='P') {
+                    if ($model->PUBLISHED==Work::$valuePublished) {
                         return '<span class="glyphicon glyphicon-ok text-success"></span>';
                     } else {
                         return '<span class="glyphicon glyphicon-remove text-danger"></span>';
                     }
                 },
-                'filter' => \app\models\Work::$valuePublished,
+                'filter' => Work::$valuePublished,
             ],
             [
                 'class' => 'yii\grid\ActionColumn',

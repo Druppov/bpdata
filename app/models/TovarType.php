@@ -45,7 +45,7 @@ class TovarType extends ActiveRecord
             'TYPE_ID' => Yii::t('app', '№'),
             'TYPE_NAME' => Yii::t('app', 'Наименование'),
             'SHOWASCATEGORY' => Yii::t('app', 'Активно'),
-            'PUBLISHED' => Yii::t('app', 'Published'),
+            'PUBLISHED' => Yii::t('app', 'Опубликовано'),
         ];
     }
 

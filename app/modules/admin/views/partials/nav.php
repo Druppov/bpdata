@@ -22,6 +22,7 @@
                         'url' => ['#'],
                         'items' => [
                             ['label' => 'Загрузить файл', 'icon'  =>  'download', 'url' => ['/admin/packet/index']],
+                            ['label' => 'Сформировать файл', 'icon'  =>  'upload', 'url' => ['/admin/packet/upload-index']],
                         ],
                     ],
                     [

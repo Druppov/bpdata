@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Tovar;
 use app\modules\admin\assets\ThemeHelper;
 use app\modules\admin\models\BposSearch;
 use yii\helpers\Html;
@@ -92,6 +93,18 @@ $this->params['breadcrumbs'][] = $this->title;
             //'ISACTIVE',
             //'PUBLISHED',
             'FKEY_1C',
+            [
+                'attribute' => 'PUBLISHED',
+                'format' => 'raw',
+                'value' => function ($model, $index, $widget) {
+                    if ($model->PUBLISHED==Tovar::$valuePublished) {
+                        return '<span class="glyphicon glyphicon-ok text-success"></span>';
+                    } else {
+                        return '<span class="glyphicon glyphicon-remove text-danger"></span>';
+                    }
+                },
+                'filter' => Tovar::$valuePublished,
+            ],
 
             //['class' => 'yii\grid\ActionColumn'],
             [

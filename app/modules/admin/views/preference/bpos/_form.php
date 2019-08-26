@@ -21,7 +21,7 @@ use app\models\Bpos;
 
     <?= $form->field($model, 'ADDR')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'PUBLISHED')->dropDownList(Bpos::$valuePublished) ?>
+    <?//= $form->field($model, 'PUBLISHED')->dropDownList(Bpos::$valuePublished) ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Сохранить'), ['class' => 'btn btn-success']); ?>

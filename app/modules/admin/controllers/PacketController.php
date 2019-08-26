@@ -2,6 +2,9 @@
 
 namespace app\modules\admin\controllers;
 
+use app\models\Bpos;
+use app\models\Packet;
+use app\modules\admin\models\PacketSearch;
 use Yii;
 use app\models\PacketIn;
 use app\modules\admin\models\PacketInSearch;
@@ -107,6 +110,7 @@ class PacketController extends Controller
                             }
                         } else {
                             //ToDo: Ошибка, имя файла не по шаблону
+                            Yii::$app->session->setFlash('error', 'Имя файла не по шаблону.');
                         }
                     /*
                     } catch (IntegrityException $e) {
@@ -119,9 +123,11 @@ class PacketController extends Controller
                     */
                 } else {
                     //ToDo: Ошибка при загрузке
+                    Yii::$app->session->setFlash('error', 'Ошибка при загрузке');
                 }
             }
 
+            Yii::$app->session->setFlash('success', 'Все прошло удачно');
             return $this->redirect(['index']);
         }
 
@@ -164,6 +170,151 @@ class PacketController extends Controller
         $this->findModel($POS_ID, $PACKETNO)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    /**
+     * Lists all PacketIn models.
+     * @return mixed
+     */
+    public function actionUploadIndex()
+    {
+        $searchModel = new PacketSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('upload-index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionUpload()
+    {
+        $path = Yii::$app->basePath . (substr(Packet::$uploadPath, -1)=='/' ? substr(Packet::$uploadPath, 0, -1) : Packet::$uploadPath);
+        $tmpPath = $path.'/tmp';
+
+        if (!$this->makeDir($path)) {
+            throw new NotFoundHttpException(Yii::t('app', 'Папка').' '.Yii::$app->basePath . $path.' '.Yii::t('app', 'не может быть создана.'));
+        }
+        $this->clearDir($path);
+
+        if (!$this->makeDir($tmpPath)) {
+            throw new NotFoundHttpException(Yii::t('app', 'Папка').' '.Yii::$app->basePath . $tmpPath.' '.Yii::t('app', 'не может быть создана.'));
+        }
+        //$this->clearDir($tmpPath);
+
+        $list = Packet::getExportTables();
+        $storedFileName = null;
+        if (!is_null($list) && is_array($list)) {
+            foreach ($list as $key => $modelName) {
+                $rows = $modelName::find()
+                    ->where(['PUBLISHED'=>$modelName::$valuePublishedU])
+                    ->all();
+
+                if (!empty($rows)) {
+                    $fileName = $modelName::tableName().'.xml';
+                    $xmlData = $this->renderPartial('_xml_' . $key, [
+                        'rows' => $rows
+                    ]);
+                    file_put_contents($tmpPath . '/' . $fileName, $xmlData);
+                    $storedFileName[$fileName] = $tmpPath.'/'.$fileName;
+                }
+            }
+        }
+
+        /*
+         * Если сгенерировался хотя бы один файл, то формируем архив для каждой точки
+         */
+        //if (!is_null($storedFileName)) {
+            $bposes = Bpos::find()->all();
+            foreach ($bposes as $bpos) {
+                $packetNo = Packet::find()
+                    ->where(['DEST_POS_ID'=>$bpos->POS_ID])
+                    ->max('PACKETNO');
+                if (empty($packetNo)) {
+                    $packetNo = 1;
+                } else {
+                    $packetNo++;
+                }
+                $iniData = $this->renderPartial('_data', [
+                    'recipient' => $bpos->POS_ID,
+                    'packetno' => $packetNo,
+                ]);
+                $this->clearDir($path, 'data.ini');
+                file_put_contents($tmpPath . '/data.ini', $iniData);
+                $storedFileName['data.ini'] = $tmpPath.'/'.'data.ini';
+
+                /*
+                 * Выбираем зависимые таблицы
+                 */
+                $list = Packet::getExportDependenceTables($bpos->POS_ID);
+                if (!is_null($list) && is_array($list)) {
+                    foreach ($list as $key => $modelName) {
+                        $fileName = $modelName::tableName().'.xml';
+                        unset($storedFileName[$fileName]);
+                        $this->clearDir($path, $fileName);
+                        $rows = $modelName::find()
+                            ->where([
+                                'PUBLISHED'=>$modelName::$valuePublishedU,
+                                'POS_ID' => $bpos->POS_ID,
+                            ])
+                            ->all();
+
+                        if (!empty($rows)) {
+                            $xmlData = $this->renderPartial('_xml_' . $key, [
+                                'rows' => $rows
+                            ]);
+                            file_put_contents($tmpPath . '/' . $fileName, $xmlData);
+                            $storedFileName[$fileName] = $tmpPath.'/'.$fileName;
+                        }
+                    }
+                }
+                /********************************************************************************/
+
+                $packetFileName = sprintf('mgt-00-%02d-%05d.zip', $bpos->POS_ID, $packetNo);
+                $model = new Packet();
+                if ($model->zipping($tmpPath, $path.'/'.$packetFileName)) {
+                    $model->POS_ID = 0;
+                    $model->DEST_POS_ID = $bpos->POS_ID;
+                    $model->PACKETNO = $packetNo;
+                    $model->PACKETFILENAME = $packetFileName;
+                    if ($model->save(false)) {
+                        //$this->download($path.'/'.$packetFileName);
+                    }
+                }
+            }
+        //}
+        $this->clearDir($tmpPath);
+
+        /*
+         * Если все ОК, то в выгруженных данных заменяем PUBLISHED=P
+         */
+
+        Yii::$app->session->setFlash('success', 'Все прошло удачно. Файлы в папке: '.$path);
+        return $this->redirect(['upload-index']);
+    }
+
+    private function download($file) {
+        //$path = \Yii::getAlias('@uploads') ;
+        //$file = $path . '/some-file.pdf';
+
+        if (file_exists($file)) {
+            return \Yii::$app->response->sendFile($file);
+        }
+        throw new \Exception('File not found');
+    }
+
+    private function makeDir($path)
+    {
+        return is_dir($path) || mkdir($path, 0777, true);
+    }
+
+    private function clearDir($path, $mask='*')
+    {
+        if (file_exists('./'.$path)) {
+            foreach (glob('./'.$path.'/'.$mask) as $file) {
+                @unlink($file);
+            }
+        }
     }
 
     /**

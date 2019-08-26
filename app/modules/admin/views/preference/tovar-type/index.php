@@ -52,6 +52,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 //'falseLabel' => TovarType::$valueYesNo['N'],
                 'filter' => TovarType::$valueYesNo,
             ],
+            array(
+                'attribute' => 'PUBLISHED',
+                'format' => 'raw',
+                'value' => function ($model, $index, $widget) {
+                    if ($model->PUBLISHED==TovarType::$valuePublished) {
+                        return '<span class="glyphicon glyphicon-ok text-success"></span>';
+                    } else {
+                        return '<span class="glyphicon glyphicon-remove text-danger"></span>';
+                    }
+                },
+                'filter' => TovarType::$valuePublished,
+            ),
 
             [
                 'class' => 'yii\grid\ActionColumn',

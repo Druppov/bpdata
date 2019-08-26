@@ -1,5 +1,6 @@
 <?php
 
+use app\models\TovarPrice;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
@@ -37,7 +38,7 @@ use kartik\date\DatePicker;
     <?= $form->field($model, 'PRICE_VALUE')->textInput() ?>
 
     <?= $form->field($model, 'ISUSED')->dropDownList(
-        \app\models\TovarPrice::$valueYesNo, [
+        TovarPrice::$valueYesNo, [
             'prompt' => 'Выберите активность'
         ]
     ) ?>

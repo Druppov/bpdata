@@ -28,19 +28,16 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord
         'N' => 'Нет'
     ];
 
+    public static function primaryKey()
+    {
+        return static::getTableSchema()->primaryKey;
+    }
+
     public static function getBposFilter($searchModel, $idSmenaSelector=null)
     {
         return Html::activeDropDownList(
             $searchModel,
             'POS_ID',
-            /*
-            Bpos::find()
-                //->select(['POS_NAME','POS_ID'])
-                ->select([new Expression("concat('[', POS_ID,'] ', POS_NAME) AS POS_NAME"),'POS_ID'])
-                ->orderBy('POS_ID')
-                ->indexBy('POS_ID')
-                ->column(),
-            */
             Bpos::getBposList(),
             [
                 'class'=>'form-control',

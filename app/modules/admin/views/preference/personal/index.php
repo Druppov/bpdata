@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Personal;
 use app\modules\admin\assets\ThemeHelper;
 use yii\helpers\Html;
 use kartik\grid\GridView;
@@ -44,7 +45,19 @@ $this->params['breadcrumbs'][] = $this->title;
                         return '<span class="glyphicon glyphicon-remove text-danger"></span>';
                     }
                 },
-                'filter' => \app\models\Personal::$valueYesNo,
+                'filter' => Personal::$valueYesNo,
+            ],
+            [
+                'attribute' => 'PUBLISHED',
+                'format' => 'raw',
+                'value' => function ($model, $index, $widget) {
+                    if ($model->PUBLISHED==Personal::$valuePublished) {
+                        return '<span class="glyphicon glyphicon-ok text-success"></span>';
+                    } else {
+                        return '<span class="glyphicon glyphicon-remove text-danger"></span>';
+                    }
+                },
+                'filter' => Personal::$valuePublished,
             ],
             [
                 'class' => 'yii\grid\ActionColumn',

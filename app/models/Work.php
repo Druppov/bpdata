@@ -10,6 +10,7 @@ use Yii;
  * @property int $WORK_ID
  * @property string $WORKNAME
  * @property string $PUBLISHED
+ * @property int ID
  */
 class Work extends ActiveRecord
 {
@@ -27,7 +28,8 @@ class Work extends ActiveRecord
     public function rules()
     {
         return [
-            [['WORKNAME', 'PUBLISHED'], 'required'],
+            [['WORKNAME'], 'required'],
+            [['ID'], 'safe'],
             [['WORK_ID'], 'integer'],
             [['WORKNAME'], 'string', 'max' => 20],
             [['PUBLISHED'], 'string', 'max' => 1],
