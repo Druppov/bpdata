@@ -304,7 +304,7 @@ class PacketController extends Controller
             }
         }
 
-        Yii::$app->session->setFlash('success', 'Все прошло удачно. Файлы в папке: '.$path. ':'.$tmpPath);
+        Yii::$app->session->setFlash('success', 'Все прошло удачно. Файлы в папке: '.$path);
         return $this->redirect(['upload-index']);
     }
 
