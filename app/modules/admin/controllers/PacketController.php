@@ -2,6 +2,7 @@
 
 namespace app\modules\admin\controllers;
 
+use app\models\ActiveRecord;
 use app\models\Bpos;
 use app\models\Packet;
 use app\modules\admin\models\PacketSearch;
@@ -14,7 +15,7 @@ use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\HttpException;
-use yii\web\NotFoundHttpException;
+use yii\web\NotFoundHttpException as NotFoundHttpExceptionAlias;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 
@@ -58,7 +59,7 @@ class PacketController extends Controller
      * @param integer $POS_ID
      * @param integer $PACKETNO
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpExceptionAlias if the model cannot be found
      */
     public function actionView($POS_ID, $PACKETNO)
     {
@@ -71,7 +72,6 @@ class PacketController extends Controller
      * Creates a new PacketIn model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
-     * @throws HttpException
      */
     public function actionCreate()
     {
@@ -142,7 +142,7 @@ class PacketController extends Controller
      * @param integer $POS_ID
      * @param integer $PACKETNO
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpExceptionAlias if the model cannot be found
      */
     public function actionUpdate($POS_ID, $PACKETNO)
     {
@@ -163,7 +163,9 @@ class PacketController extends Controller
      * @param integer $POS_ID
      * @param integer $PACKETNO
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpExceptionAlias if the model cannot be found
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($POS_ID, $PACKETNO)
     {
@@ -193,12 +195,13 @@ class PacketController extends Controller
         $tmpPath = $path.'/tmp';
 
         if (!$this->makeDir($path)) {
-            throw new NotFoundHttpException(Yii::t('app', 'Папка').' '.Yii::$app->basePath . $path.' '.Yii::t('app', 'не может быть создана.'));
+            throw new NotFoundHttpExceptionAlias(Yii::t('app', 'Папка').' '.Yii::$app->basePath . $path.' '.Yii::t('app', 'не может быть создана.'));
         }
+        //$this->clearDir($tmpPath);
         $this->clearDir($path);
 
         if (!$this->makeDir($tmpPath)) {
-            throw new NotFoundHttpException(Yii::t('app', 'Папка').' '.Yii::$app->basePath . $tmpPath.' '.Yii::t('app', 'не может быть создана.'));
+            throw new NotFoundHttpExceptionAlias(Yii::t('app', 'Папка').' '.Yii::$app->basePath . $tmpPath.' '.Yii::t('app', 'не может быть создана.'));
         }
         //$this->clearDir($tmpPath);
 
@@ -225,6 +228,7 @@ class PacketController extends Controller
          * Если сгенерировался хотя бы один файл, то формируем архив для каждой точки
          */
         //if (!is_null($storedFileName)) {
+        $isDownloadOk = true;
             $bposes = Bpos::find()->all();
             foreach ($bposes as $bpos) {
                 $packetNo = Packet::find()
@@ -273,12 +277,15 @@ class PacketController extends Controller
                 $packetFileName = sprintf('mgt-00-%02d-%05d.zip', $bpos->POS_ID, $packetNo);
                 $model = new Packet();
                 if ($model->zipping($tmpPath, $path.'/'.$packetFileName)) {
+                    $model->zipping($tmpPath, $path.'/arc/'.$packetFileName);
                     $model->POS_ID = 0;
                     $model->DEST_POS_ID = $bpos->POS_ID;
                     $model->PACKETNO = $packetNo;
                     $model->PACKETFILENAME = $packetFileName;
                     if ($model->save(false)) {
                         //$this->download($path.'/'.$packetFileName);
+                    } else {
+                        $isDownloadOk = false;
                     }
                 }
             }
@@ -288,8 +295,16 @@ class PacketController extends Controller
         /*
          * Если все ОК, то в выгруженных данных заменяем PUBLISHED=P
          */
+        $list = array_merge(Packet::getExportTables(), Packet::getExportDependenceTables());
+        if (!is_null($list) && is_array($list) && $isDownloadOk) {
+            foreach ($list as $key => $modelName) {
+                if ($key!='bpos') {
+                    $modelName::updateAll(['PUBLISHED' => $modelName::$valuePublishedP], ['PUBLISHED' => $modelName::$valuePublishedU]);
+                }
+            }
+        }
 
-        Yii::$app->session->setFlash('success', 'Все прошло удачно. Файлы в папке: '.$path);
+        Yii::$app->session->setFlash('success', 'Все прошло удачно. Файлы в папке: '.$path. ':'.$tmpPath);
         return $this->redirect(['upload-index']);
     }
 
@@ -310,8 +325,8 @@ class PacketController extends Controller
 
     private function clearDir($path, $mask='*')
     {
-        if (file_exists('./'.$path)) {
-            foreach (glob('./'.$path.'/'.$mask) as $file) {
+        if (file_exists($path)) {
+            foreach (glob($path.'/'.$mask) as $file) {
                 @unlink($file);
             }
         }
@@ -323,7 +338,7 @@ class PacketController extends Controller
      * @param integer $POS_ID
      * @param integer $PACKETNO
      * @return PacketIn the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpExceptionAlias if the model cannot be found
      */
     protected function findModel($POS_ID, $PACKETNO)
     {
@@ -331,6 +346,6 @@ class PacketController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+        throw new NotFoundHttpExceptionAlias(Yii::t('app', 'The requested page does not exist.'));
     }
 }

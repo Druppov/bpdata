@@ -20,7 +20,7 @@ use Yii;
  */
 class Packet extends ActiveRecord
 {
-    public static $uploadPath = '/uploads/packages_out/';
+    public static $uploadPath = '/uploads/packages_out';
     public static $exportList = [
         'bpos' => 'app\models\Bpos',
         'work' => 'app\models\Work',

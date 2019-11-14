@@ -2,6 +2,7 @@
 
 namespace app\modules\admin\controllers;
 
+use app\models\ActiveRecord;
 use app\models\Tovar;
 use app\models\TovarPrice;
 use app\models\Work;
@@ -588,8 +589,8 @@ class PreferenceController extends Controller
         if (!is_null($TOVAR_ID)) {
             $model->TOVAR_ID = $TOVAR_ID;
         }
-        $model->PUBLISHED = 'P';
-        $model->ISUSED = 'Y';
+        $model->PUBLISHED = TovarPrice::$valuePublishedP;
+        $model->ISUSED = TovarPrice::$valueYes;
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->PUBLISHED = TovarPrice::$valuePublishedU;
