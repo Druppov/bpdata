@@ -3,6 +3,7 @@
 use app\modules\admin\assets\ThemeHelper;
 use yii\helpers\Html;
 use kartik\grid\GridView;
+use yii\helpers\Url;
 use yii\widgets\Pjax;
 use app\models\TovarPrice;
 /* @var $this yii\web\View */
@@ -14,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?php $this->beginBlock(ThemeHelper::BLOCK_HEADER_BUTTONS); ?>
-<?= Html::a(Yii::t('app', 'Добавить цену товара'), ['tovar-price-create'], ['class' => 'btn btn-sm btn-success']) ?>
+<?= Html::a(Yii::t('app', 'Добавить цену товара'), ['tovar-price-create', 'TOVAR_ID'=>$searchModel->TOVAR_ID], ['class' => 'btn btn-sm btn-success']) ?>
 <?php $this->endBlock(); ?>
 
 <div class="tovar-price-index">
@@ -81,6 +82,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 },
                 'filter' => \app\models\TovarPrice::$valueYesNo,
+            ],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'headerOptions' => ['width'=>'120'],
+                'header' => Yii::t('app', 'Действия'),
+                'urlCreator' => function ($action, $model, $key, $index) {
+                    $action = 'tovar-price-'.$action;
+                    return Url::to(['preference/'.$action, 'POS_ID'=>$model->POS_ID, 'TOVAR_ID'=>$model->TOVAR_ID, 'PRICE_DATE'=>$model->PRICE_DATE]);
+                }
             ],
         ],
     ]); ?>

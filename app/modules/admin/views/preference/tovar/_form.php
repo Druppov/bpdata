@@ -33,17 +33,15 @@ use app\models\TovarType;
 
     <?//= $form->field($model, 'TAX_ID')->textInput() ?>
 
-    <? //if ($model->isNewRecord) { ?>
-    <?= $form->field($model, 'PRICE_DATE')->widget(DatePicker::classname(), [
+    <?/*= $form->field($model, 'PRICE_DATE')->widget(DatePicker::classname(), [
         'options' => ['placeholder' => 'Введите дату ...'],
         'value' => date('Y-m-d'),
         'pluginOptions' => [
             'autoclose'=>true,
             'format' => 'yyyy-mm-dd'
         ]
-    ]); ?>
-    <?= $form->field($model, 'PRICE_VALUE')->textInput() ?>
-    <? //} //if ($model->isNewRecord) ?>
+    ]);*/ ?>
+    <?//= $form->field($model, 'PRICE_VALUE')->textInput() ?>
 
     <?= $form->field($model, 'ISACTIVE')->dropDownList(\app\models\Tovar::$valueYesNo) ?>
 

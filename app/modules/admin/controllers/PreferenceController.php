@@ -468,7 +468,8 @@ class PreferenceController extends Controller
             $model->PUBLISHED = Tovar::$valuePublishedU;
             $model->save(false);
 
-            return $this->redirect(['tovar-view', 'id' => $model->TOVAR_ID]);
+            //return $this->redirect(['tovar-view', 'id' => $model->TOVAR_ID]);
+            return $this->redirect(['tovar-price-index', 'TOVAR_ID'=>$model->TOVAR_ID]);
         }
 
         return $this->render('tovar/create', [
@@ -511,8 +512,8 @@ class PreferenceController extends Controller
                     $tovarPrice->save(false);
                 }
             }
-            //return $this->redirect(['tovar-view', 'id' => $model->TOVAR_ID]);
-            return $this->redirect(['tovar-index', 'type'=>$model->TYPE_ID]);
+            //return $this->redirect(['tovar-index', 'type'=>$model->TYPE_ID]);
+            return $this->redirect(['tovar-price-index', 'TOVAR_ID'=>$model->TOVAR_ID]);
         }
 
         return $this->render('tovar/update', [
@@ -542,9 +543,12 @@ class PreferenceController extends Controller
      * Lists all TovarPrice models.
      * @return mixed
      */
-    public function actionTovarPriceIndex()
+    public function actionTovarPriceIndex($TOVAR_ID=null)
     {
         $searchModel = new TovarPriceSearch();
+        if (!is_null($TOVAR_ID)) {
+            $searchModel->TOVAR_ID=$TOVAR_ID;
+        }
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('tovar-price/index', [
@@ -580,7 +584,7 @@ class PreferenceController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionTovarPriceCreate($POS_ID=null, $TOVAR_ID=null)
+    public function actionTovarPriceCreate($POS_ID=null, $TOVAR_ID=null, $PRICE_DATE=null)
     {
         $model = new TovarPrice();
         if (!is_null($POS_ID)) {
@@ -596,8 +600,8 @@ class PreferenceController extends Controller
             $model->PUBLISHED = TovarPrice::$valuePublishedU;
             $model->save(false);
 
-            //return $this->redirect(['tovar-price-view', 'POS_ID' => $model->POS_ID, 'TOVAR_ID' => $model->TOVAR_ID, 'PRICE_DATE' => $model->PRICE_DATE]);
-            return $this->redirect(['tovar-index', 'type'=>$model->tovar->TYPE_ID]);
+            //return $this->redirect(['tovar-index', 'type'=>$model->tovar->TYPE_ID]);
+            return $this->redirect(['tovar-price-index', 'TOVAR_ID'=>$model->tovar->TOVAR_ID]);
         } else {
             if (Yii::$app->request->isAjax) {
                 return $this->renderAjax('tovar-price/create', [
@@ -630,9 +634,9 @@ class PreferenceController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->save(false);
-            echo 'ok';
-            return ;
-            //return $this->redirect(['tovar-price-view', 'POS_ID' => $model->POS_ID, 'TOVAR_ID' => $model->TOVAR_ID, 'PRICE_DATE' => $model->PRICE_DATE]);
+            //echo 'ok';
+            //return ;
+            return $this->redirect(['tovar-price-index', 'TOVAR_ID'=>$model->tovar->TOVAR_ID]);
         } else {
             if (Yii::$app->request->isAjax) {
                 return $this->renderAjax('tovar-price/update', [
