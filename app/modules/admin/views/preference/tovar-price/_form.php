@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Bpos;
 use app\models\TovarPrice;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -14,10 +15,14 @@ use kartik\date\DatePicker;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'POS_ID')->dropDownList(\app\models\Bpos::find()
+    <?= $form->field($model, 'POS_ID')->dropDownList(
+        Bpos::getBposList()
+        /*
+        \app\models\Bpos::find()
         ->select(['POS_NAME', 'POS_ID'])
         ->indexBy('POS_ID')
         ->column()
+        */
     ); ?>
 
     <?= $form->field($model, 'TOVAR_ID')->dropDownList(\app\models\Tovar::find()
@@ -31,6 +36,7 @@ use kartik\date\DatePicker;
         'value' => date('Y-m-d'),
         'pluginOptions' => [
             'autoclose'=>true,
+            'language' => 'ru',
             'format' => 'yyyy-mm-dd'
         ]
     ]); ?>

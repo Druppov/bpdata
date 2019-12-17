@@ -61,6 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {update}',
                 'headerOptions' => ['width'=>'120'],
                 'header' => Yii::t('app', 'Действия'),
                 'urlCreator' => function ($action, $model, $key, $index) {

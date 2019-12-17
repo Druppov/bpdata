@@ -109,6 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //['class' => 'yii\grid\ActionColumn'],
             [
                 'class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {update}',
                 //'class' => 'kartik\grid\ActionColumn',
                 'headerOptions' => ['width'=>'120'],
                 'header' => Yii::t('app', 'Действия'),

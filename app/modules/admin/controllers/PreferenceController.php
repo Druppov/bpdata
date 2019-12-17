@@ -212,8 +212,9 @@ class PreferenceController extends Controller
     {
         $model = $this->findTovarTypeModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            //return $this->redirect(['tovar-type-view', 'id' => $model->TYPE_ID]);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->PUBLISHED = TovarType::$valuePublishedP;
+            $model->save(false);
             return $this->redirect(['tovar-type-index']);
         }
 
@@ -365,7 +366,7 @@ class PreferenceController extends Controller
     public function actionPersonalCreate()
     {
         $model = new Personal();
-        $model->PUBLISHED = Personal::$valuePublishedP;
+        $model->PUBLISHED = Personal::$valuePublishedU;
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->PUBLISHED = Personal::$valuePublishedU;
@@ -391,8 +392,10 @@ class PreferenceController extends Controller
     {
         $model = $this->findPersonalModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['personal-view', 'id' => $model->PERSON_ID]);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->PUBLISHED = Personal::$valuePublishedU;
+            $model->save(false);
+            return $this->redirect(['personal-index']);
         }
 
         return $this->render('personal/update', [
@@ -489,7 +492,11 @@ class PreferenceController extends Controller
         $model = $this->findTovarModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->PUBLISHED = Tovar::$valuePublishedU;
+            $model->save(false);
+            return $this->redirect(['tovar-price-index', 'TOVAR_ID'=>$model->TOVAR_ID]);
 
+            /*
             if ($model->save(false) && !empty($model->PRICE_DATE) && !empty($model->PRICE_VALUE)) {
                 $bposes = Bpos::find()->all();
                 foreach ($bposes as $bpos) {
@@ -506,14 +513,14 @@ class PreferenceController extends Controller
                         'TOVAR_ID' => $model->TOVAR_ID,
                         'PRICE_DATE' => $model->PRICE_DATE,
                         'PRICE_VALUE' => $model->PRICE_VALUE,
-                        'PUBLISHED' => TovarPrice::$valuePublishedP,
+                        'PUBLISHED' => TovarPrice::$valuePublishedU,
                         'ISUSED' => TovarPrice::$valueYes,
                     ]);
                     $tovarPrice->save(false);
                 }
             }
-            //return $this->redirect(['tovar-index', 'type'=>$model->TYPE_ID]);
             return $this->redirect(['tovar-price-index', 'TOVAR_ID'=>$model->TOVAR_ID]);
+            */
         }
 
         return $this->render('tovar/update', [
@@ -593,7 +600,7 @@ class PreferenceController extends Controller
         if (!is_null($TOVAR_ID)) {
             $model->TOVAR_ID = $TOVAR_ID;
         }
-        $model->PUBLISHED = TovarPrice::$valuePublishedP;
+        $model->PUBLISHED = TovarPrice::$valuePublishedU;
         $model->ISUSED = TovarPrice::$valueYes;
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
@@ -633,6 +640,7 @@ class PreferenceController extends Controller
         $model = $this->findTovarPriceModel($POS_ID, $TOVAR_ID, $PRICE_DATE);
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->PUBLISHED = TovarPrice::$valuePublishedU;
             $model->save(false);
             //echo 'ok';
             //return ;
@@ -658,6 +666,8 @@ class PreferenceController extends Controller
      * @param string $PRICE_DATE
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionTovarPriceDelete($POS_ID, $TOVAR_ID, $PRICE_DATE)
     {

@@ -3,8 +3,10 @@
 namespace app\modules\admin\controllers;
 
 use app\models\ActiveRecord;
+use app\models\Balance;
 use app\models\Bpos;
 use app\models\Packet;
+use app\models\Tovar;
 use app\modules\admin\models\PacketSearch;
 use Yii;
 use app\models\PacketIn;
@@ -219,7 +221,31 @@ class PacketController extends Controller
                         'rows' => $rows
                     ]);
                     file_put_contents($tmpPath . '/' . $fileName, $xmlData);
-                    $storedFileName[$fileName] = $tmpPath.'/'.$fileName;
+                    $storedFileName[$fileName] = $tmpPath.'\\'.$fileName;
+                }
+
+                /*
+                 * Если выгружается TOVARY, то
+                 * Если товар неактивный и с ключом 1С должен попадать в остатки.
+                 */
+                if ($modelName==Tovar::className()) {
+                    $bposes = Bpos::find()->all();
+                    foreach ($bposes as $bpos) {
+                        foreach ($rows as $row) {
+                            $balance = Balance::find()
+                                ->where(['TOVAR_ID'=>$row->TOVAR_ID, 'POS_ID'=>$bpos->POS_ID])
+                                ->count();
+                            if (empty($balance) && $row->FKEY_1C>0) {
+                                $balance = new Balance();
+                                $balance->POS_ID = $bpos->POS_ID;
+                                $balance->BALANCEDATE = date('Y-m-d');
+                                $balance->TOVAR_ID = $row->TOVAR_ID;
+                                $balance->AMOUNT = 0;
+                                $balance->PUBLISHED = Balance::$valuePublishedP;
+                                $balance->save(false);
+                            }
+                        }
+                    }
                 }
             }
         }
