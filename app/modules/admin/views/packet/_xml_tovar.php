@@ -17,7 +17,7 @@
     <ROWDATA>
 <? foreach ($rows as $row) {
 ?>
-        <ROW TOVAR_ID="<?=$row->TOVAR_ID?>" NAME="<?=$row->NAME?>" PRINTNAME="<?=$row->PRINTNAME?>" TYPE_ID="<?=$row->TYPE_ID?>" TAX_ID="<?=$row->TAX_ID?>" ISACTIVE="<?=$row->ISACTIVE?>" PUBLISHED="P" FKEY_1C="<?=$row->FKEY_1C?>"/>
+        <ROW TOVAR_ID="<?=$row->TOVAR_ID?>" NAME="<?=htmlspecialchars($row->NAME, ENT_COMPAT)?>" PRINTNAME="<?=htmlspecialchars($row->PRINTNAME, ENT_COMPAT)?>" TYPE_ID="<?=$row->TYPE_ID?>" TAX_ID="<?=$row->TAX_ID?>" ISACTIVE="<?=$row->ISACTIVE?>" PUBLISHED="P" FKEY_1C="<?=$row->FKEY_1C?>"/>
 <? } //foreach ($rows as $row)
 ?>
     </ROWDATA>
