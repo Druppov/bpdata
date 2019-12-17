@@ -60,7 +60,8 @@
                         'icon' => 'cog',
                         'url' => '#',
                         'items' => [
-                            ['label' => 'Свойства', 'icon'  =>  'gears', 'url' => ['/admin/settings/app']],
+                            ['label' => 'Свойства', 'icon'  =>  'gears', 'url' => ['/admin/settings']],
+                            //['label' => 'Свойства', 'icon'  =>  'gears', 'url' => ['/admin/settings/app']],
                             //['label' => 'Роли/Права', 'icon' => 'lock', 'url' => ['/admin/rbac/permissions'], 'active' => 'permissions' === Yii::$app->controller->id,],
                         ],
                     ],

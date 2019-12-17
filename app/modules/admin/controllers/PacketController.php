@@ -6,6 +6,7 @@ use app\models\ActiveRecord;
 use app\models\Balance;
 use app\models\Bpos;
 use app\models\Packet;
+use app\models\Settings;
 use app\models\Tovar;
 use app\modules\admin\models\PacketSearch;
 use Yii;
@@ -13,6 +14,7 @@ use app\models\PacketIn;
 use app\modules\admin\models\PacketInSearch;
 use yii\db\Exception;
 use yii\db\IntegrityException;
+use yii\helpers\BaseFileHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\Controller;
@@ -193,17 +195,19 @@ class PacketController extends Controller
 
     public function actionUpload()
     {
-        $path = Yii::$app->basePath . (substr(Packet::$uploadPath, -1)=='/' ? substr(Packet::$uploadPath, 0, -1) : Packet::$uploadPath);
+        //$path = Yii::$app->basePath . (substr(Packet::$uploadPath, -1)=='/' ? substr(Packet::$uploadPath, 0, -1) : Packet::$uploadPath);
+        $path = Yii::$app->basePath . Packet::$uploadPath;
+        //$path = !empty(Settings::getValue('bpos', 'bpos_io')) ? Settings::getValue('bpos', 'bpos_io') : Yii::$app->basePath . Packet::$uploadPath;
         $tmpPath = $path.'/tmp';
 
         if (!$this->makeDir($path)) {
-            throw new NotFoundHttpExceptionAlias(Yii::t('app', 'Папка').' '.Yii::$app->basePath . $path.' '.Yii::t('app', 'не может быть создана.'));
+            throw new NotFoundHttpExceptionAlias(Yii::t('app', 'Папка').' '.$path.' '.Yii::t('app', 'не может быть создана.'));
         }
         //$this->clearDir($tmpPath);
         $this->clearDir($path);
 
         if (!$this->makeDir($tmpPath)) {
-            throw new NotFoundHttpExceptionAlias(Yii::t('app', 'Папка').' '.Yii::$app->basePath . $tmpPath.' '.Yii::t('app', 'не может быть создана.'));
+            throw new NotFoundHttpExceptionAlias(Yii::t('app', 'Папка').' '.$tmpPath.' '.Yii::t('app', 'не может быть создана.'));
         }
         //$this->clearDir($tmpPath);
 
@@ -221,7 +225,7 @@ class PacketController extends Controller
                         'rows' => $rows
                     ]);
                     file_put_contents($tmpPath . '/' . $fileName, $xmlData);
-                    $storedFileName[$fileName] = $tmpPath.'\\'.$fileName;
+                    $storedFileName[$fileName] = $tmpPath.'/'.$fileName;
                 }
 
                 /*
@@ -321,6 +325,7 @@ class PacketController extends Controller
         /*
          * Если все ОК, то в выгруженных данных заменяем PUBLISHED=P
          */
+        $dir = !empty(Settings::getValue('bpos', 'bpos_io')) ? Settings::getValue('bpos', 'bpos_io') : '';
         $list = array_merge(Packet::getExportTables(), Packet::getExportDependenceTables());
         if (!is_null($list) && is_array($list) && $isDownloadOk) {
             foreach ($list as $key => $modelName) {
@@ -328,9 +333,17 @@ class PacketController extends Controller
                     $modelName::updateAll(['PUBLISHED' => $modelName::$valuePublishedP], ['PUBLISHED' => $modelName::$valuePublishedU]);
                 }
             }
+
+            if (!empty($dir)) {
+                /*
+                 * копирыем выгрузку в папку с флешкой, если параметр задан
+                 */
+                BaseFileHelper::removeDirectory($dir);
+                BaseFileHelper::copyDirectory($path, $dir, ['except'=>['tmp','arc']]);
+            }
         }
 
-        Yii::$app->session->setFlash('success', 'Все прошло удачно. Файлы в папке: '.$path);
+        Yii::$app->session->setFlash('success', 'Все прошло удачно. Файлы в папке: '.empty($dir)?$path:$dir);
         return $this->redirect(['upload-index']);
     }
 
