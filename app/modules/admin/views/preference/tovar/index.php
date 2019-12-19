@@ -27,6 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        /*
         'pager' => [
             'class' => ScrollPager::className(),
             'container' => '.grid-view tbody',
@@ -40,11 +41,11 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'eventOnScroll' => 'function() {$(".ias-trigger a").trigger("click")}',
         ],
+        */
         'filterModel' => $searchModel,
         'pjax' => true,
         'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container']],
         'columns' => [
-                /*
             [
                 'class' => 'kartik\grid\ExpandRowColumn',
                 'value' => function ($model,$key,$index,$column)
@@ -65,7 +66,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 //'detailUrl'=> Yii::$app->request->getBaseUrl().'/admin/preference/bpos-detail',
             ],
-            */
             [
                 'attribute' => 'TOVAR_ID',
                 'headerOptions' => ['width'=>80],
