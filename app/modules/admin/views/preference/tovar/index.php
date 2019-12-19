@@ -35,14 +35,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'triggerTemplate' => '<tr class="ias-trigger"><td colspan="100%" style="text-align: center"><a style="cursor: pointer">{text}</a></td></tr>',
             'enabledExtensions'  => [
                 ScrollPager::EXTENSION_SPINNER,
-                ScrollPager::EXTENSION_NONE_LEFT,
+                //ScrollPager::EXTENSION_NONE_LEFT,
                 ScrollPager::EXTENSION_PAGING,
             ],
             'eventOnScroll' => 'function() {$(".ias-trigger a").trigger("click")}',
         ],
         'filterModel' => $searchModel,
         'pjax' => true,
+        'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container']],
         'columns' => [
+                /*
             [
                 'class' => 'kartik\grid\ExpandRowColumn',
                 'value' => function ($model,$key,$index,$column)
@@ -63,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 //'detailUrl'=> Yii::$app->request->getBaseUrl().'/admin/preference/bpos-detail',
             ],
-
+            */
             [
                 'attribute' => 'TOVAR_ID',
                 'headerOptions' => ['width'=>80],
@@ -82,16 +84,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'filter' => \app\models\Tovar::$valueYesNo,
             ],
-            /*
-            [
-                'TAX_ID',
-                'value' => 'TAX_ID',
-                'filter' => Tax::find()->select(['TYPE_NAME', 'TYPE_ID'])->indexBy('TYPE_ID')->column()
-            ],
-            */
-            //'TAX_ID',
-            //'ISACTIVE',
-            //'PUBLISHED',
             'FKEY_1C',
             [
                 'attribute' => 'PUBLISHED',
