@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
         */
         'filterModel' => $searchModel,
         'pjax' => true,
-        'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container']],
+        //'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container']],
         'columns' => [
             [
                 'class' => 'kartik\grid\ExpandRowColumn',

@@ -62,6 +62,7 @@ class Tovar extends ActiveRecord
             'FKEY_1C' => Yii::t('app', 'Ключ 1C'),
             'PRICE_DATE' => Yii::t('app', 'Дата цены'),
             'PRICE_VALUE' => Yii::t('app', 'Цена'),
+            'PUBLISHED' => Yii::t('app', 'Опубликовано')
         ];
     }
 }
