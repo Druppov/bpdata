@@ -65,4 +65,12 @@ class Tovar extends ActiveRecord
             'PUBLISHED' => Yii::t('app', 'Опубликовано')
         ];
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTovarPrices()
+    {
+        return $this->hasMany(TovarPrice::className(), ['TOVAR_ID'=>'TOVAR_ID']);
+    }
 }

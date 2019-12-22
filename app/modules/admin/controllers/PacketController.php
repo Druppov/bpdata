@@ -216,10 +216,10 @@ class PacketController extends Controller
         if (!is_null($list) && is_array($list)) {
             foreach ($list as $key => $modelName) {
                 $rows = $modelName::find()
-                    ->where(['PUBLISHED'=>$modelName::$valuePublishedU])
+                    ->where(['PUBLISHED' => $modelName::$valuePublishedU])
                     ->all();
 
-                if (!empty($rows)) {
+                if (!empty($rows) && count($rows)>0 && $modelName!=Tovar::className()) {
                     $fileName = $modelName::tableName().'.xml';
                     $xmlData = $this->renderPartial('_xml_' . $key, [
                         'rows' => $rows
@@ -280,10 +280,12 @@ class PacketController extends Controller
                 /*
                  * Выбираем зависимые таблицы
                  */
+                BaseFileHelper::unlink($tmpPath . '/' . 'TOVARY.xml');
                 $list = Packet::getExportDependenceTables($bpos->POS_ID);
                 if (!is_null($list) && is_array($list)) {
                     foreach ($list as $key => $modelName) {
                         $fileName = $modelName::tableName().'.xml';
+                        BaseFileHelper::unlink($tmpPath . '/' . $fileName);
                         unset($storedFileName[$fileName]);
                         $this->clearDir($path, $fileName);
                         $rows = $modelName::find()
@@ -299,6 +301,28 @@ class PacketController extends Controller
                             ]);
                             file_put_contents($tmpPath . '/' . $fileName, $xmlData);
                             $storedFileName[$fileName] = $tmpPath.'/'.$fileName;
+
+                            /*
+                             * Товары выгружаются только, если были изменения по цене
+                             */
+                            $ids=null;
+                            foreach ($rows as $r) {
+                                $ids[] = $r->TOVAR_ID;
+                            }
+                            $tovars = Tovar::find()
+                                ->where([
+                                    'TOVAR_ID'=>$ids,
+                                    'PUBLISHED'=>Tovar::$valuePublishedU
+                                ])
+                                ->all();
+                            if (!empty($tovars) && count($tovars)>0) {
+                                $xmlData = $this->renderPartial('_xml_tovar', [
+                                    'rows' => $tovars
+                                ]);
+                                file_put_contents($tmpPath . '/' . 'TOVARY.xml', $xmlData);
+                                $storedFileName[$fileName] = $tmpPath.'/'.$fileName;
+                            }
+                            /********************************************************************************/
                         }
                     }
                 }
