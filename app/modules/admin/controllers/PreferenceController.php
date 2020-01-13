@@ -605,7 +605,16 @@ class PreferenceController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->PUBLISHED = TovarPrice::$valuePublishedU;
-            $model->save(false);
+            if (empty($model->POS_ID)) {
+                $bposes = Bpos::find()->all();
+                foreach ($bposes as $bpos) {
+                    $bposModel = new TovarPrice($model);
+                    $bposModel->POS_ID = $bpos->POS_ID;
+                    $bposModel->save(false);
+                }
+            } else {
+                $model->save(false);
+            }
 
             //return $this->redirect(['tovar-index', 'type'=>$model->tovar->TYPE_ID]);
             return $this->redirect(['tovar-price-index', 'TOVAR_ID'=>$model->tovar->TOVAR_ID]);

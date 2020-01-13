@@ -16,7 +16,15 @@ use kartik\date\DatePicker;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'POS_ID')->dropDownList(
-        Bpos::getBposList()
+        Bpos::getBposList(), [
+            'prompt' => 'Все точки'
+        ]
+        /*
+        \yii\helpers\ArrayHelper::merge(
+            [0=>'[0] Все'],
+            Bpos::getBposList()
+        )
+        */
         /*
         \app\models\Bpos::find()
         ->select(['POS_NAME', 'POS_ID'])

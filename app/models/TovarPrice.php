@@ -30,9 +30,9 @@ class TovarPrice extends ActiveRecord
     public function rules()
     {
         return [
-            [['POS_ID', 'TOVAR_ID', 'PRICE_DATE'], 'required'],
-            [['POS_ID', 'TOVAR_ID'], 'integer'],
-            [['PRICE_DATE'], 'safe'],
+            [[/*'POS_ID',*/ 'TOVAR_ID', 'PRICE_DATE'], 'required'],
+            [[/*'POS_ID',*/ 'TOVAR_ID'], 'integer'],
+            [['PRICE_DATE', 'POS_ID'], 'safe'],
             [['PRICE_VALUE'], 'number'],
             [['PUBLISHED', 'ISUSED'], 'string', 'max' => 1],
             [['POS_ID', 'TOVAR_ID', 'PRICE_DATE'], 'unique', 'targetAttribute' => ['POS_ID', 'TOVAR_ID', 'PRICE_DATE']],
