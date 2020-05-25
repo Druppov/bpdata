@@ -83,7 +83,7 @@ $fullExportMenu = ExportMenu::widget([
             'type' => 'primary',
         ],
         'toolbar' => [
-            '{export}',
+            //'{export}',
             $fullExportMenu,
         ],
         'autoXlFormat'=>true,
