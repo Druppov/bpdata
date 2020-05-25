@@ -153,7 +153,8 @@ $fullExportMenu = ExportMenu::widget([
                         return '<span class="glyphicon glyphicon-remove text-danger"></span>';
                     }
                 },
-                'filter' => \app\models\TovarPrice::$valueYesNo,
+                //'filter' => \app\models\TovarPrice::$valueYesNo,
+                'filter' => false
             ],
         ],
     ]); ?>
