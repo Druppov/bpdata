@@ -13,6 +13,7 @@ use Yii;
  */
 class Settings extends \yii\db\ActiveRecord
 {
+    const BPOS_IO = 'bpos_io';
     /**
      * {@inheritdoc}
      */

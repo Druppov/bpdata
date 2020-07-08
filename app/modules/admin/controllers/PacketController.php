@@ -15,6 +15,7 @@ use app\modules\admin\models\PacketInSearch;
 use yii\db\Exception;
 use yii\db\IntegrityException;
 use yii\helpers\BaseFileHelper;
+use yii\helpers\FileHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\Controller;
@@ -178,6 +179,57 @@ class PacketController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionExchange()
+    {
+        $downloadFileList = '';
+        // Сначала все загружаем из выбранной папки.
+        $dir = !empty(Settings::getValue('bpos', Settings::BPOS_IO)) ? Settings::getValue('bpos', Settings::BPOS_IO) : '';
+        $files = FileHelper::findFiles($dir,[
+            'recursive'=>false,
+            'filter'=>function ($path) {
+                if (preg_match('/.*mgt-([0-9]{2})-00.*\.zip/', $path, $output) && $output[1]>0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        ]);
+        unset($output);
+        if (is_array($files)) {
+            foreach ($files as $file) {
+                /*
+                 * Сохраняем архив в БД
+                 */
+                $res = true;
+                $fileName = basename($file);
+                $model = new PacketIn();
+                $model->PACKETFILENAME = $fileName;
+                if (preg_match('/mgt-(\d+)-(\d+)-(\d+)\.(zip|rar)/', $file, $output)) {
+                    $model->POS_ID = (int)$output[1];
+                    $model->PACKETNO = (int)$output[3];
+                    $model->DATA = file_get_contents($file);
+                    $model->PROCESSED = 'N';
+                    if ($model->save()) {
+                        //Обработка информации
+                        PacketIn::processingAll();
+                        $downloadFileList .= Html::tag('p', sprintf('Файл %s успешно загружен.', $file));
+                    }  else {
+                        //$transaction->rollBack();
+                    }
+                } else {
+                    //ToDo: Ошибка, имя файла не по шаблону
+                    Yii::$app->session->setFlash('error', 'Имя файла не по шаблону.');
+                }
+                FileHelper::unlink($file);
+            }
+        } else {
+            Yii::$app->session->setFlash('error', 'Файлы для загрузки не найдены.');
+        }
+
+        // Затем запускаем выгрузку
+        $this->actionUpload();
+    }
+
     /**
      * Lists all PacketIn models.
      * @return mixed
@@ -203,13 +255,11 @@ class PacketController extends Controller
         if (!$this->makeDir($path)) {
             throw new NotFoundHttpExceptionAlias(Yii::t('app', 'Папка').' '.$path.' '.Yii::t('app', 'не может быть создана.'));
         }
-        //$this->clearDir($tmpPath);
-        $this->clearDir($path);
+        //$this->clearDir($path);
 
         if (!$this->makeDir($tmpPath)) {
             throw new NotFoundHttpExceptionAlias(Yii::t('app', 'Папка').' '.$tmpPath.' '.Yii::t('app', 'не может быть создана.'));
         }
-        //$this->clearDir($tmpPath);
 
         $list = Packet::getExportTables();
         $storedFileName = null;
@@ -273,7 +323,7 @@ class PacketController extends Controller
                     'recipient' => $bpos->POS_ID,
                     'packetno' => $packetNo,
                 ]);
-                $this->clearDir($path, 'data.ini');
+                //$this->clearDir($path, 'data.ini');
                 file_put_contents($tmpPath . '/data.ini', $iniData);
                 $storedFileName['data.ini'] = $tmpPath.'/'.'data.ini';
 
@@ -287,7 +337,7 @@ class PacketController extends Controller
                         $fileName = $modelName::tableName().'.xml';
                         BaseFileHelper::unlink($tmpPath . '/' . $fileName);
                         unset($storedFileName[$fileName]);
-                        $this->clearDir($path, $fileName);
+                        //$this->clearDir($path, $fileName);
                         $rows = $modelName::find()
                             ->where([
                                 'PUBLISHED'=>$modelName::$valuePublishedU,
@@ -349,7 +399,7 @@ class PacketController extends Controller
         /*
          * Если все ОК, то в выгруженных данных заменяем PUBLISHED=P
          */
-        $dir = !empty(Settings::getValue('bpos', 'bpos_io')) ? Settings::getValue('bpos', 'bpos_io') : '';
+        $dir = !empty(Settings::getValue('bpos', Settings::BPOS_IO)) ? Settings::getValue('bpos', Settings::BPOS_IO) : '';
         $list = array_merge(Packet::getExportTables(), Packet::getExportDependenceTables());
         if (!is_null($list) && is_array($list) && $isDownloadOk) {
             foreach ($list as $key => $modelName) {
@@ -360,9 +410,9 @@ class PacketController extends Controller
 
             if (!empty($dir)) {
                 /*
-                 * копирыем выгрузку в папку с флешкой, если параметр задан
+                 * копируем выгрузку в папку с флешкой, если параметр задан
                  */
-                BaseFileHelper::removeDirectory($dir);
+                //BaseFileHelper::removeDirectory($dir);
                 BaseFileHelper::copyDirectory($path, $dir, ['except'=>['tmp','arc']]);
             }
         }

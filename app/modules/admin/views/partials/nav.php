@@ -23,6 +23,7 @@
                         'items' => [
                             ['label' => 'Загрузить файл', 'icon'  =>  'download', 'url' => ['/admin/packet/index']],
                             ['label' => 'Сформировать файл', 'icon'  =>  'upload', 'url' => ['/admin/packet/upload-index']],
+                            ['label' => 'Обмен', 'icon'  =>  'upload', 'url' => ['/admin/packet/exchange']],
                         ],
                     ],
                     [
@@ -61,7 +62,6 @@
                         'url' => '#',
                         'items' => [
                             ['label' => 'Свойства', 'icon'  =>  'gears', 'url' => ['/admin/settings']],
-                            //['label' => 'Свойства', 'icon'  =>  'gears', 'url' => ['/admin/settings/app']],
                             //['label' => 'Роли/Права', 'icon' => 'lock', 'url' => ['/admin/rbac/permissions'], 'active' => 'permissions' === Yii::$app->controller->id,],
                         ],
                     ],
