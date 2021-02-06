@@ -249,6 +249,7 @@ class PacketController extends Controller
     {
         //$path = Yii::$app->basePath . (substr(Packet::$uploadPath, -1)=='/' ? substr(Packet::$uploadPath, 0, -1) : Packet::$uploadPath);
         $path = Yii::$app->basePath . Packet::$uploadPath;
+        $this->clearDir($path);
         //$path = !empty(Settings::getValue('bpos', 'bpos_io')) ? Settings::getValue('bpos', 'bpos_io') : Yii::$app->basePath . Packet::$uploadPath;
         $tmpPath = $path.'/tmp';
 
