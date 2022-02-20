@@ -19,9 +19,17 @@ use Yii;
  * @property int $M_MALE
  * @property int $M_AGE
  * @property int $ZAKAZNO
+ * @property int $VID_OPLATY
  */
 class PayCheck extends ActiveRecord
 {
+    public static $checkType = [
+        0 => 'Наличные',
+        1 => 'Карта',
+        2 => 'Другое'
+    ];
+
+
     /**
      * {@inheritdoc}
      */
@@ -37,7 +45,7 @@ class PayCheck extends ActiveRecord
     {
         return [
             [['POS_ID', 'SMENA_ID', 'CHECKNO'], 'required'],
-            [['POS_ID', 'SMENA_ID', 'CHECKNO', 'EKR_CHECKNO', 'RET', 'M_MALE', 'M_AGE', 'ZAKAZNO'], 'integer'],
+            [['POS_ID', 'SMENA_ID', 'CHECKNO', 'EKR_CHECKNO', 'RET', 'M_MALE', 'M_AGE', 'ZAKAZNO', 'VID_OPLATY'], 'integer'],
             [['SUMMA', 'EKR_SUMMA'], 'number'],
             [['STAMP'], 'safe'],
             [['PUBLISHED'], 'string', 'max' => 1],
@@ -63,6 +71,7 @@ class PayCheck extends ActiveRecord
             'M_MALE' => Yii::t('app', 'M  Male'),
             'M_AGE' => Yii::t('app', 'M  Age'),
             'ZAKAZNO' => Yii::t('app', 'Zakazno'),
+            'VID_OPLATY' => Yii::t('app', 'Vid Oplaty')
         ];
     }
 

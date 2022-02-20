@@ -7,7 +7,7 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
-    "php": ">=7.0",
+    "php": "<=5.6.32",
     "dmstr/yii2-adminlte-asset": "~2.6",
     "justcoded/dotenv-sync": "*",
     "justcoded/yii2-rbac": "*",

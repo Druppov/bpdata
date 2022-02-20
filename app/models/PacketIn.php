@@ -142,6 +142,11 @@ class PacketIn extends ActiveRecord
                                 $date = DateTime::createFromFormat('Ymd\TH:i:su', $data['@attributes']['DATECLOSE']); //20180924T21:26:19000
                                 $data['@attributes']['DATECLOSE'] = $date->format('Y-m-d H:i:s');
                             }
+                            //VID_OPLATY
+                            if (isset($data['@attributes']['VID_OPLATY'])) {
+                                $date = DateTime::createFromFormat('Ymd\TH:i:su', $data['@attributes']['VID_OPLATY']); //20180924T21:26:19000
+                                $data['@attributes']['VID_OPLATY'] = $date->format('Y-m-d H:i:s');
+                            }
                             //STAMP
                             if (isset($data['@attributes']['STAMP'])) {
                                 $date = DateTime::createFromFormat('Ymd\TH:i:su', $data['@attributes']['STAMP']); //20180924T21:26:19000
