@@ -263,11 +263,12 @@ class PacketIn extends ActiveRecord
     {
         $fileName = Yii::$app->basePath . self::$downloadPath . $this->PACKETFILENAME;
         if (is_file($fileName)) {
-            @unlink($fileName);
+//            @unlink($fileName);
+        } else {
+            $fp = fopen($fileName, 'w');
+            fwrite($fp, $this->DATA);
+            fclose($fp);
         }
-        $fp = fopen($fileName, 'w');
-        fwrite($fp, $this->DATA);
-        fclose($fp);
 
         $result = $this->unzipping();
         $this->save(false);

@@ -98,6 +98,11 @@ class PacketController extends Controller
                      */
                     $copyToFileName = Yii::$app->basePath . PacketIn::$downloadPath . 'arc\\'. $file->name;
                     @copy($file->tempName, $copyToFileName);
+                    $copyToFileName = Yii::$app->basePath . PacketIn::$downloadPath . $file->name;
+                    if (is_file($copyToFileName)) {
+                        @unlink($copyToFileName);
+                    }
+                    @copy($file->tempName, $copyToFileName);
 
                     //echo file_get_contents($_FILES['uploadedfile']['tmp_name']);
                     //$connection = Yii::$app->db;
