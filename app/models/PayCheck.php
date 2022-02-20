@@ -20,6 +20,8 @@ use Yii;
  * @property int $M_AGE
  * @property int $ZAKAZNO
  * @property int $VID_OPLATY
+ * @property string $GUID
+ * @property string $STATUS
  */
 class PayCheck extends ActiveRecord
 {
@@ -49,6 +51,8 @@ class PayCheck extends ActiveRecord
             [['SUMMA', 'EKR_SUMMA'], 'number'],
             [['STAMP'], 'safe'],
             [['PUBLISHED'], 'string', 'max' => 1],
+            [['GUID'], 'string', 'max' => 36],
+            [['STATUS'], 'string', 'max' => 32],
             [['POS_ID', 'SMENA_ID', 'CHECKNO'], 'unique', 'targetAttribute' => ['POS_ID', 'SMENA_ID', 'CHECKNO']],
         ];
     }

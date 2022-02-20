@@ -20,7 +20,7 @@ use yii\helpers\Json;
  */
 class PacketIn extends ActiveRecord
 {
-    public static $downloadPath = '/uploads/packages_in/';
+    public static $downloadPath = '\uploads\packages_in\\';
 
     public $created_at;
     public $updated_at;
@@ -127,6 +127,9 @@ class PacketIn extends ActiveRecord
 
                 if (!is_null($modelName)) {
                     //$transaction = $modelName::getDb()->beginTransaction();
+                    if ($modelName == 'app\models\PayCheck') {
+                        Yii::info("В таблицу : ".$modelName. " добавлена запись:");
+                    }
                     try {
                         $isSuccessfull = true;
                         foreach ($rows as $row) {
@@ -141,11 +144,6 @@ class PacketIn extends ActiveRecord
                             if (isset($data['@attributes']['DATECLOSE'])) {
                                 $date = DateTime::createFromFormat('Ymd\TH:i:su', $data['@attributes']['DATECLOSE']); //20180924T21:26:19000
                                 $data['@attributes']['DATECLOSE'] = $date->format('Y-m-d H:i:s');
-                            }
-                            //VID_OPLATY
-                            if (isset($data['@attributes']['VID_OPLATY'])) {
-                                $date = DateTime::createFromFormat('Ymd\TH:i:su', $data['@attributes']['VID_OPLATY']); //20180924T21:26:19000
-                                $data['@attributes']['VID_OPLATY'] = $date->format('Y-m-d H:i:s');
                             }
                             //STAMP
                             if (isset($data['@attributes']['STAMP'])) {
@@ -248,6 +246,17 @@ class PacketIn extends ActiveRecord
         }
 
         return is_null($errors) ? true : $errors;
+    }
+
+    public function copyPackage()
+    {
+        $fileName = Yii::$app->basePath . self::$downloadPath . $this->PACKETFILENAME;
+        if (is_file($fileName)) {
+            @unlink($fileName);
+        }
+        $fp = fopen($fileName, 'w');
+        fwrite($fp, $this->DATA);
+        fclose($fp);
     }
 
     public function processing()
