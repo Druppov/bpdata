@@ -92,6 +92,13 @@ class PacketController extends Controller
                 $res = true;
                 if (!$file->hasError              //checks for errors
                     && is_uploaded_file($file->tempName)) { //checks that file is uploaded
+
+                    /*
+                     * Сохоанить копию входящего файла
+                     */
+                    $copyToFileName = Yii::$app->basePath . PacketIn::$downloadPath . 'arc\\'. $file->name;
+                    @copy($file->tempName, $copyToFileName);
+
                     //echo file_get_contents($_FILES['uploadedfile']['tmp_name']);
                     //$connection = Yii::$app->db;
                     //$transaction = $connection->beginTransaction();
