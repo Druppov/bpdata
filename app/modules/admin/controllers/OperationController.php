@@ -8,6 +8,7 @@ use app\models\SmenaTb;
 use app\models\TovarPrice;
 use app\modules\admin\models\BposSearch;
 use app\modules\admin\models\PayCheckIntlTbSearch;
+use app\modules\admin\models\PaycheckSearch;
 use app\modules\admin\models\PayCheckTbSearch;
 use app\modules\admin\models\SmenaSearch;
 use app\modules\admin\models\SmenaTbSearch;
@@ -633,5 +634,23 @@ class OperationController extends Controller
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+
+    /**
+     * Lists all PayCheckIntlTb models.
+     * @return mixed
+     */
+    public function actionCountIndex()
+    {
+        $searchModel = new PaycheckSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+//        print_r($dataProvider);
+//        die();
+
+        return $this->render('count/index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 }

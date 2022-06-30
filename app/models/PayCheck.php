@@ -22,9 +22,16 @@ use Yii;
  * @property int $VID_OPLATY
  * @property string $GUID
  * @property string $STATUS
+ * @property string $DATE_BEGIN
+ * @property string $DATE_END
+ * @property int $CNT
  */
 class PayCheck extends ActiveRecord
 {
+    public $DATE_BEGIN;
+    public $DATE_END;
+    public $CNT;
+
     public static $checkType = [
         0 => 'Наличные',
         1 => 'Карта',
@@ -49,7 +56,7 @@ class PayCheck extends ActiveRecord
             [['POS_ID', 'SMENA_ID', 'CHECKNO'], 'required'],
             [['POS_ID', 'SMENA_ID', 'CHECKNO', 'EKR_CHECKNO', 'RET', 'M_MALE', 'M_AGE', 'ZAKAZNO', 'VID_OPLATY'], 'integer'],
             [['SUMMA', 'EKR_SUMMA'], 'number'],
-            [['STAMP'], 'safe'],
+            [['STAMP', 'DATE_BEGIN', 'DATE_END', 'CNT'], 'safe'],
             [['PUBLISHED'], 'string', 'max' => 1],
             [['GUID'], 'string', 'max' => 36],
             [['STATUS'], 'string', 'max' => 32],
@@ -70,12 +77,15 @@ class PayCheck extends ActiveRecord
             'EKR_CHECKNO' => Yii::t('app', 'Ekr  Checkno'),
             'EKR_SUMMA' => Yii::t('app', 'Ekr  Summa'),
             'STAMP' => Yii::t('app', 'Stamp'),
-            'PUBLISHED' => Yii::t('app', 'Published'),
-            'RET' => Yii::t('app', 'Ret'),
+            'PUBLISHED' => Yii::t('app', 'Опубликовано'),
+            'RET' => Yii::t('app', 'Тип чека'),
             'M_MALE' => Yii::t('app', 'M  Male'),
             'M_AGE' => Yii::t('app', 'M  Age'),
             'ZAKAZNO' => Yii::t('app', 'Zakazno'),
-            'VID_OPLATY' => Yii::t('app', 'Vid Oplaty')
+            'VID_OPLATY' => Yii::t('app', 'Vid Oplaty'),
+            'DATE_BEGIN' => Yii::t('app', 'Период с ...'),
+            'DATE_END' => Yii::t('app', 'Период до ...'),
+            'CNT' => Yii::t('app', 'Количество'),
         ];
     }
 
@@ -85,6 +95,14 @@ class PayCheck extends ActiveRecord
     public function getSmena()
     {
         return $this->hasOne(Smena::className(), ['SMENA_ID'=>'SMENA_ID', 'POS_ID'=>'POS_ID']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBpos()
+    {
+        return $this->hasOne(Bpos::className(), ['POS_ID' => 'POS_ID']);
     }
 
 }

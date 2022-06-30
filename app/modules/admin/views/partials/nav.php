@@ -54,6 +54,7 @@
                             //['label' => 'Внутренний расход', 'icon' => 'file-code-o', 'url' => ['/admin/operation/pay-check-intl-index'],],
                             ['label' => 'Отчет смены', 'icon' => 'file-code-o', 'url' => ['/admin/operation/smena-tb-index'],],
                             ['label' => 'Остатки на торговых точках', 'icon' => 'file-code-o', 'url' => ['/admin/operation/balance-index'],],
+                            ['label' => 'Новый отчет', 'icon' => 'file-code-o', 'url' => ['/admin/operation/count-index'],],
                         ]
                     ],
                     [
@@ -62,7 +63,7 @@
                         'url' => '#',
                         'items' => [
                             ['label' => 'Свойства', 'icon'  =>  'gears', 'url' => ['/admin/settings']],
-                            //['label' => 'Роли/Права', 'icon' => 'lock', 'url' => ['/admin/rbac/permissions'], 'active' => 'permissions' === Yii::$app->controller->id,],
+//                            ['label' => 'Роли/Права', 'icon' => 'lock', 'url' => ['/admin/rbac/permissions'], 'active' => 'permissions' === Yii::$app->controller->id,],
                         ],
                     ],
                     //['label' => 'Окна', 'icon' => 'tasks', 'url' => ['/admin/#']],
