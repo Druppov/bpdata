@@ -54,7 +54,7 @@
                             //['label' => 'Внутренний расход', 'icon' => 'file-code-o', 'url' => ['/admin/operation/pay-check-intl-index'],],
                             ['label' => 'Отчет смены', 'icon' => 'file-code-o', 'url' => ['/admin/operation/smena-tb-index'],],
                             ['label' => 'Остатки на торговых точках', 'icon' => 'file-code-o', 'url' => ['/admin/operation/balance-index'],],
-                            ['label' => 'Новый отчет', 'icon' => 'file-code-o', 'url' => ['/admin/operation/count-index'],],
+                            ['label' => 'Количество чеков', 'icon' => 'file-code-o', 'url' => ['/admin/operation/count-index'],],
                         ]
                     ],
                     [

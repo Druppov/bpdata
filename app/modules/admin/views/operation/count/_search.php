@@ -56,15 +56,15 @@ use yii\widgets\ActiveForm;
         ]
     ]); ?>
 
-    <?= $form->field($model, 'PUBLISHED')->dropDownList(
-        \app\modules\admin\models\PaycheckSearch::$valuePublished,
-        ['prompt'=>'Все',]
-    ); ?>
-
-    <?= $form->field($model, 'RET')->dropDownList(
-        [0=>Yii::t('app', 'Продажа'), 1=>Yii::t('app', 'Возврат')],
-        ['prompt'=>'Все',]
-    ); ?>
+<!--    --><?//= $form->field($model, 'PUBLISHED')->dropDownList(
+//        \app\modules\admin\models\PaycheckSearch::$valuePublished,
+//        ['prompt'=>'Все',]
+//    ); ?>
+<!---->
+<!--    --><?//= $form->field($model, 'RET')->dropDownList(
+//        [0=>Yii::t('app', 'Продажа'), 1=>Yii::t('app', 'Возврат')],
+//        ['prompt'=>'Все',]
+//    ); ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Найти'), ['class' => 'btn btn-primary']) ?>

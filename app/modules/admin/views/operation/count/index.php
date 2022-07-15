@@ -79,7 +79,18 @@ $fullExportMenu = ExportMenu::widget([
                 'headerOptions'=>['style'=>'color:#3c8dbc'],
             ],
             'SUMMA',
-            'RET',
+            //'RET',
+            [
+                'attribute' => 'RET',
+                'format' => 'raw',
+                'value' => function ($model, $index, $widget) {
+                    if ($model->RET==0) {
+                        return Yii::t('app', 'Чеки');
+                    } else {
+                        return Yii::t('app', 'Возвраты');
+                    }
+                },
+            ],
 //            'STAMP',
             [
                 'attribute' => 'PUBLISHED',

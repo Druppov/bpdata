@@ -643,6 +643,8 @@ class OperationController extends Controller
     public function actionCountIndex()
     {
         $searchModel = new PaycheckSearch();
+        $searchModel->DATE_BEGIN = date('Y-m-d');
+        $searchModel->DATE_END = date('Y-m-d');
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 //        print_r($dataProvider);
